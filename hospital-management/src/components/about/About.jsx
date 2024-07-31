@@ -3,6 +3,7 @@ import './About.css';
 import banner1 from '../../assets/operation.jpg';
 import banner2 from '../../assets/beds.jpg';
 import banner3 from '../../assets/nurse.webp';
+import Fake from '../../utility/Fake';
 
 const About = () => {
   const images = [banner1, banner2, banner3];
@@ -22,6 +23,8 @@ const About = () => {
   }, [images]);
 
   return (
+    <div>
+      <Fake />
     <div className="about_container">
       <div className="about">
         <div className="about_left">
@@ -47,6 +50,7 @@ const About = () => {
         <div className="about_right">
           <img src={currentImage} alt="Hospital Banner" />
         </div>
+      </div>
       </div>
     </div>
   );
