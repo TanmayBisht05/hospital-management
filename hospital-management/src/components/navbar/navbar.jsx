@@ -28,9 +28,9 @@ const Navbar = () => {
                     <div className="nav-item"><a href="/doctors" className="nav-links">Doctors</a></div>
                     <div className="nav-item"><a href="/contact" className="nav-links">Contact</a></div>
                 </div>
-                <div className='navbar_button'>
+                {/* <div className='navbar_button'>
                     <p>Make Appointment</p>
-                </div>
+                </div> */}
             </div>
         </nav>
     );
