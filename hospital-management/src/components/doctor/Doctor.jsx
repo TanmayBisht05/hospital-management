@@ -12,9 +12,11 @@ import doc9 from '../../assets/doc9.jpg';
 import Fake from '../../utility/Fake';
 const Doctor = () => {
     return (
-        <div className='doctor-page'>
-            <div className='doctor-page-heading'>Doctors</div>
+        <div>
             <Fake />
+        <div className='doctor-page-tiles'>
+            <div className='doctor-page-heading'>Doctors</div>
+            <div className='doctor-page'>
             { <DoctorTiles params={{'img':doc1, 'name':'Dr. Anoop Misra', 'spec':'EXECUTIVE CHAIRMAN FORTIS C DOC', 'desc':'Diabetology/Endocrinology | Diabetology/Endocrinology | Endocrinology'}} />}
             { <DoctorTiles params={{'img':doc2, 'name':'Dr. Ajay Kaul', 'spec':'CHAIRMAN CARDIAC SCIENCE', 'desc':'Cardiac Sciences | Adult CTVS (Cardiothoracic and Vascular Surgery) | Heart Transplant | Heart & Lung Transplant'}} />}
             { <DoctorTiles params={{'img':doc3, 'name':'Dr. Shina Seth', 'spec':'CHAIRMAN – LIVER TRANSPLANT & HEPATO - BILIARY SCIENCE ', 'desc':'Gastroenterology and Hepatobiliary Sciences | GI, Minimal Access and Bariatric Surgery | Liver Transplant | Metabolic & Bariatric Surgery'}} />}
@@ -24,6 +26,8 @@ const Doctor = () => {
             { <DoctorTiles params={{'img':doc7, 'name':'Dr. Krishna Subramony Iyer', 'spec':'EXECUTIVE DIRECTOR PAEDIATRIC CARDIO THORACIC VASCULAR SURGERY | Fortis Okhla', 'desc':'Paediatrics | Paediatric CTVS (Cardiothoracic and Vascular Surgery)'}} />}
             { <DoctorTiles params={{'img':doc8, 'name':'Dr. Shiv Kumar Choudhary', 'spec':'EXECUTIVE DIRECTOR CARDIO THORACIC VASCULAR SURGERY | Fortis Okhla', 'desc':'Cardiac Sciences | Adult CTVS (Cardiothoracic and Vascular Surgery)'}} />}
             { <DoctorTiles params={{'img':doc9, 'name':'Dr. Subrat Kumar Acharya', 'spec':'EXECUTIVE DIRECTOR GASTROENTEROLOGY | Fortis Okhla', 'desc':'Gastroenterology and Hepatobiliary Sciences | Gastroenterology and Hepatobiliary Sciences'}} />}
+            </div>
+        </div>
         </div>
     )
 }
