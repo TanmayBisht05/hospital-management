@@ -1,0 +1,21 @@
+.doctor-page {
+    padding: 120px;
+    padding-top: 20px;
+    display: flex;
+    flex-wrap: wrap; /* Allows items to wrap to the next line if necessary */
+    gap: 10px; /* Space between items */
+    justify-content: center; /* Center align items horizontally */
+}
+
+.doctor-page-heading {
+    font-size: 36px;
+    color: #005761;
+    font-family: 'Oswald', 'sans-serif';
+    margin: 20px 0;
+}
+.doctor-page-tiles {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
