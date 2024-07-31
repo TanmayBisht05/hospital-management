@@ -2,7 +2,7 @@
 
 .navbar {
     background: rgb(0,87,97);
-    height: 80px;
+    height: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -16,7 +16,7 @@
     font-family: 'Rubik', 'sans-serif';
     display: flex;
     justify-content: space-between;
-    height: 80px;
+    height: 50px;
     z-index: 1;
     width: 100%;
     max-width: 1500px;
@@ -25,6 +25,7 @@
 
 .navbar-logo {
     color: #fff;
+    font-weight: 500;
     justify-self: start;
     cursor: pointer;
     text-decoration: none;
@@ -32,12 +33,13 @@
     display: flex;
     align-items: center;
 }
-
+/* 
 .menu-icon {
     display: none;
-}
+} */
 
 .nav-menu {
+    flex: 3;
     display: flex;
     text-align: center;
     justify-content: end;
@@ -45,7 +47,7 @@
 }
 
 .nav-item {
-    height: 80px;
+    height: 50px;
     text-decoration: none;
     text-align: center;
     justify-content: center;
@@ -61,8 +63,33 @@
     padding: 0.5rem 1rem;
 }
 
-.nav-links:hover {
+/* .nav-links:hover {
     font-size: x-large;
+} */
+
+
+.navbar_button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-family: 'Rubik', sans-serif;
+    width: 213px;
+    height: 51px;
+    border-radius: 12px;
+    background-color: rgb(0, 173, 179);
+    border: 1px solid rgb(0, 87, 97);
+
+    font-size: 16px;
+    font-weight: 450;
+}
+.navbar_button:hover {
+    cursor: pointer;
+    background-color: black;
+    transition: 0.5s all ease;
 }
 
-
+.scroll {
+    background: #000;
+    transition: 0.8s all ease;
+}
