@@ -10,7 +10,11 @@ const Section1 = () => {
             <p className='section1_welcome'>Welcome to Doclab</p>
             <h1 className='section1_heading'>Find Nearest Doctor.</h1>
             <div className="section1_search_doctor">
-              
+              <p className='section1_search_desc'>Search doctors, clinics, hospitals, etc.</p>
+              <div className="section1_search">
+                <input type="text" placeholder="Locations" />
+                <button className='section1_search_button'>Search</button>
+              </div>
             </div>
           </div>
           <div className="section1_right">
