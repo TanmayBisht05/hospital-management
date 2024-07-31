@@ -1,0 +1,64 @@
+/* navbar.css */
+
+.navbar {
+    background: rgb(0,87,97);
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    height: 80px;
+    z-index: 1;
+    width: 100%;
+    max-width: 1500px;
+    padding: 0 50px;
+}
+
+.navbar-logo {
+    color: #fff;
+    justify-self: start;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+}
+
+.menu-icon {
+    display: none;
+}
+
+.nav-menu {
+    display: flex;
+    text-align: center;
+    justify-content: end;
+    margin-right: 2rem;
+}
+
+.nav-item {
+    height: 80px;
+    text-decoration: none;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.nav-links {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+}
+
+.nav-links:hover {
+    font-size: x-large;
+}
+
+
