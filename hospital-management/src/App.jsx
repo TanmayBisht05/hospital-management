@@ -8,7 +8,7 @@ function App() {
     <>
       <Navbar />
       <Section1 />
-      <Footer />f
+      <Footer />
     </>
   )
 }
