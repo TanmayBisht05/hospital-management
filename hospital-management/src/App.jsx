@@ -5,14 +5,20 @@ import Navbar from './components/navbar/navbar.jsx'
 import Footer from './components/footer.jsx'
 import DoctorTiles from './components/doctorTiles/DoctorTiles.jsx'
 import bazad from './assets/Bazad.jpeg'
-
 import Contact from './pages/contact.jsx'
 
 function App() {
 
   return (
     <>
-      <Section1 />
+    <Navbar />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Section1 />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
+    </BrowserRouter>
+    <Footer />
     </>
   )
 }
