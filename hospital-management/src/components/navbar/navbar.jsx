@@ -24,7 +24,7 @@ const Navbar = () => {
                 <div className="nav-menu">
                     <div className="nav-item"><a href="/" className="nav-links">Home</a></div>
                     <div className="nav-item"><a href="/about" className="nav-links">About</a></div>
-                    <div className="nav-item"><a href="/services" className="nav-links">Services</a></div>
+                    {/* <div className="nav-item"><a href="/services" className="nav-links">Services</a></div> */}
                     <div className="nav-item"><a href="/doctors" className="nav-links">Doctors</a></div>
                     <div className="nav-item"><a href="/contact" className="nav-links">Contact</a></div>
                 </div>
