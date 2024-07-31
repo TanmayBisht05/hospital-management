@@ -1,0 +1,41 @@
+.tile_container {
+    width: 300px;
+    border: 1px solid black;
+    border-radius: 10px;
+    height: 400px;
+    margin: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 10px 20px 10px;
+}
+.tile {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+.tile_image img{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.tile {
+    font-family: 'Rubik', 'sans-serif';
+}
+.tile_name {
+    font-size: 24px;
+    font-weight: 500px;
+}
+.tile_spec {
+    font-size: 16px;
+    font-weight: 400;
+}
+.tile_desc {
+    font-size: 14px;
+    font-weight: 400;
+    text-align: center;
+}
