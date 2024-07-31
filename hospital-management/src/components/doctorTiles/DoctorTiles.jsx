@@ -1,6 +1,6 @@
 import React from 'react'
 import './doctorTiles.css'
-import image from '../../assets/Bazad.jpeg'
+// import image from '../../assets/Bazad.jpeg'
 
 const DoctorTiles = ({params}) => {
   return (
@@ -8,11 +8,19 @@ const DoctorTiles = ({params}) => {
         <div className="tile_container">
             <div className="tile">
                 <div className="tile_image">
-                    <img src={image} alt="doctor" />
+                    <img src={params.img} alt="doctor" />
                 </div>
-                <div className="tile_name">
-                    <p className="tile_name">{params.name}</p>
-                    <p className="tile_speciality">{params.spec}</p>
+                <div className='tile_details'>
+                    <center>
+                    <span className='tile_name'>{params.name}</span><br />
+                    <span className='tile_spec'>{params.spec}</span>
+                    </center>
+                </div>
+                <div className='tile_desc'>
+                    <p>{params.desc}</p>
+                    {/* <p>Dr. Ashish is a Cardiologist with 10 years of experience.</p>
+                    <p>He is available at XYZ hospital on Monday, Wednesday and Friday.</p>
+                    <p>He is available for online consultation.</p> */}
                 </div>
             </div>
         </div>
