@@ -6,6 +6,7 @@ import Footer from './components/footer.jsx'
 import DoctorTiles from './components/doctorTiles/DoctorTiles.jsx'
 import bazad from './assets/Bazad.jpeg'
 import Contact from './pages/contact.jsx'
+import Doctor from './components/doctor/Doctor.jsx'
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Section1 />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/doctors" element={<Doctor />} />
       </Routes>
     </BrowserRouter>
     <Footer />

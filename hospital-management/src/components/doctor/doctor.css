@@ -1,0 +1,11 @@
+.doctor-page {
+    padding: 120px;
+    display: flex;
+    flex-wrap: wrap; /* Allows items to wrap to the next line if necessary */
+    gap: 10px; /* Space between items */
+    justify-content: center; /* Center align items horizontally */
+}
+
+.doctor-page-heading {
+    
+}
