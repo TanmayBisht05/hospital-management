@@ -1,0 +1,24 @@
+.tile_container {
+    width: 300px;
+    border: 1px solid black;
+    border-radius: 10px;
+    height: 400px;
+    margin: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.tile {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.tile_image img{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
