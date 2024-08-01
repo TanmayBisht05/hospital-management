@@ -1,13 +1,13 @@
 import React from 'react'
 import './Section1.css'
-import banner from '../../assets/hero-banner.png'
+import banner from '../../assets/docteam.jpg'
 const Section1 = () => {
   return (
     <div>
       <div className="section1_container">
         <div className="section1">
           <div className="section1_left">
-            <p className='section1_welcome'>Welcome to Doclab</p>
+            <p className='section1_welcome'>Welcome to Heal</p>
             <h1 className='section1_heading'>Find Nearest Doctor.</h1>
             <div className="section1_search_doctor">
               <p className='section1_search_desc'>Search doctors, clinics, hospitals, etc.</p>
