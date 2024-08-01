@@ -11,6 +11,9 @@
     position: fixed;
     width: 100%;
 }
+.navbar_fake {
+    height: 70px;
+}
 
 .navbar-container {
     font-family: 'Rubik', 'sans-serif';
@@ -92,6 +95,9 @@
     width: 100%;
 }
 /* Media Query for Responsive Navbar */
+.nav-links:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
 @media screen and (max-width: 768px) {
     .navbar, .navbar_fake {
         height: 130px;
@@ -123,12 +129,10 @@
         width: 100%;
         display: table;
         padding: 10px;
-        background-color: rgba(0, 0, 0, 0.1);
+        /* background-color: rgba(0, 0, 0, 0.1); */
     }
 
-    .nav-links:hover {
-        background-color: rgba(0, 0, 0, 0.1);
-    }
+    
 
     .navbar.active .nav-menu {
         display: flex;
