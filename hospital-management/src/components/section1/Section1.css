@@ -69,22 +69,73 @@
 }
 
 .section1_search_doctor {
-    width: 450px;
-    height: 160px;
+    width: 400px;
+    height: 90px;
     background-color: white;
     border-radius: 15px;
-    padding: 10px 20px 10px 20px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
 }
+
 .section1_search_desc {
     font-size: 16px;
-    font-family: 'Rubik', 'sans-serif';
+    font-family: 'Rubik', sans-serif;
+    text-align: center;
+    
+    
+    
 }
 
 .section1_search {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
+    gap: 10px;
+}
+
+.section1_search input[type="text"] {
+    flex: 1;
+    padding: 10px 15px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: border-color 0.3s ease;
+}
+
+.section1_search input[type="text"]:focus {
+    border-color: rgb(0, 173, 179);
+    outline: none;
+}
+
+.section1_search_button {
+    padding: 10px 20px;
+    background-color: rgb(0, 173, 179);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.section1_search_button:hover {
+    background-color: #000;
+}
+
+@media screen and (max-width : 1280px) {
+    .section1_container, .section1 {
+        max-height: 1080px;
+    }
+    .section1_left {
+        margin-left: 30px;
+    }
+    .section1_right {
+        margin-right: 30px;
+    }
 }
 
 @media screen and (max-width : 1280px) {
