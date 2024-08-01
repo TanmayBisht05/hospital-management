@@ -1,9 +1,9 @@
 import React from 'react'
-
+import '../components/navbar/navbar.css'
 const Fake = () => {
   return (
     <div>
-      <div style={{'height':'70px', 'width':'100%'}}></div>
+      <div className='navbar_fake'></div>
     </div>
   )
 }
