@@ -1,16 +1,24 @@
 /* contact.css */
 
 /* Style the container */
-body, html{
-    margin : 0;
+body, html {
+    margin: 0;
+    width: 80 vw;
+    height: 100vh;
 }
+
 .contact-bod {
-    display : flex;
-    flex-direction: column;
-    margin-top:0 ;
-    background-color: rgb(0,87,97);
-    color : white
+    display: flex;
+    flex-flow: column;
+    height: auto;
+    width: 80 vw;
+    padding: 50px;
+    justify-content: space-evenly;
+    margin-top: 0;
+    background-color: rgb(0, 87, 97);
+    color: white;
 }
+
 .contact-header {
     display: flex;
     flex-direction: column;
@@ -19,29 +27,36 @@ body, html{
     padding: 50px 0;
 }
 
-
 /* Style the form */
 .contact-form {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border: rgb(0,87,97);
+    flex-wrap: wrap;
+    height: auto;
+    width : 80 vw;
+    justify-content: space-evenly;
+    max-inline-size: 3;
+    border: rgb(36, 213, 233);
     align-items: center;
+    padding: 30px;
 }
 
 /* Style the form elements */
 .contact-label {
     display: flex;
     flex-direction: column;
-    margin-bottom: 10px;
-    max-width: 10px 10px;
+    padding: 30px;
+    /* flex-wrap: wrap; */
+    margin: 10px;
+    max-width: 300px;
+    min-width: 100px;
 }
 
-.contact-inp{
+.contact-inp {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-bottom: 10px;
+    width: 100%;
 }
 
 .contact-but {
@@ -51,6 +66,7 @@ body, html{
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    width: 100%;
 }
 
 .contact-but:hover {
@@ -60,4 +76,20 @@ body, html{
 h1 {
     text-align: center;
     margin-bottom: 20px;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 600px) {
+    .contact-form {
+        padding: 10px;
+        height: auto;
+    }
+    
+    .contact-label {
+        max-width: 100%;
+    }
+    
+    .contact-inp, .contact-but {
+        width: 100%;
+    }
 }

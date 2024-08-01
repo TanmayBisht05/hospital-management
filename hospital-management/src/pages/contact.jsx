@@ -24,37 +24,37 @@ const Contact = () => {
             <form onSubmit={handleSubmit} className='contact-form'>
                 <label className='contact-label'>
                     Name:
-                    <input className = 'contact-inp' type="text" value={name} onChange={(e) => setName(e.target.value)} />
+                    <input className='contact-inp' type="text" value={name} onChange={(e) => setName(e.target.value)} />
                 </label>
                 <br />
                 <label className='contact-label'>
                     Age:
-                    <input className = 'contact-inp' type="number" value={age} onChange={(e) => setAge(e.target.value)} />
+                    <input className='contact-inp' type="number" value={age} onChange={(e) => setAge(e.target.value)} />
                 </label>
                 <br />
                 <label className='contact-label'>
                      Phone Number:
-                    <input className = 'contact-inp' type="number" value={ph} onChange={(e) => setPh(e.target.value)} />
+                    <input className='contact-inp' type="number" value={ph} onChange={(e) => setPh(e.target.value)} />
                 </label>
                 <br />
                 <label className='contact-label'>
                     Gender:
-                    <input className = 'contact-inp' type="text" value={gender} onChange={(e) => setGender(e.target.value)} />
+                    <input className='contact-inp' type="text" value={gender} onChange={(e) => setGender(e.target.value)} />
                 </label>
                 <br />
                 <label className='contact-label'>
                     Weight:
-                    <input className = 'contact-inp' type="number" value={weight} onChange={(e) => setWeight(e.target.value)} />
+                    <input className='contact-inp' type="number" value={weight} onChange={(e) => setWeight(e.target.value)} />
                 </label>
                 <br />
                 <label className='contact-label'>
                     Problem Information:
-                    <textarea className = 'contact-inp' value={problemInfo} onChange={(e) => setProblemInfo(e.target.value)} />
+                    <textarea className='contact-inp' value={problemInfo} onChange={(e) => setProblemInfo(e.target.value)} />
                 </label>
                 <br />
                 <label className='contact-label'>
                     Problem Type:
-                    <select className = 'contact-inp' value={problemType} onChange={(e) => setProblemType(e.target.value)}>
+                    <select className='contact-inp' value={problemType} onChange={(e) => setProblemType(e.target.value)}>
                         <option value="">Select problem type</option>
                         <option value="gynae">Gynecology</option>
                         <option value="ent">ENT</option>
