@@ -88,10 +88,12 @@
     background: #000;
     transition: 0.8s all ease;
 }
-
+.navbar_fake {
+    width: 100%;
+}
 /* Media Query for Responsive Navbar */
 @media screen and (max-width: 768px) {
-    .navbar {
+    .navbar, .navbar_fake {
         height: 130px;
     }
     .navbar-container {
