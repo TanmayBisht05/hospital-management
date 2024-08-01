@@ -10,10 +10,10 @@ const Section1 = () => {
             <p className='section1_welcome'>Welcome to Heal</p>
             <h1 className='section1_heading'>Find Nearest Doctor.</h1>
             <div className="section1_search_doctor">
-              <p className='section1_search_desc'>Search doctors, clinics, hospitals, etc.</p>
+              <p className='section1_search_desc'>Search doctors, clinics, and hospitals</p>
               <div className="section1_search">
                 <input type="text" placeholder="Locations" />
-                <button className='section1_search_button'>Search</button>
+                <button className='section1_search_button'>Find Now</button>
               </div>
             </div>
           </div>

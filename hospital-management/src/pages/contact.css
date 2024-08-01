@@ -1,76 +1,69 @@
-/* contact.css */
-
-/* Style the container */
 body, html {
     margin: 0;
-    width: 80 vw;
-    height: 100vh;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Arial', sans-serif;
 }
 
 .contact-bod {
     display: flex;
-    flex-flow: column;
-    height: auto;
-    width: 80 vw;
-    padding: 50px;
-    justify-content: space-evenly;
-    margin-top: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
     background-color: rgb(0, 87, 97);
     color: white;
 }
 
-.contact-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 50px 0;
-}
-
-/* Style the form */
 .contact-form {
-    display: flex;
-    flex-wrap: wrap;
-    height: auto;
-    width : 80 vw;
-    justify-content: space-evenly;
-    max-inline-size: 3;
-    border: rgb(36, 213, 233);
-    align-items: center;
-    padding: 30px;
+    color: white;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 600px;
+    width: 100%;
 }
 
-/* Style the form elements */
 .contact-label {
     display: flex;
     flex-direction: column;
-    padding: 30px;
-    /* flex-wrap: wrap; */
-    margin: 10px;
-    max-width: 300px;
-    min-width: 100px;
+    margin-bottom: 15px;
+    font-size: 16px;
 }
 
 .contact-inp {
-    padding: 8px;
+    padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-bottom: 10px;
-    width: 100%;
+    border-radius: 10px;
+    margin-top: 5px;
+    background-color: white;
+    color: black;
+    width:90%;
+    box-sizing: border-box;
+}
+
+.contact-inp:focus {
+    border-color: #000;
+    outline: none;
 }
 
 .contact-but {
-    padding: 10px 20px;
-    background-color: #4caf50;
+    padding: 10px;
+    background-color: rgb(0, 173, 179);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 10px;
     cursor: pointer;
-    width: 100%;
+    width: 50%;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin: 0 auto;
+    display: block;
 }
 
 .contact-but:hover {
-    background-color: #45a049;
+    background-color: #000;
 }
 
 h1 {
@@ -82,13 +75,13 @@ h1 {
 @media screen and (max-width: 600px) {
     .contact-form {
         padding: 10px;
-        height: auto;
     }
-    
+
     .contact-label {
-        max-width: 100%;
+        margin-bottom: 10px;
+        font-size: 14px;
     }
-    
+
     .contact-inp, .contact-but {
         width: 100%;
     }
