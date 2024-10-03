@@ -13,7 +13,7 @@ const DoctorTiles = ({params}) => {
                 <div className='tile_details'>
                     <center>
                     <span className='tile_name'>{params.firstName} {params.lastName}</span><br />
-                    <span className='tile_spec'>{params.specialization}</span>
+                    <span className='tile_spec'>{params.post}</span>
                     </center>
                 </div>
                 <div className='tile_desc'>
