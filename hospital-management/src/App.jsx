@@ -5,10 +5,11 @@ import Contact from './pages/contact.jsx'
 import Doctor from './components/doctor/Doctor.jsx'
 import About from './components/about/About.jsx'
 import Pdashboard from './pages/patient/Pdashboard.jsx'
+import { AuthProvider } from './AuthContext'
 function App() {
 
   return (
-    <>
+    <AuthProvider>
     {/* <Navbar /> */}
     <BrowserRouter>
       <Routes>
@@ -19,7 +20,7 @@ function App() {
         <Route path = "/patients" element = {<Pdashboard />} />
       </Routes>
     </BrowserRouter>
-    </>
+    </AuthProvider>
   )
 }
 
