@@ -6,6 +6,7 @@ import Footer from './components/footer.jsx'
 import Contact from './pages/contact.jsx'
 import Doctor from './components/doctor/Doctor.jsx'
 import About from './components/about/About.jsx'
+import Medicines from './components/medicines/medicine.jsx'
 function App() {
 
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/doctors" element={<Doctor />} />
         <Route path = "/about" element = {<About />} />
+        <Route path = "/medicines" element = {<Medicines />} />        
       </Routes>
     </BrowserRouter>
     <Footer />

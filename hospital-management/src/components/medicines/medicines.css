@@ -1,0 +1,82 @@
+.medicines-container {
+    display: flex;
+    padding: 20px;
+}
+
+.medicines-list {
+    flex: 1; /* Left column takes available space */
+    padding: 20px;
+    border-right: 2px solid #005761; /* Optional: Separate the two columns */
+}
+
+.medicines-list-heading {
+    font-size: 36px;
+    color: #005761;
+    font-family: 'Oswald', 'sans-serif';
+    margin-bottom: 20px;
+}
+
+.medicines-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.medicine-item {
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+}
+
+.actions-container {
+    flex: 1; /* Right column takes available space */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.actions-container input {
+    margin: 5px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.button {
+    padding: 10px;
+    margin: 5px 0;
+    background-color: #005761;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #004d56;
+}
+
+.header-row {
+    display: flex;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.header-cell {
+    flex: 1; /* Each cell takes equal space */
+    padding: 10px;
+}
+.delete-button {
+    background-color: #e74c3c; /* Red for delete */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.delete-button:hover {
+    background-color: #c0392b; /* Darker red on hover */
+}
+
