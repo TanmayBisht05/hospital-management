@@ -1,10 +1,13 @@
 import React from 'react'
 import './Section1.css'
 // import banner from '../../assets/docteam.jpg'
+import Navbar from '../navbar/navbar'
 import banner from '../../assets/hero-banner.png'
+import Footer from '../footer'
 const Section1 = () => {
   return (
     <div>
+      <Navbar />
       <div className="section1_container">
         <div className="section1">
           <div className="section1_left">
@@ -23,6 +26,7 @@ const Section1 = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   )
 }
