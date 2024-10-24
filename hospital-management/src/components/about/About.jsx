@@ -4,7 +4,8 @@ import banner1 from '../../assets/operation.jpg';
 import banner2 from '../../assets/beds.jpg';
 import banner3 from '../../assets/nurse.webp';
 import Fake from '../../utility/Fake';
-
+import Navbar from '../navbar/navbar';
+import Footer from '../footer';
 const About = () => {
   const images = [banner1, banner2, banner3];
   const [currentImage, setCurrentImage] = useState(images[0]);
@@ -24,6 +25,7 @@ const About = () => {
 
   return (
     <div>
+      <Navbar />
       <Fake />
     <div className="about_container">
       <div className="about">
@@ -52,6 +54,7 @@ const About = () => {
         </div>
       </div>
       </div>
+      <Footer />
     </div>
   );
 }
