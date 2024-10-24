@@ -22,11 +22,16 @@ const pdashboard = () => {
               <App_cards />
               <App_cards />
               <App_cards />
+              <App_cards />
             </div>
           </div>
           <div className="appointments">
             <h2>Previous Appointments</h2>
             <div className="appointment_cards">
+              <App_cards />
+              <App_cards />
+              <App_cards />
+              <App_cards />
               <App_cards />
               <App_cards />
               <App_cards />
