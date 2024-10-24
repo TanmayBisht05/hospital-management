@@ -41,6 +41,11 @@ const Navbar = () => {
                         </a>
                     </div>
                     <div className="nav-item">
+                        <a href="/patients" className="nav-links">
+                            Patients
+                        </a>
+                    </div>
+                    <div className="nav-item">
                         <a href="/contact" className="nav-links">
                             Contact
                         </a>

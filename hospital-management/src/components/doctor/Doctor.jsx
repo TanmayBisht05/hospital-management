@@ -11,6 +11,8 @@ import doc8 from '../../assets/doc8.jpg';
 import doc9 from '../../assets/doc9.jpg';
 import Fake from '../../utility/Fake';
 import { useEffect, useState } from 'react';
+import Navbar from '../navbar/navbar';
+import Footer from '../footer';
 const Doctor = () => {
 
 
@@ -35,6 +37,7 @@ const Doctor = () => {
 
     return(
         <div>
+            <Navbar />
             <Fake />
         <div className='doctor-page-tiles'>
         <div className='doctor-page-heading'>Doctors</div>
@@ -44,6 +47,7 @@ const Doctor = () => {
       ))}
         </div>
         </div>
+        <Footer />
         </div>
     );
 

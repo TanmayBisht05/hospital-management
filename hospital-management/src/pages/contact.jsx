@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Navbar from '../components/navbar/navbar';
 import Footer from '../components/footer';
 import Fake from '../utility/Fake';
 import './contact.css';
+import Navbar from '../components/navbar/navbar';
 
 const Contact = () => {
     const [name, setName] = useState('');
@@ -19,6 +19,7 @@ const Contact = () => {
 
     return (
         <>
+        <Navbar />
         <Fake />
         <div className='contact-bod'>
             <form onSubmit={handleSubmit} className='contact-form'>
@@ -64,6 +65,7 @@ const Contact = () => {
                 <button className='contact-but' type="submit">Submit</button>
             </form>
         </div>
+        <Footer />
         </>
     );
 };
