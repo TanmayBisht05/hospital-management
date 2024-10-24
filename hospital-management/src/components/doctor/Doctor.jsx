@@ -20,7 +20,7 @@ const Doctor = () => {
         // Fetch data from API endpoint
         const fetchDoctors = async () => {
           try {
-            const response = await fetch('https://run.mocky.io/v3/da84791f-0bc8-48b4-bee5-f5ba2762f6d9');
+            const response = await fetch('http://localhost:8080/doctor');
             const data = await response.json();
             setDoctors(data);  // Assuming data is an array of doctors
           } catch (error) {
