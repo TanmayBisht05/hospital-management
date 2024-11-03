@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import SurgeryList from './surgeryList';
+import axios from 'axios';
 
 const SurgeryForm = ({ doctorID }) => {
   const [formData, setFormData] = useState({
@@ -30,15 +31,32 @@ const SurgeryForm = ({ doctorID }) => {
     setErrorMessage('');
 
     try {
-      const response = await fetch(`http://localhost:8080/surgery/add/${doctorID}`, {
+        
+        const resp = await axios.get(`http://localhost:8080/patients/by-email?email=${formData.patientID}`);
+        // console.log(resp.data.patientID)
+        // formData.patientID = resp.data.patientID;
+        // console.log(resp.data.patientID)
+        
+        const body = {
+            "patientID": resp.data.patientID,
+            "doctorID": doctorID,
+            "type": formData.type,
+            "criticalLevel": formData.criticalLevel,
+            "cost": formData.cost
+
+        }
+
+        console.log(body)
+        
+      const response = await fetch(`http://localhost:8080/surgery/${doctorID}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(body),
       });
 
       if (response.ok) {
         setSuccessMessage('Surgery registered successfully!');
-        setFormData({ surgeryID: '', patientID: '', type: '', criticalLevel: '' }); // Reset form
+        setFormData({ surgeryID: '', patientID: '', type: '', criticalLevel: '', cost: '' }); // Reset form
 
       } else {
         throw new Error('Failed to register surgery');
@@ -65,7 +83,7 @@ const SurgeryForm = ({ doctorID }) => {
           />
         </div>
         <div>
-          <label>Patient ID:</label>
+          <label>Patient Email:</label>
           <input
             type="text"
             name="patientID"
@@ -90,6 +108,16 @@ const SurgeryForm = ({ doctorID }) => {
             type="number"
             name="criticalLevel"
             value={formData.criticalLevel}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <label>Cost:</label>
+          <input
+            type="number"
+            name="cost"
+            value={formData.cost}
             onChange={handleChange}
             required
           />
