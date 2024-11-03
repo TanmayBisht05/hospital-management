@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom'; // assuming you are using react-router for navigation
+import AuthContext from '../../AuthContext';
 
 
 const UserDetails = () => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
+    let {handleLogout} = useContext(AuthContext);
 
 
     useEffect(() => {
@@ -33,14 +35,6 @@ const UserDetails = () => {
 
         fetchUserDetails();
     }, []);
-
-    const handleLogout = () => {
-        Cookies.remove('token');
-        Cookies.remove('email');
-        Cookies.remove('id');
-        Cookies.remove('userType');
-        navigate('/login'); 
-    };
 
     if (!user) return <p>Loading...</p>;
 
