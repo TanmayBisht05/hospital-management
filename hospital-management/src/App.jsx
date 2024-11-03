@@ -10,10 +10,10 @@ import Medicines from './components/medicines/medicine.jsx'
 import Surgery from './components/surgery/surgery.jsx';
 import TreatmentProcedure from './components/treatmentProcedure/treatmentProcedure.jsx';
 import PatientRegistrationForm from './components/patientReg.jsx'
-import AdminDash from './pages/adminDash/adminDash.jsx'
 import Login from './pages/login/Login.jsx'
 import Signup from './pages/signup/Signup.jsx'
 import Chemist from './pages/chemist/Chemist.jsx'
+import Admin from './pages/admin/Admin.jsx'
 
 function App() {
   return (
@@ -27,7 +27,7 @@ function App() {
           <Route path="/register" element={<PatientRegistrationForm />} />
           <Route path = "/patients" element = {<Pdashboard />} />
           <Route path="/medicines" element={<Medicines />} />
-          <Route path = "/admin" element ={<AdminDash/>} />
+          <Route path = "/admin" element ={<Admin/>} />
           <Route path = "/login" element ={<Login/>} />
           <Route path="/surgery/:doctorId" element={<Surgery />} /> {/* Updated route */}
           <Route path="/treatmentProcedure" element={<TreatmentProcedure />} />
