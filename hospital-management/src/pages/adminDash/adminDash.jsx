@@ -1,6 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import Navbar from '../../components/navbar/navbar';
+import Fake from '../../utility/Fake';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 function AdminDash() {
+    const navigate = useNavigate();
+    const token = Cookies.get('token');
+    const userType = Cookies.get('userType');
+    const id = parseInt(Cookies.get('id'), 10);
+    if (isNaN(id)) {
+        console.error('Invalid chemist ID');
+    }
+    useEffect(() => {
+        if (!token || userType!='ADMIN') {
+            navigate('/');
+          }
+    }, [token])
     const [doctorFormData, setDoctorFormData] = useState({
         firstName: '',
         lastName: '',
@@ -168,6 +184,8 @@ function AdminDash() {
 
     return (
         <div>
+            <Navbar />
+            <Fake />
             <h1>Admin Dashboard</h1>
             
             {/* Doctor Registration Section */}

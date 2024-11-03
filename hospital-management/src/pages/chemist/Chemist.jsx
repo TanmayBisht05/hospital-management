@@ -16,6 +16,11 @@ const Chemist = () => {
   if (isNaN(id)) {
     console.error('Invalid chemist ID');
   }
+  useEffect(() => {
+    if (!token || userType !== 'CHEMIST') {
+      navigate('/');
+    }
+  }, [token])
   return (
     <div>
             <Navbar />
