@@ -12,8 +12,8 @@ import Surgery from './components/surgery/surgery.jsx'
 import TreatmentProcedure from './components/treatmentProcedure/treatmentProcedure.jsx'
 import PatientRegistrationForm from './components/patientReg.jsx'
 import AdminDash from './pages/adminDash/adminDash.jsx'
-import Login from './pages/login/login.jsx'
-
+import Login from './pages/login/Login.jsx'
+import Signup from './pages/signup/Signup.jsx'
 function App() {
   return (
     <AuthProvider>
@@ -32,6 +32,8 @@ function App() {
           <Route path="/surgery/:doctorId" element={<Surgery />} />
           <Route path="/treatmentProcedure" element={<TreatmentProcedure />} />
           <Route path="/treatmentProcedure/:doctorId" element={<TreatmentProcedure />} />
+          <Route path = "/login" element = {<Login />} />
+          <Route path = "/signup" element = {<Signup />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

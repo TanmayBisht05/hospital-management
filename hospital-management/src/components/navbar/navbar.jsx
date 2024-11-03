@@ -1,8 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import './navbar.css';
+import AuthContext from '../../AuthContext';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    let {isAuthenticated, logout, userType} = useContext(AuthContext);
+    console.log(userType);
+    let shouldCheckAuthentication = useRef(true);
 
     const handleScroll = () => {
         if (window.scrollY > 0) {
@@ -11,6 +15,9 @@ const Navbar = () => {
             document.querySelector('.navbar').classList.remove('scroll');
         }
     };
+    const handleLogout = () => {
+        logout();
+    }
 
     const handleMenuToggle = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -40,11 +47,11 @@ const Navbar = () => {
                             Doctors
                         </a>
                     </div>
-                    <div className="nav-item">
+                    {isAuthenticated && userType === 'PATIENT' && <div className="nav-item">
                         <a href="/patients" className="nav-links">
                             Patients
                         </a>
-                    </div>
+                    </div>}
                     <div className="nav-item">
                         <a href="/contact" className="nav-links">
                             Contact
@@ -55,29 +62,22 @@ const Navbar = () => {
                             About
                         </a>
                     </div>
+                    {!isAuthenticated && <div className="nav-item">
+                        <a href="/login" className="nav-links">
+                            Login
+                        </a>
+                    </div>}
+                    {!isAuthenticated && <div className="nav-item">
+                        <a href="/signup" className="nav-links">
+                            Signup
+                        </a>
+                    </div>}
+                    {isAuthenticated && <div className="nav-item">
+                        <a onClick={handleLogout} className="nav-links">
+                            Logout
+                        </a>
+                    </div>}
                 </div>
-                {/* <div className={`navbar-hamburger ${isMenuOpen ? 'open' : ''}`} onClick={handleMenuToggle}>
-                    <div className="hamburger-line">
-                        <a href="/" className="nav-links">
-                            Home
-                        </a>
-                    </div>
-                    <div className="hamburger-line">
-                        <a href="/doctors" className="nav-links">
-                            Doctors
-                        </a>
-                    </div>
-                    <div className="hamburger-line">
-                        <a href="/contact" className="nav-links">
-                            Contact
-                        </a>
-                    </div>
-                    <div className="hamburger-line">
-                        <a href="/about" className="nav-links">
-                            About
-                        </a>
-                    </div>
-                </div> */}
             </div>
         </nav>
     );

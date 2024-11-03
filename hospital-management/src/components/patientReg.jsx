@@ -31,7 +31,7 @@ const PatientRegistrationForm = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok ' + response.statusText);
+        throw new Error(response.statusText);
       }
 
       const result = await response.json();
