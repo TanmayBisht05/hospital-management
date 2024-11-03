@@ -49,7 +49,7 @@ const Navbar = () => {
                     </div>
                     {isAuthenticated && userType === 'PATIENT' && <div className="nav-item">
                         <a href="/patients" className="nav-links">
-                            Patients
+                            Dashboard
                         </a>
                     </div>}
                     <div className="nav-item">
