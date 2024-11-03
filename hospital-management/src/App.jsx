@@ -11,7 +11,7 @@ import Surgery from './components/surgery/surgery.jsx';
 import TreatmentProcedure from './components/treatmentProcedure/treatmentProcedure.jsx';
 import PatientRegistrationForm from './components/patientReg.jsx'
 import AdminDash from './pages/adminDash/adminDash.jsx'
-import Login from './pages/login/Login.jsx'
+import Login from './pages/login/login.jsx'
 import Signup from './pages/signup/Signup.jsx'
 function App() {
   return (
