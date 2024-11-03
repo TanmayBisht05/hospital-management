@@ -5,6 +5,7 @@ export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
     let [pdashboardState, setPdashboardState] = useState(0);
+    let [cdashboardState, setCdashboardState] = useState(0);
     const backend_url = 'http://localhost:8080';
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userType, setUserType] = useState('');
@@ -97,6 +98,8 @@ export const AuthProvider = ({ children }) => {
         backend_url,
         pdashboardState,
         setPdashboardState,
+        cdashboardState,
+        setCdashboardState,
         isAuthenticated,
         checkAuthenticated,
         login,

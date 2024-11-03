@@ -52,6 +52,11 @@ const Navbar = () => {
                             Dashboard
                         </a>
                     </div>}
+                    {isAuthenticated && userType === 'CHEMIST' && <div className="nav-item">
+                        <a href="/chemist" className="nav-links">
+                            Dashboard
+                        </a>
+                    </div>}
                     <div className="nav-item">
                         <a href="/contact" className="nav-links">
                             Contact
