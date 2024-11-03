@@ -62,6 +62,11 @@ const Navbar = () => {
                             Dashboard
                         </a>
                     </div>}
+                    {isAuthenticated && userType === 'DOCTOR' && <div className="nav-item">
+                        <a href="/doctor" className="nav-links">
+                            Dashboard
+                        </a>
+                    </div>}
                     <div className="nav-item">
                         <a href="/contact" className="nav-links">
                             Contact
