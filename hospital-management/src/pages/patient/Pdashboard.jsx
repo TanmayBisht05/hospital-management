@@ -8,6 +8,7 @@ import Cookies from 'js-cookie';
 import Navbar from '../../components/navbar/navbar';
 import Fake from '../../utility/Fake';
 import UserInfo from './profile.jsx'
+import PatientBills from '../../components/bills/patientbills.jsx';
 
 const pdashboard = () => {
   const { pdashboardState } = useContext(AuthContext);
