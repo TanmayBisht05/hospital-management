@@ -1,0 +1,31 @@
+/* styles.css or similar file */
+
+table {
+    width: 100%; /* Full width of the parent container */
+    border-collapse: collapse; /* Remove gaps between table cells */
+    margin-top: 20px; /* Space above the table */
+}
+
+th, td {
+    padding: 12px; /* Padding inside cells */
+    text-align: left; /* Align text to the left */
+    border: 1px solid #ddd; /* Light border around cells */
+}
+
+th {
+    background-color: #f2f2f2; /* Light gray background for table headers */
+    font-weight: bold; /* Bold text for headers */
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* Light background for even rows */
+}
+
+tr:hover {
+    background-color: #f1f1f1; /* Change background on hover */
+}
+
+h2 {
+    margin-top: 20px; /* Space above the heading */
+    font-family: Arial, sans-serif; /* Font for the heading */
+}
