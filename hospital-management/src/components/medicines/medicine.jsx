@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './medicines.css';
 import Fake from '../../utility/Fake';
-
+import Navbar from '../navbar/navbar';
 const Medicines = () => {
     const [medicines, setMedicines] = useState([]);
     const [medicineID, setMedicineID] = useState('');
@@ -66,6 +66,7 @@ const Medicines = () => {
 
     return (
         <div>
+            <Navbar />
             <Fake />
         <div className='medicines-container'>
             <div className='medicines-list'>
