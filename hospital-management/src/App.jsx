@@ -9,6 +9,9 @@ import { AuthProvider } from './AuthContext'
 import Medicines from './components/medicines/medicine.jsx'
 import Surgery from './components/surgery/surgery.jsx';
 import TreatmentProcedure from './components/treatmentProcedure/treatmentProcedure.jsx';
+import Login from './pages/login/Login.jsx'
+import Signup from './pages/signup/Signup.jsx'
+
 function App() {
   return (
     <AuthProvider>
@@ -24,6 +27,8 @@ function App() {
           <Route path="/surgery/:doctorId" element={<Surgery />} /> {/* Updated route */}
           <Route path="/treatmentProcedure" element={<TreatmentProcedure />} />
           <Route path="/treatmentProcedure/:doctorId" element={<TreatmentProcedure />} />
+          <Route path = "/login" element = {<Login />} />
+          <Route path = "/signup" element = {<Signup />} />
         </Routes>
       </BrowserRouter>
       </AuthProvider>
