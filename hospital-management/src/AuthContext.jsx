@@ -5,10 +5,8 @@ export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
     let [pdashboardState, setPdashboardState] = useState(0);
+    let [cdashboardState, setCdashboardState] = useState(0);
     const backend_url = 'http://localhost:8080';
-    const getCookie = (name) => {
-        return Cookies.get(name);
-    };
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userType, setUserType] = useState('');
     const [userId, setUserId] = useState(-1);
@@ -18,13 +16,16 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         if (shouldSetAuthenticated.current) {
             shouldSetAuthenticated.current = false;
-            if (getCookie('token')) {
+            if (Cookies.get('token')) {
                 setIsAuthenticated(true);
+                setUserType(Cookies.get('userType'));
+                setUserId(Cookies.get('id'));
+                setUserEmail(Cookies.get('email'));
             }
         }
     }, []);
     const checkAuthenticated = () => {
-        if(getCookie('token')) {
+        if(Cookies.get('token')) {
             setIsAuthenticated(true);
         } else {
             setIsAuthenticated(false);
@@ -82,21 +83,34 @@ export const AuthProvider = ({ children }) => {
         setUserEmail('');
         setIsAuthenticated(false);
     }
-
+    let [animate, setAnimate] = useState(true);
+    const should_set_animate = useRef(true);
+    if(should_set_animate.current) {
+        if(sessionStorage.getItem('animate')) {
+            setAnimate(sessionStorage.getItem('animate') === 'true');
+        } else {
+            sessionStorage.setItem('animate', 'true');
+        }
+        should_set_animate.current = false;
+    }
+    const should_animate = useRef(true);
     let contextData = {
         backend_url,
         pdashboardState,
         setPdashboardState,
+        cdashboardState,
+        setCdashboardState,
         isAuthenticated,
         checkAuthenticated,
-        getCookie,
         login,
         logout,
         signup,
         userType,
         userId,
         userEmail,
-
+        animate,
+        setAnimate,
+        should_animate,
     };
     return (
         <AuthContext.Provider value={contextData}>

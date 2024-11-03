@@ -13,6 +13,8 @@ import PatientRegistrationForm from './components/patientReg.jsx'
 import AdminDash from './pages/adminDash/adminDash.jsx'
 import Login from './pages/login/Login.jsx'
 import Signup from './pages/signup/Signup.jsx'
+import Chemist from './pages/chemist/Chemist.jsx'
+
 function App() {
   return (
     <AuthProvider>
@@ -32,6 +34,7 @@ function App() {
           <Route path="/treatmentProcedure/:doctorId" element={<TreatmentProcedure />} />
           <Route path = "/login" element = {<Login />} />
           <Route path = "/signup" element = {<Signup />} />
+          <Route path = "/chemist" element = {<Chemist />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
