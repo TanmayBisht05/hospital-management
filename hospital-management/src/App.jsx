@@ -16,7 +16,6 @@ import Signup from './pages/signup/Signup.jsx'
 function App() {
   return (
     <AuthProvider>
-      {/* <Navbar /> */}
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Section1 />} />

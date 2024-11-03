@@ -6,9 +6,6 @@ export default AuthContext;
 export const AuthProvider = ({ children }) => {
     let [pdashboardState, setPdashboardState] = useState(0);
     const backend_url = 'http://localhost:8080';
-    const getCookie = (name) => {
-        return Cookies.get(name);
-    };
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userType, setUserType] = useState('');
     const [userId, setUserId] = useState(-1);
@@ -18,13 +15,16 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         if (shouldSetAuthenticated.current) {
             shouldSetAuthenticated.current = false;
-            if (getCookie('token')) {
+            if (Cookies.get('token')) {
                 setIsAuthenticated(true);
+                setUserType(Cookies.get('userType'));
+                setUserId(Cookies.get('id'));
+                setUserEmail(Cookies.get('email'));
             }
         }
     }, []);
     const checkAuthenticated = () => {
-        if(getCookie('token')) {
+        if(Cookies.get('token')) {
             setIsAuthenticated(true);
         } else {
             setIsAuthenticated(false);
@@ -89,7 +89,6 @@ export const AuthProvider = ({ children }) => {
         setPdashboardState,
         isAuthenticated,
         checkAuthenticated,
-        getCookie,
         login,
         logout,
         signup,

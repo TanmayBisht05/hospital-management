@@ -5,8 +5,6 @@ import AuthContext from '../../AuthContext';
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     let {isAuthenticated, logout, userType} = useContext(AuthContext);
-    console.log(userType);
-    let shouldCheckAuthentication = useRef(true);
 
     const handleScroll = () => {
         if (window.scrollY > 0) {
