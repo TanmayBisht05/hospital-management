@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Cookies from 'js-cookie';
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -27,6 +28,10 @@ function Login() {
 
             if (response.ok) {
                 console.log('Login successful:', data);
+                Cookies.set('userType', data.userType);
+                Cookies.set('token', data.token);
+                Cookies.set('id',data.id);
+                Cookies.set('email', data.email);
                 // Handle success (e.g., save token,k redirect)
             } else {
                 console.error('Login failed:', data);
