@@ -8,6 +8,7 @@ const SurgeryForm = ({ doctorID }) => {
     patientID: '',
     type: '',
     criticalLevel: '',
+    cost:'',
   });
   const [refresh, setRefresh] = useState(0);
 
@@ -30,7 +31,7 @@ const SurgeryForm = ({ doctorID }) => {
     setErrorMessage('');
 
     try {
-      const response = await fetch(`http://localhost:8080/surgery/add/${doctorID}`, {
+      const response = await fetch(`http://localhost:8080/surgery/${doctorID}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -53,50 +54,71 @@ const SurgeryForm = ({ doctorID }) => {
       <h2>Register New Surgery</h2>
       {successMessage && <p className="success-message">{successMessage}</p>}
       {errorMessage && <p className="error-message">{errorMessage}</p>}
+      <div className="login_div">
       <form onSubmit={handleSubmit}>
+        
         <div>
-          <label>Surgery ID:</label>
-          <input
-            type="text"
-            name="surgeryID"
-            value={formData.surgeryID}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Patient ID:</label>
-          <input
+          <div className="login_div">
+
+          <label className='login_label'>Patient ID:</label>
+          <input className='login_input'
             type="text"
             name="patientID"
             value={formData.patientID}
             onChange={handleChange}
             required
           />
+          </div>
         </div>
+
+
         <div>
-          <label>Type:</label>
-          <input
+          <div className="login_div">
+
+          <label className='login_label'>Type:</label>
+          <input className='login_input'
             type="text"
             name="type"
             value={formData.type}
             onChange={handleChange}
             required
           />
+          </div>
         </div>
+
+
         <div>
-          <label>Critical Level:</label>
-          <input
+          <div className="login_div">
+
+          <label className='login_label'>Critical Level:</label>
+          <input className='login_input'
             type="number"
             name="criticalLevel"
             value={formData.criticalLevel}
             onChange={handleChange}
             required
           />
+          </div>
         </div>
-        <button type="submit">Add Surgery</button>
+        
+        <div>
+          <div className="login_div">
+          <label className='login_label'>Cost:</label>
+          <input className='login_input'
+            type="text"
+            name="cost"
+            value={formData.cost}
+            onChange={handleChange}
+            required
+          />
+          </div>
+        </div>
+
+
+        <button className='login_input' type="submit">Add Surgery</button>
       </form>
-      <SurgeryList doctorID={doctorID} />
+      </div>
+      {/* <SurgeryList doctorID={doctorID} /> */}
     </div>
 
   );

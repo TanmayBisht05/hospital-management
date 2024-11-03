@@ -9,40 +9,33 @@ import Navbar from '../../components/navbar/navbar';
 import Fake from '../../utility/Fake';
 import SurgeryForm from '../../components/surgery/surgeryform.jsx';
 import SurgeryList from '../../components/surgery/surgeryList.jsx';
-
+import DoctorAppointments from '../../components/doctorAppointments/DoctorAppointments.jsx';
+import DoctorHistory from '../../components/doctorHistory/DoctorHistory.jsx';
 
 const Ddashboard = () => {
   const { pdashboardState, setPdashboardState } = useContext(AuthContext);
   const [doctorData, setDoctorData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [surgeries, setSurgeries] = useState([]);
-  const [newSurgery, setNewSurgery] = useState({
-    surgeryID: "",
-    patientID: "",
-    type: "",
-    criticalLevel: "",
-  });
   const navigate = useNavigate();
   const token = Cookies.get('token');
   const userType = Cookies.get('userType');
   const doctorId = parseInt(Cookies.get('id'), 10);
 
   useEffect(() => {
-   
-
     if (!token || userType !== 'DOCTOR' || isNaN(doctorId)) {
       navigate('/login');
       return;
     }
-
     fetchDoctorData(doctorId);
   }, [navigate]);
 
   const fetchDoctorData = useCallback(async (doctorId) => {
     try {
       const response = await fetch(`http://localhost:8080/doctor/${doctorId}`);
-      if (!response.ok) throw new Error('Failed to fetch doctor data');
+      if (!response.ok) {
+        throw new Error('Failed to fetch doctor data');
+      }
       const data = await response.json();
       setDoctorData(data);
     } catch (error) {
@@ -51,7 +44,6 @@ const Ddashboard = () => {
       setLoading(false);
     }
   }, []);
-
 
   const renderContent = () => {
     if (loading) return <h1 className="dashboard-header">Loading...</h1>;
@@ -81,16 +73,9 @@ const Ddashboard = () => {
 
       case 1:
         return (
-          <>
-            <h1 className="dashboard-header">Appointments</h1>
-            <div className="appointments">
-              <h2>Upcoming Appointments</h2>
-              <div className="appointment_cards">
-                <App_cards />
-                <App_cards />
-              </div>
-            </div>
-          </>
+          <div>
+            <DoctorAppointments doctorID={doctorId} />
+          </div>
         );
 
       case 2:
@@ -100,11 +85,17 @@ const Ddashboard = () => {
             <SurgeryList doctorID={doctorId} />
           </div>
         );
-        
+
       case 3:
-        return <h1 className="dashboard-header">History</h1>;
-      case 4:
-        return <h1 className="dashboard-header">Requested Appointments</h1>;
+        return (
+          <div>
+            <DoctorHistory doctorID={doctorId} />
+          </div>
+        );
+
+      // case 4:
+      //   DoctorHistory
+
       default:
         return null;
     }
@@ -115,11 +106,10 @@ const Ddashboard = () => {
       <Navbar />
       <Fake />
       <div className='ddashboard'>
-  
         <SidebarDoctor />
         <div className="main-content">
-          {renderContent()} 
-         </div>
+          {renderContent()}
+        </div>
       </div>
     </div>
   );
