@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
 import './navbar.css';
 import AuthContext from '../../AuthContext';
+import { useLocation } from 'react-router-dom';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     let {isAuthenticated, logout, userType} = useContext(AuthContext);
+    const location = useLocation();
 
     const handleScroll = () => {
         if (window.scrollY > 0) {
@@ -35,11 +37,11 @@ const Navbar = () => {
                     Heal
                 </a>
                 <div className="nav-menu">
-                    <div className="nav-item">
+                    {location.pathname !== "/" && location.pathname !== "#" && <div className="nav-item">
                         <a href="/" className="nav-links">
                             Home
                         </a>
-                    </div>
+                    </div>}
                     <div className="nav-item">
                         <a href="/doctors" className="nav-links">
                             Doctors
@@ -71,7 +73,7 @@ const Navbar = () => {
                         </a>
                     </div>}
                     {isAuthenticated && <div className="nav-item">
-                        <a onClick={handleLogout} className="nav-links">
+                        <a href = "/" onClick={handleLogout} className="nav-links">
                             Logout
                         </a>
                     </div>}
