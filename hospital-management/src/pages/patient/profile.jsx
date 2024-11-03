@@ -8,8 +8,11 @@ import AuthContext from '../../AuthContext';
 const UserDetails = () => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
-    let {handleLogout} = useContext(AuthContext);
-
+    let {logout} = useContext(AuthContext);
+    const handleLogout = () => {
+        logout();
+        navigate('/');
+    }
 
     useEffect(() => {
         const fetchUserDetails = async () => {
