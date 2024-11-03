@@ -16,7 +16,6 @@ import Signup from './pages/signup/Signup.jsx'
 function App() {
   return (
     <AuthProvider>
-      {/* <Navbar /> */}
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Section1 />} />
@@ -24,7 +23,7 @@ function App() {
           <Route path="/doctors" element={<Doctor />} />
           <Route path="/about" element={<About />} />
           <Route path="/register" element={<PatientRegistrationForm />} />
-        <Route path = "/patients" element = {<Pdashboard />} />
+          <Route path = "/patients" element = {<Pdashboard />} />
           <Route path="/medicines" element={<Medicines />} />
           <Route path = "/admin" element ={<AdminDash/>} />
           <Route path = "/login" element ={<Login/>} />
