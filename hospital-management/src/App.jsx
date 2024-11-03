@@ -7,6 +7,7 @@ import About from './components/about/About.jsx'
 import Pdashboard from './pages/patient/Pdashboard.jsx'
 import { AuthProvider } from './AuthContext'
 import Medicines from './components/medicines/medicine.jsx'
+import Login from './pages/login/login.jsx'
 function App() {
 
   return (
@@ -19,7 +20,8 @@ function App() {
         <Route path="/doctors" element={<Doctor />} />
         <Route path = "/about" element = {<About />} />
         <Route path = "/patients" element = {<Pdashboard />} />
-        <Route path = "/medicines" element = {<Medicines />} />        
+        <Route path = "/medicines" element = {<Medicines />} />   
+        <Route path = "/login" element = {<Login />} />
       </Routes>
     </BrowserRouter>
     </AuthProvider>
