@@ -82,7 +82,17 @@ export const AuthProvider = ({ children }) => {
         setUserEmail('');
         setIsAuthenticated(false);
     }
-
+    let [animate, setAnimate] = useState(true);
+    const should_set_animate = useRef(true);
+    if(should_set_animate.current) {
+        if(sessionStorage.getItem('animate')) {
+            setAnimate(sessionStorage.getItem('animate') === 'true');
+        } else {
+            sessionStorage.setItem('animate', 'true');
+        }
+        should_set_animate.current = false;
+    }
+    const should_animate = useRef(true);
     let contextData = {
         backend_url,
         pdashboardState,
@@ -95,7 +105,9 @@ export const AuthProvider = ({ children }) => {
         userType,
         userId,
         userEmail,
-
+        animate,
+        setAnimate,
+        should_animate,
     };
     return (
         <AuthContext.Provider value={contextData}>

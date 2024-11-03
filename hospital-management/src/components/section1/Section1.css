@@ -16,12 +16,13 @@
     max-width: 1200px;
     height: 100vh;
 }
-.section1_left, .section1_right {
+.section1_left_animation {
     opacity: 0;
     transform: translateX(-100%);
     animation: slideInFromLeft 0.5s forwards;
 }
-.section1_right {
+.section1_right_animation {
+    opacity: 0;
     transform: translateX(100%);
     animation: slideInFromRight 0.5s forwards;
 }
