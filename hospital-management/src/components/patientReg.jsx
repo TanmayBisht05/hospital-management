@@ -35,8 +35,8 @@ const PatientRegistrationForm = () => {
       }
 
       const result = await response.json();
-      console.log('Registration successful:', result);
-      // Optionally reset the form or provide feedback
+      console.log(result);
+
       setFormData({
         firstName: '',
         lastName: '',
@@ -49,7 +49,7 @@ const PatientRegistrationForm = () => {
         password: '',
       });
     } catch (error) {
-      console.error('There was a problem with the registration:', error);
+      console.error(error);
     }
   };
 
