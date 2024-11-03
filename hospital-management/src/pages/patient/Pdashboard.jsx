@@ -8,6 +8,7 @@ import Cookies from 'js-cookie';
 import Navbar from '../../components/navbar/navbar';
 import Fake from '../../utility/Fake';
 import UserInfo from './profile.jsx'
+import PatientBills from '../../components/bills/patientbills.jsx';
 
 const pdashboard = () => {
   const { pdashboardState } = React.useContext(AuthContext);
@@ -110,6 +111,7 @@ const pdashboard = () => {
         </>}
         {pdashboardState === 3 && <>
           <h1 className="dashboard-header">Pending Bills</h1>
+          <PatientBills patientID={id} />
         </>}
         
         {pdashboardState === 4 && <>
