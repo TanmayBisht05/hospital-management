@@ -5,6 +5,7 @@ export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
     let [pdashboardState, setPdashboardState] = useState(0);
+    let [cdashboardState, setCdashboardState] = useState(0);
     const backend_url = 'http://localhost:8080';
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userType, setUserType] = useState('');
@@ -82,11 +83,23 @@ export const AuthProvider = ({ children }) => {
         setUserEmail('');
         setIsAuthenticated(false);
     }
-
+    let [animate, setAnimate] = useState(true);
+    const should_set_animate = useRef(true);
+    if(should_set_animate.current) {
+        if(sessionStorage.getItem('animate')) {
+            setAnimate(sessionStorage.getItem('animate') === 'true');
+        } else {
+            sessionStorage.setItem('animate', 'true');
+        }
+        should_set_animate.current = false;
+    }
+    const should_animate = useRef(true);
     let contextData = {
         backend_url,
         pdashboardState,
         setPdashboardState,
+        cdashboardState,
+        setCdashboardState,
         isAuthenticated,
         checkAuthenticated,
         login,
@@ -95,7 +108,9 @@ export const AuthProvider = ({ children }) => {
         userType,
         userId,
         userEmail,
-
+        animate,
+        setAnimate,
+        should_animate,
     };
     return (
         <AuthContext.Provider value={contextData}>
