@@ -1,12 +1,102 @@
 import { createContext, useState, useEffect, useRef } from 'react';
 const AuthContext = createContext();
+import Cookies from 'js-cookie';
 export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
     let [pdashboardState, setPdashboardState] = useState(0);
+    const backend_url = 'http://localhost:8080';
+    const getCookie = (name) => {
+        return Cookies.get(name);
+    };
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [userType, setUserType] = useState('');
+    const [userId, setUserId] = useState(-1);
+    const [userEmail, setUserEmail] = useState('');
+
+    const shouldSetAuthenticated = useRef(true);
+    useEffect(() => {
+        if (shouldSetAuthenticated.current) {
+            shouldSetAuthenticated.current = false;
+            if (getCookie('token')) {
+                setIsAuthenticated(true);
+            }
+        }
+    }, []);
+    const checkAuthenticated = () => {
+        if(getCookie('token')) {
+            setIsAuthenticated(true);
+        } else {
+            setIsAuthenticated(false);
+        }
+    }
+
+    const login = async (reqData) => {
+        const response = await fetch(`${backend_url}/auth/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: reqData.toString(),
+        });
+        const data = await response.json();
+        console.log(data, response);
+        if(response.status === 200) {
+            Cookies.set('token', data.token);
+            Cookies.set('userType', data.userType);
+            Cookies.set('id', data.id);
+            Cookies.set('email', data.email);
+            setUserType(data.userType);
+            setUserId(data.id);
+            setUserEmail(data.email);
+            setIsAuthenticated(true);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    const signup = async (reqData, type) => {
+        const response = await fetch(`${backend_url}/${type}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(reqData),
+        })
+        const data = await response.json();
+        console.log(data, response);
+        if(response.status === 201) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    const logout = () => {
+        Cookies.remove('token');
+        Cookies.remove('userType');
+        Cookies.remove('id');
+        Cookies.remove('email');
+        setUserType('');
+        setUserId(-1);
+        setUserEmail('');
+        setIsAuthenticated(false);
+    }
+
     let contextData = {
+        backend_url,
         pdashboardState,
-        setPdashboardState
+        setPdashboardState,
+        isAuthenticated,
+        checkAuthenticated,
+        getCookie,
+        login,
+        logout,
+        signup,
+        userType,
+        userId,
+        userEmail,
+
     };
     return (
         <AuthContext.Provider value={contextData}>
