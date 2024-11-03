@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [userType, setUserType] = useState('');
+    const navigate = useNavigate(); // Initialize navigate
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -18,7 +20,7 @@ function Login() {
         try {
             const response = await fetch('http://localhost:8080/auth/login', {
                 method: 'POST',
-                headers: {
+                headers: {  
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body: params.toString(), // Send as URL-encoded
@@ -30,9 +32,17 @@ function Login() {
                 console.log('Login successful:', data);
                 Cookies.set('userType', data.userType);
                 Cookies.set('token', data.token);
-                Cookies.set('id',data.id);
+                Cookies.set('id', data.id);
                 Cookies.set('email', data.email);
-                // Handle success (e.g., save token,k redirect)
+
+                // Redirect based on userType
+                if (data.userType === 'DOCTOR') {
+                    navigate(`/ddashboard`); // Redirect to the doctor's dashboard
+                } else if (data.userType === 'PATIENT') {
+                    navigate(`/patients`); // Redirect to the patient's dashboard
+                } else if (data.userType === 'ADMIN') {
+                    navigate(`/admin`); // Redirect to the admin dashboard
+                }
             } else {
                 console.error('Login failed:', data);
                 // Handle error (e.g., show message)
@@ -53,6 +63,7 @@ function Login() {
                     required
                 />
                 <input
+                    type="password"
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}

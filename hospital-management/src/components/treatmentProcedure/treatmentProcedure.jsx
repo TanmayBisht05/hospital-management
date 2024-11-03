@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./treatmentProcedure.css";
+import Navbar from "../navbar/navbar";
 
 const TreatmentProcedure = () => {
     const { doctorId } = useParams(); // Get doctorId from the route parameters
@@ -34,6 +35,8 @@ const TreatmentProcedure = () => {
     };
 
     return (
+        <>
+        <Navbar />
         <div className="treatment-procedure-container">
             <h2 className="treatment-procedure-list-heading">
                 Treatment Procedures {doctorId ? `for Doctor ID: ${doctorId}` : ""}
@@ -60,6 +63,7 @@ const TreatmentProcedure = () => {
                 ))}
             </div>
         </div>
+        </>
     );
 };
 

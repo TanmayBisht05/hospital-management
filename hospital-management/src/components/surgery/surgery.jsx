@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"; // To capture the URL parameter
 import "./surgery.css";
 import Fake from '../../utility/Fake';
+import Navbar from "../navbar/navbar";
 
 const Surgery = () => {
   const { doctorId } = useParams(); // Capture doctorId from the URL
@@ -89,6 +90,7 @@ const Surgery = () => {
 
   return (
     <div>
+      <Navbar />
       <Fake />
       <div className="surgery-container">
         <div className="surgery-list">
