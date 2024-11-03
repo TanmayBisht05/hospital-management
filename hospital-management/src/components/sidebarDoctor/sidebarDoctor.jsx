@@ -63,9 +63,12 @@ const SidebarDoctor = () => {
                     <FaCalendarAlt /> Appointments
                 </a>
                 <a onClick={() => {handleClick(2)}} id='idnewapp'>
-                    <FaSyringe /> Surgery
+                    <FaSyringe /> Grant Appointments
                 </a>
                 <a onClick={() => {handleClick(3)}} id='idpending'>
+                    <MdPending /> Surgery 
+                </a>
+                <a onClick={() => {handleClick(4)}} id='idhistory'>
                     <MdPending /> History 
                 </a>
         </div>
