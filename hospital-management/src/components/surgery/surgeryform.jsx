@@ -56,7 +56,7 @@ const SurgeryForm = ({ doctorID }) => {
 
       if (response.ok) {
         setSuccessMessage('Surgery registered successfully!');
-        setFormData({ surgeryID: '', patientID: '', type: '', criticalLevel: '', cost: '' }); // Reset form
+        setFormData({patientID: '', type: '', criticalLevel: '', cost: '' }); // Reset form
 
       } else {
         throw new Error('Failed to register surgery');
@@ -72,16 +72,7 @@ const SurgeryForm = ({ doctorID }) => {
       {successMessage && <p className="success-message">{successMessage}</p>}
       {errorMessage && <p className="error-message">{errorMessage}</p>}
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Surgery ID:</label>
-          <input
-            type="text"
-            name="surgeryID"
-            value={formData.surgeryID}
-            onChange={handleChange}
-            required
-          />
-        </div>
+       
         <div>
           <label>Patient Email:</label>
           <input
