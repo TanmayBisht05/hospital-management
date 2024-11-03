@@ -7,25 +7,32 @@ import About from './components/about/About.jsx'
 import Pdashboard from './pages/patient/Pdashboard.jsx'
 import { AuthProvider } from './AuthContext'
 import Medicines from './components/medicines/medicine.jsx'
-import Login from './pages/login/login.jsx'
-function App() {
 
+import Login from './pages/login/login.jsx'
+
+import Surgery from './components/surgery/surgery.jsx';
+import TreatmentProcedure from './components/treatmentProcedure/treatmentProcedure.jsx';
+
+function App() {
   return (
     <AuthProvider>
-    {/* <Navbar /> */}
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Section1 />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/doctors" element={<Doctor />} />
-        <Route path = "/about" element = {<About />} />
-        <Route path = "/patients" element = {<Pdashboard />} />
-        <Route path = "/medicines" element = {<Medicines />} />   
-        <Route path = "/login" element = {<Login />} />
+      {/* <Navbar /> */}
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Section1 />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/doctors" element={<Doctor />} />
+          <Route path="/about" element={<About />} />
+          <Route path = "/patients" element = {<Pdashboard />} />
+          <Route path = "/login" element = {<Login />} />
+          <Route path="/medicines" element={<Medicines />} />
+          <Route path="/surgery/:doctorId" element={<Surgery />} /> {/* Updated route */}
+          <Route path="/treatmentProcedure" element={<TreatmentProcedure />} />
+          <Route path="/treatmentProcedure/:doctorId" element={<TreatmentProcedure />} />
       </Routes>
-    </BrowserRouter>
+     </BrowserRouter>
     </AuthProvider>
-  )
+  );
 }
 
-export default App
+export default App;
