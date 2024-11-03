@@ -1,57 +1,48 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
-const UserInfo = ({cookie}) => {
+const UserDetails = () => {
     const [user, setUser] = useState(null);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchUserData = async () => {
+        const fetchUserDetails = async () => {
             try {
-                const response = await fetch('http://localhost:8080/patients', {
-                    method: 'GET',
-                    credentials: cookie, // Include cookies in the request
-                });
+                const token = Cookies.get('token');  // Retrieve token from cookies
 
-                if (!response.ok) {
-                    throw new Error('Failed to fetch user data');
+                if (!token) {
+                    console.error("No token found in cookies");
+                    return;
                 }
 
-                const userData = await response.json();
-                setUser(userData);
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
+                const response = await axios.get('http://localhost:8080/auth/userinfo', {
+                    headers: {
+                        Authorization: `${token}`
+                    }
+                });
+                console.error(response)
+                setUser(response.data);
+            } catch (error) {
+                console.error("Error fetching user details:", error);
             }
         };
 
-        fetchUserData();
+        fetchUserDetails();
     }, []);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
+    if (!user) return <p>Loading...</p>;
 
     return (
         <div>
-            <h1>User Information</h1>
-            {user ? (
-                <div>
-                    <p>Name: {user.firstName} {user.lastName}</p>
-                    <p>Email: {user.email}</p>
-                    <p>Address: {user.address}</p>
-
-                </div>
-            ) : (
-                <div>No user information available.</div>
-            )}
+            <h1>User Details</h1>
+            <p><strong>First Name:</strong> {user.firstName}</p>
+            <p><strong>Last Name:</strong> {user.lastName}</p>
+            <p><strong>Email:</strong> {user.email}</p>
+            <p><strong>User Type:</strong> {user.userType}</p>
+            <p><strong>History:</strong> {user.history}</p>
+            <p><strong>NTK:</strong> {user.ntk}</p>
         </div>
     );
 };
 
-export default UserInfo;
+export default UserDetails;
