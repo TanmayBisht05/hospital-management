@@ -3,6 +3,7 @@ import Sidebar from '../../components/sidebar/Sidebar.jsx'
 import './pdashboard.css'
 import AuthContext from '../../AuthContext.jsx'
 import App_cards from '../../components/app_cards/App_cards.jsx'
+import UserInfo from './profile.jsx'
 
 const pdashboard = () => {
   const { pdashboardState } = React.useContext(AuthContext);
@@ -47,6 +48,8 @@ const pdashboard = () => {
         
         {pdashboardState === 4 && <>
           <h1 className="dashboard-header">History</h1>
+          <UserInfo cookie={"ejkjjs"}></UserInfo>
+
         </>}
       </div>
     </div>
