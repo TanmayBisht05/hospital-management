@@ -8,7 +8,6 @@ import Pdashboard from './pages/patient/Pdashboard.jsx'
 import Ddashboard from './pages/doctor/Ddashboard.jsx'
 import { AuthProvider } from './AuthContext'
 import Medicines from './components/medicines/medicine.jsx'
-import Surgery from './components/surgery/surgery.jsx'
 import TreatmentProcedure from './components/treatmentProcedure/treatmentProcedure.jsx'
 import PatientRegistrationForm from './components/patientReg.jsx'
 import AdminDash from './pages/adminDash/adminDash.jsx'
@@ -29,7 +28,6 @@ function App() {
           <Route path="/medicines" element={<Medicines />} />
           <Route path="/admin" element={<AdminDash />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/surgery/:doctorId" element={<Surgery />} />
           <Route path="/treatmentProcedure" element={<TreatmentProcedure />} />
           <Route path="/treatmentProcedure/:doctorId" element={<TreatmentProcedure />} />
           <Route path = "/login" element = {<Login />} />

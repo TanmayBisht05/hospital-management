@@ -52,7 +52,7 @@ const SidebarDoctor = () => {
     }
     return (
         <div className="sidebar">
-            <h2 className="text-light mb-4">Patient Dashboard</h2>
+            <h2 className="text-light mb-4">Doctor Dashboard</h2>
                 <Link to={'/'}>
                     <FaHome /> Home
                 </Link>
@@ -60,13 +60,13 @@ const SidebarDoctor = () => {
                     <CgProfile /> Profile
                 </a>
                 <a onClick={() => {handleClick(1)}} id='idapp'>
-                    <FaCalendarAlt /> Upcoming Appointments
+                    <FaCalendarAlt /> Appointments
                 </a>
                 <a onClick={() => {handleClick(2)}} id='idnewapp'>
-                    <FaSyringe /> Requested Appointments
+                    <FaSyringe /> Surgery
                 </a>
                 <a onClick={() => {handleClick(3)}} id='idpending'>
-                    <MdPending /> Surgery
+                    <MdPending /> History 
                 </a>
         </div>
     );
