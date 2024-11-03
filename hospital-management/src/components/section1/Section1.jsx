@@ -11,7 +11,7 @@ const Section1 = () => {
       <div className="section1_container">
         <div className="section1">
           <div className="section1_left">
-            <p className='section1_welcome'><center>Welcome to Heal</center></p>
+            <center><p className='section1_welcome'>Welcome to Heal</p></center>
             <h1 className='section1_heading'>Find Nearest Doctor.</h1>
             <div className="section1_search_doctor">
               <p className='section1_search_desc'>Search doctors, clinics, and hospitals</p>
