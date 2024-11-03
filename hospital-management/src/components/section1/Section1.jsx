@@ -14,7 +14,7 @@ const Section1 = () => {
         const timer = setTimeout(() => {
           setAnimate(false);
           sessionStorage.setItem('animate', 'false');
-        }, 500);
+        }, 1000);
         
         return () => clearTimeout(timer);
       }
