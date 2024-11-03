@@ -48,8 +48,6 @@ const UserDetails = () => {
             <p><strong>Last Name:</strong> {user.lastName}</p>
             <p><strong>Email:</strong> {user.email}</p>
             <p><strong>User Type:</strong> {user.userType}</p>
-            <p><strong>History:</strong> {user.history}</p>
-            <p><strong>NTK:</strong> {user.ntk}</p>
 
             <button onClick={handleLogout} >Logout</button>
         </div>
