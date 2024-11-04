@@ -254,29 +254,45 @@ const Admin = () => {
         </>}
         {adashboardState === 2 && <>
             <center><h1 className="dashboard-header">Machinery</h1></center>
-          <div className="login_div">
-            <h1>{machineryID === -1 ? 'Add' : 'Edit'}</h1>
-            <form onSubmit={handleMachinerySubmit} className="login_form">
+            <div className="appointments">
                 <div className="login_div">
-                    <label htmlFor="mname" className="login_label">Machine Name : </label>
-                    <input className='login_input' id='mname' maxLength="50" required type="text" placeholder="Machine Name" />
+                    <h1>{machineryID === -1 ? 'Add' : 'Edit'}</h1>
+                    <form onSubmit={handleMachinerySubmit} className="login_form">
+                        <div className="login_div">
+                            <label htmlFor="mname" className="login_label">Machine Name : </label>
+                            <input className='login_input' id='mname' maxLength="50" required type="text" placeholder="Machine Name" />
+                        </div>
+                        <div className="login_div">
+                            <label htmlFor="mcost" className="login_label">Cost : </label>
+                            <input className='login_input' id='mcost' type="number" placeholder="Cost" required />
+                        </div>
+                        <button className="login_button" type='submit'>{machineryID === -1 ? 'Add' : 'Edit'}</button>
+                    </form>
                 </div>
-                <div className="login_div">
-                    <label htmlFor="mcost" className="login_label">Cost : </label>
-                    <input className='login_input' id='mcost' type="number" placeholder="Cost" required />
-                </div>
-                <button className="login_button" type='submit'>{machineryID === -1 ? 'Add' : 'Edit'}</button>
-            </form>
-          </div>
-            <center><h1>Machinery List</h1></center>
-            <ul>
-                {machineryList.map((machinery) => (
-                    <li key={machinery.machineID}>
-                        {machinery.name} - ${machinery.cost}{' '}
-                        <button onClick={() => handleEditMachinery(machinery)}>Edit</button>
-                    </li>
-                ))}
-            </ul>
+                <center><h1>Machinery List</h1></center>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Machine ID</th>
+                            <th>Machine Name</th>
+                            <th>Cost</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {machineryList.map((machinery) => (
+                            <tr key={machinery.machineID}>
+                                <td>{machinery.machineID}</td>
+                                <td>{machinery.name}</td>
+                                <td>{machinery.cost}</td>
+                                <td>
+                                    <button className='login_button' onClick={() => handleEditMachinery(machinery)}>Edit</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </>}
         {adashboardState === 3 && <>
             <center><h1 className="dashboard-header">Requests</h1></center>
@@ -303,15 +319,6 @@ const Admin = () => {
                     ))}
                 </tbody>
             </table>
-            {/* <ul>
-                {requests.map((request) => (
-                    <li key={request.requestID}>
-                        <p>{request.medicineName} - {request.amount}</p>
-                        <button onClick={() => handleAcceptRequest(request.requestID)}>Accept</button>
-                        <button onClick={() => handleDenyRequest(request.requestID)}>Deny</button>
-                    </li>
-                ))}
-            </ul> */}
         </div>
         </>}
       </div>
