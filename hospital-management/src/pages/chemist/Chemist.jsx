@@ -8,11 +8,38 @@ import Fake from '../../utility/Fake';
 import Sidebar_chemist from '../../components/sidebar_chemist/Sidebar_chemist';
 
 const Chemist = () => {
-  const { cdashboardState } = React.useContext(AuthContext);
+  const { cdashboardState, backend_url } = React.useContext(AuthContext);
   const navigate = useNavigate();
   const token = Cookies.get('token');
   const userType = Cookies.get('userType');
   const id = parseInt(Cookies.get('id'), 10);
+  const [medicineName, setMedicineName] = useState('');
+    const [cost, setCost] = useState('');
+    const [type, setType] = useState('');
+    const [companyName, setCompanyName] = useState('');
+    const [amount, setAmount] = useState('');
+
+    const handleRequestMedicine = async () => {
+        const data = {
+            medicineName,
+            cost: parseInt(cost),
+            type,
+            companyName,
+            amount: parseInt(amount),
+        };
+
+        const requestResponse = await fetch(`${backend_url}/medicine-requests`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+
+        if (requestResponse.ok) {
+            alert("Request submitted successfully!");
+        } else {
+            alert("Failed to submit request.");
+        }
+    };
   if (isNaN(id)) {
     console.error('Invalid chemist ID');
   }
@@ -30,13 +57,41 @@ const Chemist = () => {
       
       <div className="main-content">
         {cdashboardState === 0 && <>
-          <h1 className="dashboard-header">Inventory</h1>
+          <center><h1 className="dashboard-header">Inventory</h1></center>
         </>}
         {cdashboardState === 1 && <>
-          <h1 className="dashboard-header">Order Medicines</h1>
+          <center><h1 className="dashboard-header">Order Medicines</h1></center>
+          <div>
+            <center><h2>Request Medicine</h2></center>
+            <div className="login_div">
+              <form onSubmit={handleRequestMedicine} className="login_form">
+                <div className="login_div">
+                  <label htmlFor="medname" className="login_label">Medicine Name : </label>
+                  <input className='login_input' type="text" id='medname' value={medicineName} onChange={(e) => setMedicineName(e.target.value)} placeholder="Medicine Name" />
+                </div>
+                <div className="login_div">
+                  <label htmlFor="medcost" className="login_label">Cost : </label>
+                  <input className='login_input' id='medcost' type="number" value={cost} onChange={(e) => setCost(e.target.value)} placeholder="Cost" />
+                </div>
+                <div className="login_div">
+                  <label htmlFor="medtype" className="login_label">Type : </label>
+                <input className='login_input' id='medtype' type="text" value={type} onChange={(e) => setType(e.target.value)} placeholder="Type" />
+                </div>
+                <div className="login_div">
+                  <label htmlFor="medcompanyname" className="login_label">Company Name : </label>
+                <input className='login_input' id='medcompanyname' type="text" value={companyName} onChange={(e) => setCompanyName(e.target.value)} placeholder="Company Name" />
+                </div>
+                <div className="login_div">
+                  <label htmlFor="medamount" className="login_label">Amount : </label>
+                <input className='login_input' id='medamount' type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Amount" />
+                </div>
+                <button className='login_button' type='submit'>Request Medicine</button>
+              </form>
+            </div>
+        </div>
         </>}
         {cdashboardState === 2 && <>
-          <h1 className="dashboard-header">Sell Requests</h1>
+          <center><h1 className="dashboard-header">Sell Requests</h1></center>
         </>}
       </div>
     </div>

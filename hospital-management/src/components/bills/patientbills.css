@@ -1,0 +1,10 @@
+.patient_bills {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+.patient_bills_table {
+    width: 300px;
+}

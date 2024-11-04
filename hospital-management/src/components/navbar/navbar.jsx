@@ -4,31 +4,11 @@ import AuthContext from '../../AuthContext';
 import { useLocation } from 'react-router-dom';
 
 const Navbar = () => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
     let {isAuthenticated, logout, userType} = useContext(AuthContext);
     const location = useLocation();
-
-    const handleScroll = () => {
-        if (window.scrollY > 0) {
-            document.querySelector('.navbar').classList.add('scroll');
-        } else {
-            document.querySelector('.navbar').classList.remove('scroll');
-        }
-    };
     const handleLogout = () => {
         logout();
     }
-
-    const handleMenuToggle = () => {
-        setIsMenuOpen(!isMenuOpen);
-    };
-
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
 
     return (
         <nav className="navbar">
@@ -37,7 +17,7 @@ const Navbar = () => {
                     Heal
                 </a>
                 <div className="nav-menu">
-                    {location.pathname !== "/" && location.pathname !== "#" && <div className="nav-item">
+                    {location.pathname !== "/" && location.pathname !== "#" && location.pathname !== "/patients" && location.pathname !== "/admin" && location.pathname !== "/chemist" && location.pathname !== "/doctor" && <div className="nav-item">
                         <a href="/" className="nav-links">
                             Home
                         </a>
@@ -47,31 +27,26 @@ const Navbar = () => {
                             Doctors
                         </a>
                     </div>
-                    {isAuthenticated && userType === 'PATIENT' && <div className="nav-item">
+                    {isAuthenticated && userType === 'PATIENT' && location.pathname !== "/patients" && <div className="nav-item">
                         <a href="/patients" className="nav-links">
                             Dashboard
                         </a>
                     </div>}
-                    {isAuthenticated && userType === 'ADMIN' && <div className="nav-item">
+                    {isAuthenticated && userType === 'ADMIN' && location.pathname !== "/admin" && <div className="nav-item">
                         <a href="/admin" className="nav-links">
                             Dashboard
                         </a>
                     </div>}
-                    {isAuthenticated && userType === 'CHEMIST' && <div className="nav-item">
+                    {isAuthenticated && userType === 'CHEMIST' && location.pathname !== "/chemist" && <div className="nav-item">
                         <a href="/chemist" className="nav-links">
                             Dashboard
                         </a>
                     </div>}
-                    {isAuthenticated && userType === 'DOCTOR' && <div className="nav-item">
+                    {isAuthenticated && userType === 'DOCTOR' && location.pathname !== "/doctor" && <div className="nav-item">
                         <a href="/doctor" className="nav-links">
                             Dashboard
                         </a>
                     </div>}
-                    <div className="nav-item">
-                        <a href="/contact" className="nav-links">
-                            Contact
-                        </a>
-                    </div>
                     <div className="nav-item">
                         <a href="/about" className="nav-links">
                             About

@@ -152,7 +152,7 @@ const pdashboard = () => {
         <Sidebar />
         <div className="main-content">
           {pdashboardState === 0 && <>
-            <h1 className="dashboard-header">Profile</h1>
+            <center><h1 className="dashboard-header">Profile</h1></center>
             {patientData ? (
               <div className="patient-profile">
                 <p><strong>Patient ID:</strong> {patientData.patientID}</p>
@@ -169,50 +169,57 @@ const pdashboard = () => {
             )}
           </>}
           {pdashboardState === 1 && <>
-            <h1 className="dashboard-header">Appointments</h1>
+            <center><h1 className="dashboard-header">Appointments</h1></center>
             <div className="appointments">
               <h2>Upcoming Appointments</h2>
+              {upcomingAppointments.length === 0 ? 
+              <p>No Upcoming Appointments</p>
+              :
               <div className="appointment_cards">
                 {upcomingAppointments.map(app => (
-                  <App_cards key={app.appointmentID} appointment={app} />
+                  <App_cards key={app.appointmentID} param={app} flag ={false} />
                 ))}
-              </div>
+              </div>}
             </div>
             <div className="appointments">
               <h2>Previous Appointments</h2>
+              {previousAppointments.length === 0 ? 
+              <p>No Previous Appointments</p>
+              :
               <div className="appointment_cards">
                 {previousAppointments.map(app => (
-                  <App_cards key={app.appointmentID} appointment={app} />
+                  <App_cards key={app.appointmentID} param={app} flag = {false} />
                 ))}
-              </div>
+              </div>}
             </div>
             <div className="appointments">
               <h2>Requested Appointments</h2>
+              {requestedAppointments.length === 0 ?
+              <p>No Requested Appointments</p>
+              :
               <div className="appointment_cards">
                 {requestedAppointments.map(app => (
-                  <App_cards key={app.appointmentID} appointment={app} />
+                  <App_cards key={app.appointmentID} param={app} flag = {false} />
                 ))}
-              </div>
+              </div>}
             </div>
           </>}
           {pdashboardState === 2 && <>
-            <h1 className="dashboard-header">New Appointment</h1>
-            <div>
-              <h3>Available Doctors:</h3>
+            <center><h1 className="dashboard-header">New Appointment</h1></center>
+            <div className='appointments'>
+              <center><h2>Available Doctors:</h2></center>
+              <div className="appointment_cards">
               {doctors.map(doctor => (
-                <div key={doctor.doctorID}>
-                  <p>
-                    <strong>Doctor ID:</strong> {doctor.doctorID} <br />
-                    <strong>Name:</strong> {doctor.firstName} {doctor.lastName} <br />
-                    <strong>Post:</strong> {doctor.post} <br />
-                    <strong>Department:</strong> {doctor.department} <br />
-                    <strong>Specialization:</strong> {doctor.specialization} <br />
-                  </p>
-                </div>
+                <App_cards key = {doctor.doctorID} param = {doctor} flag = {false} />
               ))}
+              </div>
             </div>
-            <label htmlFor="doctorSelect">Select a Doctor:</label>
-            <select id="doctorSelect" value={selectedDoctorID} onChange={handleDoctorChange}>
+            <div className="login_div">
+            <h2>Request an Appointment:</h2>
+            <form onSubmit={handleRequestAppointment} className="login_form">
+              <div className="login_div">
+            <label className='login_label' htmlFor="doctorSelect">Select a Doctor : </label>
+            <select className='login_select' id="doctorSelect" value={selectedDoctorID} onChange={handleDoctorChange}>
               <option value="">--Select Doctor--</option>
               {doctors.map(doctor => (
                 <option key={doctor.doctorID} value={doctor.doctorID}>
@@ -220,15 +227,28 @@ const pdashboard = () => {
                 </option>
               ))}
             </select>
-            <button onClick={handleRequestAppointment}>Request Appointment</button>
+              </div>
+            <button type='submit' className='login_button'>Request Appointment</button>
+              </form>
+              </div>
           </>}
           {pdashboardState === 3 && <>
-            <h1 className="dashboard-header">Pending Bills</h1>
+            <center><h1 className="dashboard-header">Pending Bills</h1></center>
+            <div className="appointments">
             <PatientBills patientID={id} /> 
+            </div>
           </>}
           {pdashboardState === 4 && <>
-            <h1 className="dashboard-header">History</h1>
+            <center><h1 className="dashboard-header">History</h1></center>
             <UserInfo cookie={"ejkjjs"} />
+          </>}
+          {pdashboardState === 5 && <>
+            <center><h1 className="dashboard-header">Book Room</h1></center>
+            
+          </>}
+          {pdashboardState === 6 && <>
+            <center><h1 className="dashboard-header">Pharmacy</h1></center>
+
           </>}
         </div>
       </div>

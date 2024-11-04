@@ -1,7 +1,6 @@
 import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Section1 from './components/section1/Section1.jsx'
-import Contact from './pages/contact.jsx'
 import Doctor from './components/doctor/Doctor.jsx' 
 import About from './components/about/About.jsx'
 import Pdashboard from './pages/patient/Pdashboard.jsx'
@@ -20,7 +19,6 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Section1 />} />
-          <Route path="/contact" element={<Contact />} />
           <Route path="/doctors" element={<Doctor />} />
           <Route path="/ddashboard" element={<Ddashboard />} /> 
           <Route path="/about" element={<About />} />
@@ -29,7 +27,6 @@ function App() {
           <Route path="/medicines" element={<Medicines />} />
           <Route path = "/admin" element ={<Admin/>} />
           <Route path = "/login" element ={<Login/>} />
-          {/* <Route path="/surgery/:doctorId" element={<Surgery />} /> Updated route */}
           <Route path = "/doctor" element = {<Ddashboard />} />
           <Route path="/treatmentProcedure" element={<TreatmentProcedure />} />
           <Route path="/treatmentProcedure/:doctorId" element={<TreatmentProcedure />} />

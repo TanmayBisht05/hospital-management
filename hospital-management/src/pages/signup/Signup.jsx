@@ -32,43 +32,47 @@ const Signup = () => {
         <Fake />
         <div className="login_div">
             <h1>Signup</h1>
-            <form className='login_form' onSubmit={handleSignup}>
-                <div className="login_div">
-                    <label htmlFor="firstName" className="login_label">First Name : </label>
-                    <input className='login_input' id='firstName' type="text" placeholder="First Name" />
+            <form className='login_form_horizontal' onSubmit={handleSignup}>
+                <div className="login_form_left">
+                    <div className="login_div">
+                        <label htmlFor="firstName" className="login_label">First Name : </label>
+                        <input className='login_input' id='firstName' type="text" placeholder="First Name" />
+                    </div>
+                    <div className="login_div">
+                        <label htmlFor="lastName" className="login_label">Last Name : </label>
+                        <input className='login_input' id='lastName' type="text" placeholder="Last Name" />
+                    </div>
+                    <div className="login_div">
+                        <label htmlFor="dob" className="login_label">Date of Birth : </label>
+                        <input className='login_input' id='dob' type="date" placeholder="Date of Birth" />
+                    </div>
+                    <div className="login_div">
+                        <label htmlFor="address" className="login_label">Address : </label>
+                        <input type="text" className="login_input" placeholder='Address' id='address' />
+                    </div>
                 </div>
-                <div className="login_div">
-                    <label htmlFor="lastName" className="login_label">Last Name : </label>
-                    <input className='login_input' id='lastName' type="text" placeholder="Last Name" />
+                <div className="login_form_right">
+                    <div className="login_div">
+                        <label htmlFor="NTK" className="login_label">NTK : </label>
+                        <input type="text" className="login_input" placeholder='NTK' id='NTK' />
+                    </div>
+                    <div className="login_div">
+                        <label htmlFor="gender" className="login_label">Gender : </label>
+                        <select className='login_select' id = 'gender'>
+                            <option value = "M">Male</option>
+                            <option value = "F">Female</option>
+                        </select>
+                    </div>
+                    <div className="login_div">
+                        <label htmlFor="email" className="login_label">Email : </label>
+                        <input className='login_input' id='email' type="text" placeholder="Email" />
+                    </div>
+                    <div className="login_div">
+                        <label htmlFor="password" className="login_label">Password : </label>
+                        <input className='login_input' id='password' type="password" placeholder="Password" />
+                    </div>
+                    <button className='login_button' type="submit">Signup</button>
                 </div>
-                <div className="login_div">
-                    <label htmlFor="dob" className="login_label">Date of Birth : </label>
-                    <input className='login_input' id='dob' type="date" placeholder="Date of Birth" />
-                </div>
-                <div className="login_div">
-                    <label htmlFor="address" className="login_label">Address : </label>
-                    <input type="text" className="login_input" placeholder='Address' id='address' />
-                </div>
-                <div className="login_div">
-                    <label htmlFor="NTK" className="login_label">NTK : </label>
-                    <input type="text" className="login_input" placeholder='NTK' id='NTK' />
-                </div>
-                <div className="login_div">
-                    <label htmlFor="gender" className="login_label">Gender : </label>
-                    <select className='login_select' id = 'gender'>
-                        <option value = "M">Male</option>
-                        <option value = "F">Female</option>
-                    </select>
-                </div>
-                <div className="login_div">
-                    <label htmlFor="email" className="login_label">Email : </label>
-                    <input className='login_input' id='email' type="text" placeholder="Email" />
-                </div>
-                <div className="login_div">
-                    <label htmlFor="password" className="login_label">Password : </label>
-                    <input className='login_input' id='password' type="password" placeholder="Password" />
-                </div>
-                <button className='login_button' type="submit">Signup</button>
             </form>
         </div>
     </div>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './doctorAppointments.css';
+import App_cards from '../app_cards/App_cards.jsx';
 
 const DoctorAppointments = ({ doctorID }) => {
     const [upcomingAppointments, setUpcomingAppointments] = useState([]);
@@ -102,33 +103,17 @@ const DoctorAppointments = ({ doctorID }) => {
 
     return (
         <div>
-            <h2>Appointments for Doctor ID: {doctorID}</h2>
+            <center><h1>Your Appointments</h1></center>
 
             {upcomingAppointments.length > 0 ? (
-                <div>
-                    <h3>Upcoming Appointments</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Appointment ID</th>
-                                <th>Patient ID</th>
-                                <th>Cost</th>
-                                <th>Status</th>
-                                <th>Time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {upcomingAppointments.map(appointment => (
-                                <tr key={appointment.appointmentID}>
-                                    <td>{appointment.appointmentID}</td>
-                                    <td>{appointment.patientID}</td>
-                                    <td>{appointment.cost}</td>
-                                    <td>Upcoming</td>
-                                    <td>{appointment.time ? appointment.time : "N/A"}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+
+                <div className='appointments'>
+                    <h2>Upcoming Appointments</h2>
+                    <div className="appointment_cards">
+                        {upcomingAppointments.map(app => (
+                            <App_cards key={app.appointmentID} param={app} flag={true} />
+                        ))}
+                    </div>
                 </div>
             ) : (
                 <div>No upcoming appointments found.</div>
