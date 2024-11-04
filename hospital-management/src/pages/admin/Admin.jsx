@@ -13,6 +13,37 @@ const Admin = () => {
   const token = Cookies.get('token');
   const userType = Cookies.get('userType');
   const id = parseInt(Cookies.get('id'), 10);
+  const [requests, setRequests] = useState([]);
+
+    useEffect(() => {
+        fetchRequests();
+    }, []);
+
+    const fetchRequests = async () => {
+        const response = await fetch(`${backend_url}/medicine-requests`);
+        const data = await response.json();
+        setRequests(data);
+    };
+
+    const handleAcceptRequest = async (requestID) => {
+        const response = await fetch(`${backend_url}/medicine-requests/${requestID}/accept`, { method: 'POST' });
+        if (response.ok) {
+            alert("Request accepted and processed!");
+            fetchRequests();
+        } else {
+            alert("Failed to accept request.");
+        }
+    };
+
+    const handleDenyRequest = async (requestID) => {
+        const response = await fetch(`/medicine-requests/${requestID}/deny`, { method: 'DELETE' });
+        if (response.ok) {
+            alert("Request denied.");
+            fetchRequests();
+        } else {
+            alert("Failed to deny request.");
+        }
+    };
   if (isNaN(id)) {
     console.error('Invalid admin ID');
   }
@@ -235,6 +266,18 @@ const Admin = () => {
         </>}
         {adashboardState === 3 && <>
           <h1 className="dashboard-header">Requests</h1>
+          <div>
+            <h2>Medicine Requests</h2>
+            <ul>
+                {requests.map((request) => (
+                    <li key={request.requestID}>
+                        <p>{request.medicineName} - {request.amount}</p>
+                        <button onClick={() => handleAcceptRequest(request.requestID)}>Accept</button>
+                        <button onClick={() => handleDenyRequest(request.requestID)}>Deny</button>
+                    </li>
+                ))}
+            </ul>
+        </div>
         </>}
       </div>
     </div>
