@@ -75,7 +75,7 @@ const DoctorAppointments = ({ doctorID }) => {
                     appointmentTime: formattedTime,
                     patientID,
                     totalCost: costNumber,
-                    type: 'scheduled', // You can modify this type as necessary
+                    type: 'Appointment', // You can modify this type as necessary
                 },
                 {
                     headers: {

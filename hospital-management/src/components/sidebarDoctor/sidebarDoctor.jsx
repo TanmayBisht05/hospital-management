@@ -20,8 +20,9 @@ const SidebarDoctor = () => {
             } else if(pdashboardState === 2) {
                 ele.current = document.getElementById('idnewapp');
             } else if(pdashboardState === 3) {
-                ele.current = document.getElementById('idpending');
-            } else if(pdashboardState === 4) {
+                ele = document.getElementById('idapproves');
+            }
+            else if(pdashboardState === 4) {
                 ele = document.getElementById('idhistory');
             }
             if(ele.current) {
@@ -40,9 +41,10 @@ const SidebarDoctor = () => {
             ele.current = document.getElementById('idapp');
         } else if(num === 2) {
             ele.current = document.getElementById('idnewapp');
-        } else if(num === 3) {
-            ele.current = document.getElementById('idpending');
-        } else if(num === 4) {
+        }  else if(num === 3) {
+            ele.current = document.getElementById('idapproves');
+        }
+         else if(num === 4) {
             ele.current = document.getElementById('idhistory');
         }
         if(ele.current) {
@@ -65,7 +67,10 @@ const SidebarDoctor = () => {
                 <a onClick={() => {handleClick(2)}} id='idnewapp'>
                     <FaSyringe /> Surgery
                 </a>
-                <a onClick={() => {handleClick(3)}} id='idpending'>
+                <a onClick={() => {handleClick(3)}} id='idapproves'>
+                    <MdPending /> Approve Bills
+                </a>
+                <a onClick={() => {handleClick(4)}} id='idhistory'>
                     <MdPending /> History 
                 </a>
         </div>

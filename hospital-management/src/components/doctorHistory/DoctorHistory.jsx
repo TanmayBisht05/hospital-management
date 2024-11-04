@@ -60,7 +60,6 @@ const DoctorHistory = ({ doctorID }) => {
                         <tr>
                             <th>Appointment ID</th>
                             <th>Patient ID</th>
-                            <th>Cost</th>
                             <th>Status</th>
                             <th>Time</th>
                             <th>Action</th>
@@ -71,7 +70,6 @@ const DoctorHistory = ({ doctorID }) => {
                             <tr key={appointment.appointmentID}>
                                 <td>{appointment.appointmentID}</td>
                                 <td>{appointment.patientID}</td>
-                                <td>{appointment.cost}</td>
                                 <td>Previous</td>
                                 <td>{appointment.time ? new Date(appointment.time).toLocaleString() : "N/A"}</td>
                                 <td>

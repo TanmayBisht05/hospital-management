@@ -11,6 +11,7 @@ import Fake from '../../utility/Fake';
 import UserInfo from './profile.jsx';
 import PatientBills from '../../components/bills/patientbills.jsx';
 
+
 const pdashboard = () => {
   const { pdashboardState, backend_url } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -20,10 +21,13 @@ const pdashboard = () => {
   const [upcomingAppointments, setUpcomingAppointments] = useState([]);
   const [previousAppointments, setPreviousAppointments] = useState([]);
   const [requestedAppointments, setRequestedAppointments] = useState([]);
+  const [unpaidBills, setUnpaidBills] = useState([]);
 
   const token = Cookies.get('token');
   const userType = Cookies.get('userType');
   const id = parseInt(Cookies.get('id'), 10);
+
+
 
   useEffect(() => {
     if (!token || userType !== 'PATIENT') {
@@ -32,8 +36,9 @@ const pdashboard = () => {
       fetchPatientData();
       fetchDoctors();
       fetchAppointments();
+      if (pdashboardState === 3) fetchUnpaidBills(); // Fetch unpaid bills when pdashboardState is 3
     }
-  }, [navigate, token, userType, id]);
+  }, [navigate, token, userType, id, pdashboardState]);
 
   const fetchPatientData = async () => {
     try {
@@ -168,6 +173,47 @@ const pdashboard = () => {
     }
   };
 
+
+  const fetchUnpaidBills = async () => {
+    try {
+      const response = await fetch(`${backend_url}/bill/patient/${id}/unpaid`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        const bills = await response.json();
+        setUnpaidBills(bills);
+      } else {
+        console.error('Failed to fetch unpaid bills');
+      }
+    } catch (error) {
+      console.error('Error fetching unpaid bills:', error);
+    }
+  };
+
+
+  const handlePayBill = async (billID) => {
+    try {
+      const response = await fetch(`${backend_url}/bill/${billID}/status?status=1`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        alert('Bill successfully paid.');
+        fetchUnpaidBills(); // Refresh unpaid bills list after payment
+      } else {
+        alert('Failed to update bill status.');
+      }
+    } catch (error) {
+      console.error('Error updating bill status:', error);
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -248,14 +294,21 @@ const pdashboard = () => {
           )}
           {pdashboardState === 3 && (
             <div>
-              <h1>Consult a Doctor</h1>
-              <select onChange={handleDoctorChange} value={selectedDoctorID}>
-                <option value="">Select a Doctor</option>
-                {doctors.map((doctor) => (
-                  <option key={doctor.id} value={doctor.id}>{doctor.name}</option>
-                ))}
-              </select>
-              <button onClick={handleRequestAppointment}>Request Appointment</button>
+              <h1>Pending Bills</h1>
+              <div className="bills-list">
+                {unpaidBills.length > 0 ? (
+                  unpaidBills.map((bill) => (
+                    <div key={bill.billID} className="bill-item">
+                      <p><strong>Bill ID:</strong> {bill.billID}</p>
+                      <p><strong>Amount:</strong> {bill.totalCost}</p>
+                      <p><strong>Type:</strong> {bill.type}</p>
+                      <button onClick={() => handlePayBill(bill.billID)} className="pay-button">Pay</button>
+                    </div>
+                  ))
+                ) : (
+                  <p>No pending bills.</p>
+                )}
+              </div>
             </div>
           )}
           {pdashboardState === 4 && (
@@ -279,3 +332,7 @@ const pdashboard = () => {
 };
 
 export default pdashboard;
+
+
+
+
