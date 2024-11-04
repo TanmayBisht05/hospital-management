@@ -7,6 +7,7 @@
     padding: 20px;
     flex: 1;
     background-color: #f8f9fa;
+    height: fit-content;
   }
 .dashboard-header {
   font-size: 2.5em;

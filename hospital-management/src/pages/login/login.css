@@ -4,7 +4,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     font-family: Arial, sans-serif;
   }
   
@@ -26,11 +27,26 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #f9f9f9;
   }
+  .login_form_horizontal {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    max-width: 800px;
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+  }
   
   /* Style each form group */
   .login_form div {
     margin-bottom: 15px;
     margin-top: 15px;
+  }
+  .login_form_left, .login_form_right {
+    width: 100%;
   }
   
   /* Style labels */

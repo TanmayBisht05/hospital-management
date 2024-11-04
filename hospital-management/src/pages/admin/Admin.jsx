@@ -143,103 +143,111 @@ const Admin = () => {
       
       <div className="main-content">
         {adashboardState === 0 && <>
-          <h1 className="dashboard-header">Register Doctor</h1>
+          <center><h1 className="dashboard-header">Register Doctor</h1></center>
           <div className="login_div">
             <h1>Details</h1>
-            <form onSubmit={handleRegDoc} className="login_form">
-                <div className="login_div">
-                    <label htmlFor="dfirstName" className="login_label">First Name : </label>
-                    <input className='login_input' id='dfirstName' type="text" placeholder="First Name" />
+            <form onSubmit={handleRegDoc} className="login_form_horizontal">
+                <div className="login_form_left">
+                    <div className="login_div">
+                        <label htmlFor="dfirstName" className="login_label">First Name : </label>
+                        <input className='login_input' id='dfirstName' type="text" placeholder="First Name" />
+                    </div>
+                    <div className="login_div">
+                        <label htmlFor="dlastName" className="login_label">Last Name : </label>
+                        <input className='login_input' id='dlastName' type="text" placeholder="Last Name" />
+                    </div>
+                    <div className="login_div">
+                        <label htmlFor="ddob" className="login_label">Date of Birth : </label>
+                        <input className='login_input' id='ddob' type="date" placeholder="Date of Birth" />
+                    </div>
+                    <div className="login_div">
+                        <label htmlFor="deducation" className="login_label">Education : </label>
+                        <input type="text" className="login_input" placeholder='Education' id='deducation' />
+                    </div>
+                    <div className="login_div">
+                        <label htmlFor="dgender" className="login_label">Gender : </label>
+                        <select className='login_select' id = 'dgender'>
+                            <option value = "Male">Male</option>
+                            <option value = "Female">Female</option>
+                        </select>
+                    </div>
+                    <div className="login_div">
+                        <label htmlFor="dphone" className="login_label">Phone : </label>
+                        <input type="text" className="login_input" placeholder='Phone' id='dphone' />
+                    </div>
                 </div>
-                <div className="login_div">
-                    <label htmlFor="dlastName" className="login_label">Last Name : </label>
-                    <input className='login_input' id='dlastName' type="text" placeholder="Last Name" />
+                <div className="login_form_right">
+                    <div className="login_div">
+                        <label htmlFor="demail" className="login_label">Email : </label>
+                        <input className='login_input' id='demail' type="text" placeholder="Email" />
+                    </div>
+                    <div className="login_div">
+                        <label htmlFor="dpost" className="login_label">Post : </label>
+                        <input className='login_input' id='dpost' type="text" placeholder="Post" />
+                    </div>
+                    <div className="login_div">
+                        <label htmlFor="ddepartment" className="login_label">Department : </label>
+                        <input className='login_input' id='ddepartment' type="text" placeholder="Department" />
+                    </div>
+                    <div className="login_div">
+                        <label htmlFor="dspecialization" className="login_label">Specialization : </label>
+                        <input className='login_input' id='dspecialization' type="text" placeholder="Specialization" />
+                    </div>
+                    <div className="login_div">
+                        <label htmlFor="dpassword" className="login_label">Password : </label>
+                        <input className='login_input' id='dpassword' type="password" placeholder="Password" />
+                    </div>
+                    <button className='login_button' type="submit">Register</button>
                 </div>
-                <div className="login_div">
-                    <label htmlFor="ddob" className="login_label">Date of Birth : </label>
-                    <input className='login_input' id='ddob' type="date" placeholder="Date of Birth" />
-                </div>
-                <div className="login_div">
-                    <label htmlFor="deducation" className="login_label">Education : </label>
-                    <input type="text" className="login_input" placeholder='Education' id='deducation' />
-                </div>
-                <div className="login_div">
-                    <label htmlFor="dgender" className="login_label">Gender : </label>
-                    <select className='login_select' id = 'dgender'>
-                        <option value = "Male">Male</option>
-                        <option value = "Female">Female</option>
-                    </select>
-                </div>
-                <div className="login_div">
-                    <label htmlFor="dphone" className="login_label">Phone : </label>
-                    <input type="text" className="login_input" placeholder='Phone' id='dphone' />
-                </div>
-                <div className="login_div">
-                    <label htmlFor="demail" className="login_label">Email : </label>
-                    <input className='login_input' id='demail' type="text" placeholder="Email" />
-                </div>
-                <div className="login_div">
-                    <label htmlFor="dpost" className="login_label">Post : </label>
-                    <input className='login_input' id='dpost' type="text" placeholder="Post" />
-                </div>
-                <div className="login_div">
-                    <label htmlFor="ddepartment" className="login_label">Department : </label>
-                    <input className='login_input' id='ddepartment' type="text" placeholder="Department" />
-                </div>
-                <div className="login_div">
-                    <label htmlFor="dspecialization" className="login_label">Specialization : </label>
-                    <input className='login_input' id='dspecialization' type="text" placeholder="Specialization" />
-                </div>
-                <div className="login_div">
-                    <label htmlFor="dpassword" className="login_label">Password : </label>
-                    <input className='login_input' id='dpassword' type="password" placeholder="Password" />
-                </div>
-                <button className='login_button' type="submit">Register</button>
             </form>
           </div>
         </>}
         {adashboardState === 1 && <>
-          <h1 className="dashboard-header">Register Chemist</h1>
+            <center><h1 className="dashboard-header">Register Chemist</h1></center>
           <div className="login_div">
             <h1>Details</h1>
-            <form onSubmit={handleRegChem} className="login_form">
-                <div className="login_div">
-                    <label htmlFor="cfirstName" className="login_label">First Name : </label>
-                    <input className='login_input' id='cfirstName' type="text" placeholder="First Name" />
+            <form onSubmit={handleRegChem} className="login_form_horizontal">
+                <div className="login_form_left">
+                    <div className="login_div">
+                        <label htmlFor="cfirstName" className="login_label">First Name : </label>
+                        <input className='login_input' id='cfirstName' type="text" placeholder="First Name" />
+                    </div>
+                    <div className="login_div">
+                        <label htmlFor="clastName" className="login_label">Last Name : </label>
+                        <input className='login_input' id='clastName' type="text" placeholder="Last Name" />
+                    </div>
+                    <div className="login_div">
+                        <label htmlFor="cdob" className="login_label">Date of Birth : </label>
+                        <input className='login_input' id='cdob' type="date" placeholder="Date of Birth" />
+                    </div>
+                    <div className="login_div">
+                        <label htmlFor="cgender" className="login_label">Gender : </label>
+                        <select className='login_select' id = 'cgender'>
+                            <option value = "M">Male</option>
+                            <option value = "F">Female</option>
+                        </select>
+                    </div>
                 </div>
-                <div className="login_div">
-                    <label htmlFor="clastName" className="login_label">Last Name : </label>
-                    <input className='login_input' id='clastName' type="text" placeholder="Last Name" />
+                <div className="login_form_right">
+                    <div className="login_div">
+                        <label htmlFor="cphone" className="login_label">Phone : </label>
+                        <input type="text" className="login_input" placeholder='Phone' id='cphone' />
+                    </div>
+                    <div className="login_div">
+                        <label htmlFor="cemail" className="login_label">Email : </label>
+                        <input className='login_input' id='cemail' type="text" placeholder="Email" />
+                    </div>
+                    <div className="login_div">
+                        <label htmlFor="cpassword" className="login_label">Password : </label>
+                        <input className='login_input' id='cpassword' type="password" placeholder="Password" />
+                    </div>
+                    <button className='login_button' type="submit">Register</button>
                 </div>
-                <div className="login_div">
-                    <label htmlFor="cdob" className="login_label">Date of Birth : </label>
-                    <input className='login_input' id='cdob' type="date" placeholder="Date of Birth" />
-                </div>
-                <div className="login_div">
-                    <label htmlFor="cgender" className="login_label">Gender : </label>
-                    <select className='login_select' id = 'cgender'>
-                        <option value = "M">Male</option>
-                        <option value = "F">Female</option>
-                    </select>
-                </div>
-                <div className="login_div">
-                    <label htmlFor="cphone" className="login_label">Phone : </label>
-                    <input type="text" className="login_input" placeholder='Phone' id='cphone' />
-                </div>
-                <div className="login_div">
-                    <label htmlFor="cemail" className="login_label">Email : </label>
-                    <input className='login_input' id='cemail' type="text" placeholder="Email" />
-                </div>
-                <div className="login_div">
-                    <label htmlFor="cpassword" className="login_label">Password : </label>
-                    <input className='login_input' id='cpassword' type="password" placeholder="Password" />
-                </div>
-                <button className='login_button' type="submit">Register</button>
             </form>
           </div>
         </>}
         {adashboardState === 2 && <>
-          <h1 className="dashboard-header">Machinery</h1>
+            <center><h1 className="dashboard-header">Machinery</h1></center>
           <div className="login_div">
             <h1>{machineryID === -1 ? 'Add' : 'Edit'}</h1>
             <form onSubmit={handleMachinerySubmit} className="login_form">
@@ -254,7 +262,7 @@ const Admin = () => {
                 <button className="login_button" type='submit'>{machineryID === -1 ? 'Add' : 'Edit'}</button>
             </form>
           </div>
-            <h1>Machinery List</h1>
+            <center><h1>Machinery List</h1></center>
             <ul>
                 {machineryList.map((machinery) => (
                     <li key={machinery.machineID}>
@@ -265,7 +273,7 @@ const Admin = () => {
             </ul>
         </>}
         {adashboardState === 3 && <>
-          <h1 className="dashboard-header">Requests</h1>
+            <center><h1 className="dashboard-header">Requests</h1></center>
           <div>
             <h2>Medicine Requests</h2>
             <ul>
