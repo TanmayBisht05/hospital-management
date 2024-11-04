@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './doctorAppointments.css';
-import App_cards from '../app_cards/App_cards.jsx';
 
 const DoctorAppointments = ({ doctorID }) => {
     const [upcomingAppointments, setUpcomingAppointments] = useState([]);
@@ -12,22 +11,31 @@ const DoctorAppointments = ({ doctorID }) => {
         appointmentID: null,
         time: '',
         cost: '',
+        patientID: null, // To hold the patient ID when scheduling
     });
 
     useEffect(() => {
         const fetchAppointments = async () => {
             try {
+                // Fetch upcoming appointments
                 const upcomingResponse = await axios.get(`http://localhost:8080/appointments/doctor/${doctorID}/upcoming`);
-                console.log('Fetched upcoming appointments:', upcomingResponse.data);
                 if (Array.isArray(upcomingResponse.data)) {
-                    setUpcomingAppointments(upcomingResponse.data);
+                    const updatedAppointments = await Promise.all(upcomingResponse.data.map(async (appointment) => {
+                        // Fetch cost from the corresponding bill
+                        const billResponse = await axios.get(`http://localhost:8080/bill/${appointment.billID}`); // Assuming billID is part of the appointment
+                        return {
+                            ...appointment,
+                            cost: billResponse.data.totalCost, // Add cost from the bill
+                        };
+                    }));
+                    setUpcomingAppointments(updatedAppointments);
                 } else {
                     console.error('Unexpected response format for upcoming appointments:', upcomingResponse.data);
                     setError('Unexpected response format for upcoming appointments');
                 }
 
+                // Fetch requested appointments
                 const requestedResponse = await axios.get(`http://localhost:8080/appointments/doctor/${doctorID}/requested`);
-                console.log('Fetched requested appointments:', requestedResponse.data);
                 if (Array.isArray(requestedResponse.data)) {
                     setRequestedAppointments(requestedResponse.data);
                 } else {
@@ -45,31 +53,29 @@ const DoctorAppointments = ({ doctorID }) => {
         fetchAppointments();
     }, [doctorID]);
 
-    const handleScheduleClick = (appointmentID) => {
-        // Set the appointment ID for the one being scheduled
-        setSchedulingData({ ...schedulingData, appointmentID });
+    const handleScheduleClick = (appointmentID, patientID) => {
+        // Set the appointment ID and patient ID for the one being scheduled
+        setSchedulingData({ ...schedulingData, appointmentID, patientID });
     };
 
     const handleScheduleSubmit = async (event) => {
         event.preventDefault();
-    
-        const { appointmentID, time, cost } = schedulingData;
-    
+
+        const { appointmentID, time, cost, patientID } = schedulingData;
+
         // Format the time to ISO string if not already formatted
         const formattedTime = new Date(time).toISOString();
-    
-        // Convert cost to a number
         const costNumber = parseInt(cost, 10);
-    
-        console.log('Scheduling Data:', { appointmentID, formattedTime, costNumber }); // Check the formatted data
-    
+
         try {
             const response = await axios.put(
                 `http://localhost:8080/appointments/doctor/${doctorID}/grant`,
                 {
                     appointmentID,
                     appointmentTime: formattedTime,
-                    cost: costNumber,
+                    patientID,
+                    totalCost: costNumber,
+                    type: 'scheduled', // You can modify this type as necessary
                 },
                 {
                     headers: {
@@ -77,22 +83,16 @@ const DoctorAppointments = ({ doctorID }) => {
                     },
                 }
             );
-    
+
             alert(response.data); // Show success or failure message
-            setRequestedAppointments(prevAppointments =>
-                prevAppointments.map(appointment =>
-                    appointment.appointmentID === appointmentID
-                        ? { ...appointment, status: 1, time: formattedTime, cost: costNumber }
-                        : appointment
-                )
-            );
-            setSchedulingData({ appointmentID: null, time: '', cost: '' }); // Reset scheduling data
+            // Refresh the appointments after scheduling
             window.location.reload();
         } catch (error) {
             console.error('Error scheduling appointment:', error);
             alert('Error scheduling appointment');
         }
     };
+
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setSchedulingData({ ...schedulingData, [name]: value });
@@ -103,17 +103,39 @@ const DoctorAppointments = ({ doctorID }) => {
 
     return (
         <div>
-            <center><h1>Your Appointments</h1></center>
+            <h2>Appointments for Doctor ID: {doctorID}</h2>
 
             {upcomingAppointments.length > 0 ? (
-
-                <div className='appointments'>
-                    <h2>Upcoming Appointments</h2>
-                    <div className="appointment_cards">
-                        {upcomingAppointments.map(app => (
-                            <App_cards key={app.appointmentID} param={app} flag={true} />
-                        ))}
-                    </div>
+                <div>
+                    <h3>Upcoming Appointments</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Appointment ID</th>
+                                <th>Patient ID</th>
+                                <th>Cost</th>
+                                <th>Status</th>
+                                <th>Time</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {upcomingAppointments.map(appointment => (
+                                <tr key={appointment.appointmentID}>
+                                    <td>{appointment.appointmentID}</td>
+                                    <td>{appointment.patientID}</td>
+                                    <td>{appointment.cost}</td>
+                                    <td>Upcoming</td>
+                                    <td>{appointment.time ? appointment.time : "N/A"}</td>
+                                    <td>
+                                        <button onClick={() => handleScheduleClick(appointment.appointmentID, appointment.patientID)}>
+                                            Reschedule
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             ) : (
                 <div>No upcoming appointments found.</div>
@@ -127,9 +149,7 @@ const DoctorAppointments = ({ doctorID }) => {
                             <tr>
                                 <th>Appointment ID</th>
                                 <th>Patient ID</th>
-                                <th>Cost</th>
                                 <th>Status</th>
-                                <th>Time</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -138,11 +158,9 @@ const DoctorAppointments = ({ doctorID }) => {
                                 <tr key={appointment.appointmentID}>
                                     <td>{appointment.appointmentID}</td>
                                     <td>{appointment.patientID}</td>
-                                    <td>{appointment.cost}</td>
                                     <td>Requested</td>
-                                    <td>{appointment.time ? appointment.time : "N/A"}</td>
                                     <td>
-                                        <button onClick={() => handleScheduleClick(appointment.appointmentID)}>
+                                        <button onClick={() => handleScheduleClick(appointment.appointmentID, appointment.patientID)}>
                                             Schedule
                                         </button>
                                     </td>
@@ -184,7 +202,7 @@ const DoctorAppointments = ({ doctorID }) => {
                             </label>
                         </div>
                         <button type="submit">Confirm Schedule</button>
-                        <button type="button" onClick={() => setSchedulingData({ appointmentID: null, time: '', cost: '' })}>
+                        <button type="button" onClick={() => setSchedulingData({ appointmentID: null, time: '', cost: '', patientID: null })}>
                             Cancel
                         </button>
                     </form>
