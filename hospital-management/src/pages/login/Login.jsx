@@ -21,20 +21,6 @@ const Login = () => {
     }
   return (
     <div>
-
-        {/* <h1>Login</h1>
-        <form onSubmit={handleLogin}>
-            <select id='userType'>
-                <option value="patient">Patient</option>
-                <option value="doctor">Doctor</option>
-                <option value="admin">Admin</option>
-                <option value="chemist">Chemist</option>
-            </select>
-            <input id='email' type="text" placeholder="Email" />
-            <input id='password' type="password" placeholder="Password" />
-            <button type="submit">Login</button>
-        </form> */}
-
         <Navbar />
         <Fake />
         <div className="login_div">

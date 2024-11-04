@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import './patientbills.css';
 const PatientBills = ({ patientID }) => {
     const [bills, setBills] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -30,9 +30,9 @@ const PatientBills = ({ patientID }) => {
     if (error) return <p>Error fetching bills: {error}</p>;
 
     return (
-        <div>
+        <div className='patient_bills'>
             <h2>Patient Bills</h2>
-            <table>
+            <table className='patient_bills_table'>
                 <thead>
                     <tr>
                         <th>Bill ID</th>
@@ -49,7 +49,7 @@ const PatientBills = ({ patientID }) => {
                 </tbody>
             </table>
             <div>
-                <strong>Total Cost: </strong>${totalCost.toFixed(2)}
+                <strong>Total Cost: </strong>&nbsp; &nbsp;${totalCost.toFixed(2)}
             </div>
         </div>
     );
