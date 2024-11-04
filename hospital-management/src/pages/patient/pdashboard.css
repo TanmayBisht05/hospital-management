@@ -24,7 +24,8 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    height: 400px;
+    height: fit-content;
+    max-height: 400px;
     width: 1000px;
     border-radius: 10px;
     gap: 20px;
