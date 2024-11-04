@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import SurgeryList from './surgeryList';
+import axios from 'axios';
 
 const SurgeryForm = ({ doctorID }) => {
   const [formData, setFormData] = useState({
@@ -31,15 +32,25 @@ const SurgeryForm = ({ doctorID }) => {
     setErrorMessage('');
 
     try {
+        const resp = await axios.get(`http://localhost:8080/patients/by-email?email=${formData.patientEmail}`)
+        console.log(resp.data)
+        const body = {
+            "patientID": resp.data.patientID,
+            "type": formData.type,
+            "criticalLevel": formData.criticalLevel,
+            "cost": formData.cost
+
+        }
+
       const response = await fetch(`http://localhost:8080/surgery/${doctorID}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(body),
       });
 
       if (response.ok) {
         setSuccessMessage('Surgery registered successfully!');
-        setFormData({ surgeryID: '', patientID: '', type: '', criticalLevel: '' }); // Reset form
+        setFormData({ surgeryID: '', patientEmail: '', type: '', criticalLevel: '' }); // Reset form
 
       } else {
         throw new Error('Failed to register surgery');
@@ -60,11 +71,11 @@ const SurgeryForm = ({ doctorID }) => {
         <div>
           <div className="login_div">
 
-          <label className='login_label'>Patient ID:</label>
+          <label className='login_label'>Patient Email:</label>
           <input className='login_input'
             type="text"
-            name="patientID"
-            value={formData.patientID}
+            name="patientEmail"
+            value={formData.patientEmail}
             onChange={handleChange}
             required
           />
