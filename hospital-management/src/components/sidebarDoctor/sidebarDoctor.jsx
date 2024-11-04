@@ -79,7 +79,7 @@ const SidebarDoctor = () => {
                     <MdPending /> Salary 
                 </a>
                 <a onClick={() => {handleClick(5)}} id='idhistory'>
-                    <MdPending /> Salary 
+                    <MdPending /> History 
                 </a>
         </div>
     );

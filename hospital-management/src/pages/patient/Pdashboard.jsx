@@ -82,6 +82,7 @@ const pdashboard = () => {
   useEffect(() => {
     if(should_fetch.current === true) {
       fetchRoomsByPatientId();
+      fetchRooms();
       should_fetch.current = false;
     }
   }, [])
@@ -165,7 +166,7 @@ const pdashboard = () => {
         });
         if (response.ok) {
           alert('Room booking created successfully.');
-          fetchRooms(); // Update room list after booking
+          fetchRoomsByPatientId(); // Update room list after booking
         } else {
           alert('Failed to create room booking.');
         }
@@ -329,6 +330,16 @@ const pdashboard = () => {
                   <p>No previous appointments.</p>
                 )}
               </div>
+              <center><h1 className="dashboard-header">Requested Appointments</h1></center>
+              <div className="appointments">
+                {requestedAppointments.length > 0 ? (
+                  requestedAppointments.map((appointment) => (
+                    <App_cards key={appointment.appointmentID} param={appointment} flag={false} onDelete={handleDeleteAppointment} />
+                  ))
+                ) : (
+                  <p>No Requested appointments.</p>
+                )}
+              </div>
             </div>
           )}
           {pdashboardState === 2 && (
@@ -399,7 +410,6 @@ const pdashboard = () => {
             <center><h1 className="dashboard-header">Book Room</h1></center>
             <div className="appointments">
               <h2>Available Rooms:</h2>
-              {rooms.length > 0 ? (
                 <div className="appointment_cards">
                 {rooms.length > 0 ? (
                   rooms.map(room => (
@@ -412,7 +422,6 @@ const pdashboard = () => {
                   <p>No rooms available.</p>
                 )}
               </div>
-              ) : <p>No rooms available!</p>}
             </div>
             <div className="login_div">
                 <h2>Book a Room:</h2>
@@ -461,20 +470,20 @@ const pdashboard = () => {
             </div>
             <div className="appointments">
               <h2>Your Booked Rooms :</h2>
+              <div className="appointment_cards">
                 {roomBookings.length > 0 ? (
                   roomBookings.map(room => (
-                    <div className="appointment_cards">
                     <div key={room.roomBookingID} className="room-card">
                       <p><strong>Room ID :</strong> {room.roomID}</p>
                       <p><strong>Room Type :</strong> {getRoomType(room.roomID)}</p>
                       <p><strong>Booked From :</strong> {room.bookFrom}</p>
                       <p><strong>Booked Till :</strong> {room.bookTill}</p>
                     </div>
-                    </div>
                   ))
                 ) : (
                   <p>No rooms booked.</p>
                 )}
+                </div>
             </div>
           </>}
           {pdashboardState === 6 && <>
