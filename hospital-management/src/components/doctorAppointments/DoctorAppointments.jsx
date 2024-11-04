@@ -51,21 +51,32 @@ const DoctorAppointments = ({ doctorID }) => {
 
     const handleScheduleSubmit = async (event) => {
         event.preventDefault();
-
+    
         const { appointmentID, time, cost } = schedulingData;
-
+    
         // Format the time to ISO string if not already formatted
-        const formattedTime = new Date(time).toLocaleString();
-
+        const formattedTime = new Date(time).toISOString();
+    
         // Convert cost to a number
-        const costNumber = parseInt(cost, 10); // Ensure cost is an integer
-
+        const costNumber = parseInt(cost, 10);
+    
         console.log('Scheduling Data:', { appointmentID, formattedTime, costNumber }); // Check the formatted data
-
+    
         try {
-            const response = await axios.put(`http://localhost:8080/appointments/doctor/${doctorID}/grant`, null, {
-                params: { appointmentID:appointmentID, appointmentTime: formattedTime, cost: costNumber },
-            });
+            const response = await axios.put(
+                `http://localhost:8080/appointments/doctor/${doctorID}/grant`,
+                {
+                    appointmentID,
+                    appointmentTime: formattedTime,
+                    cost: costNumber,
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+    
             alert(response.data); // Show success or failure message
             setRequestedAppointments(prevAppointments =>
                 prevAppointments.map(appointment =>
@@ -81,7 +92,6 @@ const DoctorAppointments = ({ doctorID }) => {
             alert('Error scheduling appointment');
         }
     };
-
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setSchedulingData({ ...schedulingData, [name]: value });
