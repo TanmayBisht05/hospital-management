@@ -14,9 +14,13 @@ const Admin = () => {
   const userType = Cookies.get('userType');
   const id = parseInt(Cookies.get('id'), 10);
   const [requests, setRequests] = useState([]);
+  const should_fetch = useRef(true);
 
     useEffect(() => {
-        fetchRequests();
+        if(should_fetch.current) {
+            fetchRequests();
+            should_fetch.current = false;
+        }
     }, []);
 
     const fetchRequests = async () => {
@@ -53,6 +57,7 @@ const Admin = () => {
     }
   }, [token])
   const handleRegDoc = async () => {
+        e.preventDefault();
         const data = {
             firstName: document.getElementById('dfirstName').value,
             lastName: document.getElementById('dlastName').value,
@@ -74,6 +79,7 @@ const Admin = () => {
         }
     }
     const handleRegChem = async () => {
+        e.preventDefault();
         const data = {
             firstName: document.getElementById('cfirstName').value,
             lastName: document.getElementById('clastName').value,
@@ -274,9 +280,30 @@ const Admin = () => {
         </>}
         {adashboardState === 3 && <>
             <center><h1 className="dashboard-header">Requests</h1></center>
-          <div>
+          <div className='appointments'>
             <h2>Medicine Requests</h2>
-            <ul>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Medicine Name</th>
+                        <th>Amount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {requests.map((request) => (
+                        <tr key={request.requestID}>
+                            <td>{request.medicineName}</td>
+                            <td>{request.amount}</td>
+                            <td className='req_table_data'>
+                                <button className='login_button button_green' onClick={() => handleAcceptRequest(request.requestID)}>Accept</button>
+                                <button className='login_button button_red' onClick={() => handleDenyRequest(request.requestID)}>Deny</button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            {/* <ul>
                 {requests.map((request) => (
                     <li key={request.requestID}>
                         <p>{request.medicineName} - {request.amount}</p>
@@ -284,7 +311,7 @@ const Admin = () => {
                         <button onClick={() => handleDenyRequest(request.requestID)}>Deny</button>
                     </li>
                 ))}
-            </ul>
+            </ul> */}
         </div>
         </>}
       </div>
