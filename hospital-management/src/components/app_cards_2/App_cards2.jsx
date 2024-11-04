@@ -1,9 +1,18 @@
 import React from 'react';
-import './app_cards.css';
+import './app_cards_2.css';
 
-const App_cards = ({ param, flag, onDelete }) => {
-  const handleDelete = () => {
-    onDelete(param.appointmentID); // Call the delete function with the appointment ID
+const App_cards_2 = ({ param, flag, onDelete }) => {
+  // Function to render the prescription details if available
+  const renderPrescription = () => {
+    if (param.prescription) {
+      return (
+        <div className="prescription_box">
+          <h4>Prescription:</h4>
+          <p>{param.prescription}</p>
+        </div>
+      );
+    }
+    return null; // Return null if no prescription is available
   };
 
   if (flag === false) {
@@ -18,8 +27,8 @@ const App_cards = ({ param, flag, onDelete }) => {
               <p><strong>Appointment ID:</strong> {param.appointmentID}</p>
               <p><strong>Doctor ID:</strong> {param.doctorID}</p>
               <p><strong>Status:</strong> {param.status === 0 ? 'Requested' : 'Granted'}</p>
+              {renderPrescription()} {/* Call the renderPrescription function here */}
             </div>
-            <button onClick={handleDelete} className="delete-button">Delete</button> {/* Delete Button */}
           </div>
         ) : (
           <div className="app_cards">
@@ -31,6 +40,7 @@ const App_cards = ({ param, flag, onDelete }) => {
               <p><strong>Post : </strong>{param.post}</p>
               <p><strong>Specialization : </strong>{param.specialization}</p>
               <p><strong>Department : </strong>{param.department}</p>
+              {renderPrescription()} {/* Call the renderPrescription function here */}
             </div>
           </div>
         )}
@@ -47,11 +57,11 @@ const App_cards = ({ param, flag, onDelete }) => {
           <p><strong>Patient ID:</strong> {param.patientID}</p>
           <p><strong>Status:</strong> {param.status}</p>
           <p><strong>Cost:</strong> {param.cost}</p>
+          {renderPrescription()} {/* Call the renderPrescription function here */}
         </div>
-        <button onClick={handleDelete} className="delete-button">Delete</button> {/* Delete Button */}
       </div>
     );
   }
 };
 
-export default App_cards;
+export default App_cards_2;

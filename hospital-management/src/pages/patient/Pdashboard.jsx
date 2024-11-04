@@ -1,14 +1,16 @@
 import React, { useEffect, useContext, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
-import Sidebar from '../../components/sidebar/Sidebar.jsx'
-import './pdashboard.css'
-import AuthContext from '../../AuthContext.jsx'
-import App_cards from '../../components/app_cards/App_cards.jsx'
+import Sidebar from '../../components/sidebar/Sidebar.jsx';
+import './pdashboard.css';
+import AuthContext from '../../AuthContext.jsx';
+import App_cards from '../../components/app_cards/App_cards.jsx';
+import App_cards_2 from '../../components/app_cards_2/App_cards2.jsx';
 import Cookies from 'js-cookie';
 import Navbar from '../../components/navbar/navbar';
 import Fake from '../../utility/Fake';
-import UserInfo from './profile.jsx'
+import UserInfo from './profile.jsx';
 import PatientBills from '../../components/bills/patientbills.jsx';
+
 
 const pdashboard = () => {
   const { pdashboardState, backend_url } = useContext(AuthContext);
@@ -24,40 +26,30 @@ const pdashboard = () => {
   const [previousAppointments, setPreviousAppointments] = useState([]);
   const [requestedAppointments, setRequestedAppointments] = useState([]);
   const [roomBookings, setRoomBookings] = useState([]);
+  const [unpaidBills, setUnpaidBills] = useState([]);
 
   const token = Cookies.get('token');
   const userType = Cookies.get('userType');
   const id = parseInt(Cookies.get('id'), 10);
-  const should_fetch = useRef(true);
-  useEffect(() => {
-    if(should_fetch.current === true) {
-      fetchRooms();
-      should_fetch.current = false;
-    }
-  })
 
-  useEffect(() => {
-    if (!token || userType !== 'PATIENT') {
-      navigate('/login');
-    } else {
-      const fetchPatientData = async () => {
-        try {
-          const response = await fetch(`${backend_url}/patients/${id}`, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          });
-          if (response.ok) {
-            const data = await response.json();
-            setPatientData(data);
-          } else {
-            console.error('Failed to fetch patient data');
-          }
-        } catch (error) {
-          console.error('Error:', error);
-        }
-      };
+  const fetchPatientData = async () => {
+    try {
+      const response = await fetch(`${backend_url}/patients/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setPatientData(data);
+      } else {
+        console.error('Failed to fetch patient data');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
       const fetchRooms = async () => {
         try {
@@ -73,29 +65,39 @@ const pdashboard = () => {
         }
       };
 
-      const fetchDoctors = async () => {
-        try {
-          const response = await fetch(`${backend_url}/doctor`);
-          if (response.ok) {
-            const data = await response.json();
-            setDoctors(data);
-          } else {
-            console.error('Failed to fetch doctors');
-          }
-        } catch (error) {
-          console.error('Error fetching doctor data:', error);
-        }
-      };
+  const fetchDoctors = async () => {
+    try {
+      const response = await fetch(`${backend_url}/doctor`);
+      if (response.ok) {
+        const data = await response.json();
+        setDoctors(data);
+      } else {
+        console.error('Failed to fetch doctors');
+      }
+    } catch (error) {
+      console.error('Error fetching doctor data:', error);
+    }
+  };
+  const should_fetch = useRef(true);
+  useEffect(() => {
+    if(should_fetch.current === true) {
+      fetchRoomsByPatientId();
+      should_fetch.current = false;
+    }
+  }, [])
 
-      fetchRooms();
+  useEffect(() => {
+    if (!token || userType !== 'PATIENT') {
+      navigate('/login');
+    } else {
       fetchPatientData();
       fetchDoctors();
       fetchAppointments();
+      if (pdashboardState === 3) fetchUnpaidBills(); // Fetch unpaid bills when pdashboardState is 3
     }
-  }, [navigate, token, userType, id]);
+  }, [navigate, token, userType, id, pdashboardState]);
   const fetchAppointments = async () => {
     try {
-      // Fetch requested appointments
       const requestedResponse = await fetch(`${backend_url}/appointments/patient/${id}/requested`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -108,8 +110,7 @@ const pdashboard = () => {
       } else {
         console.error('Failed to fetch requested appointments');
       }
-  
-      // Fetch upcoming appointments
+
       const upcomingResponse = await fetch(`${backend_url}/appointments/patient/${id}/upcoming`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -122,8 +123,7 @@ const pdashboard = () => {
       } else {
         console.error('Failed to fetch upcoming appointments');
       }
-  
-      // Fetch previous appointments
+
       const previousResponse = await fetch(`${backend_url}/appointments/patient/${id}/previous`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -140,7 +140,7 @@ const pdashboard = () => {
       console.error('Error fetching appointments:', error);
     }
   };
-  const fetchRooms = async () => {
+  const fetchRoomsByPatientId = async () => {
     const response = await fetch(`${backend_url}/api/roomBookings/patient/${id}`);
     const data = await response.json();
     setRoomBookings(data);
@@ -216,6 +216,73 @@ const pdashboard = () => {
     return room ? room.roomType : 'Unknown';
   }
 
+  const handleDeleteAppointment = async (appointmentID) => {
+    if (window.confirm("Are you sure you want to delete this appointment?")) {
+      try {
+        console.log(appointmentID);
+
+        const response = await fetch(`${backend_url}/appointments/${appointmentID}/delete`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        if (response.ok) {
+          alert('Appointment successfully deleted.');
+          fetchAppointments(); // Refresh the appointments after deletion
+        } else {
+          console.log(response);
+          const message = await response.text();
+          alert(message || 'Failed to delete appointment.');
+        }
+      } catch (error) {
+        console.error('Error deleting appointment:', error);
+      }
+    }
+  };
+
+
+  const fetchUnpaidBills = async () => {
+    try {
+      const response = await fetch(`${backend_url}/bill/patient/${id}/unpaid`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        const bills = await response.json();
+        setUnpaidBills(bills);
+      } else {
+        console.error('Failed to fetch unpaid bills');
+      }
+    } catch (error) {
+      console.error('Error fetching unpaid bills:', error);
+    }
+  };
+
+
+  const handlePayBill = async (billID) => {
+    try {
+      const response = await fetch(`${backend_url}/bill/${billID}/status?status=1`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        alert('Bill successfully paid.');
+        fetchUnpaidBills(); // Refresh unpaid bills list after payment
+      } else {
+        alert('Failed to update bill status.');
+      }
+    } catch (error) {
+      console.error('Error updating bill status:', error);
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -240,80 +307,94 @@ const pdashboard = () => {
               <p>Loading patient data...</p>
             )}
           </>}
-          {pdashboardState === 1 && <>
-            <center><h1 className="dashboard-header">Appointments</h1></center>
-            <div className="appointments">
-              <h2>Upcoming Appointments</h2>
-              {upcomingAppointments.length === 0 ? 
-              <p>No Upcoming Appointments</p>
-              :
-              <div className="appointment_cards">
-                {upcomingAppointments.map(app => (
-                  <App_cards key={app.appointmentID} param={app} flag ={false} />
-                ))}
-              </div>}
-            </div>
-            <div className="appointments">
-              <h2>Previous Appointments</h2>
-              {previousAppointments.length === 0 ? 
-              <p>No Previous Appointments</p>
-              :
-              <div className="appointment_cards">
-                {previousAppointments.map(app => (
-                  <App_cards key={app.appointmentID} param={app} flag = {false} />
-                ))}
-              </div>}
-            </div>
-            <div className="appointments">
-              <h2>Requested Appointments</h2>
-              {requestedAppointments.length === 0 ?
-              <p>No Requested Appointments</p>
-              :
-              <div className="appointment_cards">
-                {requestedAppointments.map(app => (
-                  <App_cards key={app.appointmentID} param={app} flag = {false} />
-                ))}
-              </div>}
-            </div>
-          </>}
-          {pdashboardState === 2 && <>
-            <center><h1 className="dashboard-header">New Appointment</h1></center>
-            <div className='appointments'>
-              <center><h2>Available Doctors:</h2></center>
-              <div className="appointment_cards">
-              {doctors.map(doctor => (
-                <App_cards key = {doctor.doctorID} param = {doctor} flag = {false} />
-              ))}
+          {pdashboardState === 1 && (
+            <div>
+              <center><h1 className="dashboard-header">Upcoming Appointments</h1></center>
+              <div className="appointments">
+                {upcomingAppointments.length > 0 ? (
+                  upcomingAppointments.map((appointment) => (
+                    <App_cards key={appointment.appointmentID} param={appointment} flag={false} onDelete={handleDeleteAppointment} />
+                  ))
+                ) : (
+                  <p>No upcoming appointments.</p>
+                )}
+              </div>
+              <center><h1 className="dashboard-header">Previous Appointments</h1></center>
+              <div className="appointments">
+                {previousAppointments.length > 0 ? (
+                  previousAppointments.map((appointment) => (
+                    <App_cards key={appointment.appointmentID} param={appointment} flag={false} onDelete={handleDeleteAppointment} />
+                  ))
+                ) : (
+                  <p>No previous appointments.</p>
+                )}
               </div>
             </div>
-            <div className="login_div">
-            <h2>Request an Appointment:</h2>
-            <form onSubmit={handleRequestAppointment} className="login_form">
-              <div className="login_div">
-            <label className='login_label' htmlFor="doctorSelect">Select a Doctor : </label>
-            <select className='login_select' id="doctorSelect" value={selectedDoctorID} onChange={handleDoctorChange}>
-              <option value="">--Select Doctor--</option>
-              {doctors.map(doctor => (
-                <option key={doctor.doctorID} value={doctor.doctorID}>
-                  {doctor.doctorID} - {doctor.firstName} {doctor.lastName}
-                </option>
-              ))}
-            </select>
-              </div>
-            <button type='submit' className='login_button'>Request Appointment</button>
-              </form>
-              </div>
-          </>}
-          {pdashboardState === 3 && <>
-            <center><h1 className="dashboard-header">Pending Bills</h1></center>
-            <div className="appointments">
-            <PatientBills patientID={id} /> 
+          )}
+          {pdashboardState === 2 && (
+            <div>
+              <center><h1 className="dashboard-header">New Appointment</h1></center>
+                <div className='appointments'>
+                  <center><h2>Available Doctors:</h2></center>
+                  <div className="appointment_cards">
+                  {doctors.map(doctor => (
+                    <App_cards key = {doctor.doctorID} param = {doctor} flag = {false} />
+                  ))}
+                  </div>
+                </div>
+                <div className="login_div">
+                <h2>Request an Appointment:</h2>
+                <form onSubmit={handleRequestAppointment} className="login_form">
+                  <div className="login_div">
+                <label className='login_label' htmlFor="doctorSelect">Select a Doctor : </label>
+                <select className='login_select' id="doctorSelect" value={selectedDoctorID} onChange={handleDoctorChange}>
+                  <option value="">--Select Doctor--</option>
+                  {doctors.map(doctor => (
+                    <option key={doctor.doctorID} value={doctor.doctorID}>
+                      {doctor.doctorID} - {doctor.firstName} {doctor.lastName}
+                    </option>
+                  ))}
+                </select>
+                  </div>
+                <button type='submit' className='login_button'>Request Appointment</button>
+                  </form>
+                  </div>
             </div>
-          </>}
-          {pdashboardState === 4 && <>
-            <center><h1 className="dashboard-header">History</h1></center>
-            <UserInfo cookie={"ejkjjs"} />
-          </>}
+          )}
+          {pdashboardState === 3 && (
+            <div>
+              <h1>Pending Bills</h1>
+              <div className="bills-list">
+                {unpaidBills.length > 0 ? (
+                  unpaidBills.map((bill) => (
+                    <div key={bill.billID} className="bill-item">
+                      <p><strong>Bill ID:</strong> {bill.billID}</p>
+                      <p><strong>Amount:</strong> {bill.totalCost}</p>
+                      <p><strong>Type:</strong> {bill.type}</p>
+                      <button onClick={() => handlePayBill(bill.billID)} className="pay-button">Pay</button>
+                    </div>
+                  ))
+                ) : (
+                  <p>No pending bills.</p>
+                )}
+              </div>
+            </div>
+          )}
+          {pdashboardState === 4 && (
+            <div>
+              <center><h1 className="dashboard-header">Previous Appointments</h1></center>
+              <div className="appointments">
+                {previousAppointments.length > 0 ? (
+                  previousAppointments.map((appointment) => (
+                    <App_cards_2 key={appointment.appointmentID} param={appointment} flag={false} onDelete={handleDeleteAppointment} />
+                  ))
+                ) : (
+                  <p>No previous appointments.</p>
+                )}
+              </div>
+            </div>
+          )}
+      
           {pdashboardState === 5 && <>
             <center><h1 className="dashboard-header">Book Room</h1></center>
             <div className="appointments">
@@ -403,7 +484,11 @@ const pdashboard = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default pdashboard;
+
+
+
+

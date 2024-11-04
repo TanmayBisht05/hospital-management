@@ -77,3 +77,12 @@
     background-color: darkred; /* Darker shade on hover */
   }
   
+
+  .prescription_box {
+    border: 1px solid #ccc; /* Add a light border */
+    padding: 10px;          /* Add some padding */
+    margin-top: 10px;      /* Space above the prescription box */
+    background-color: #f9f9f9; /* Light background color */
+    border-radius: 5px;    /* Rounded corners */
+  }
+  
