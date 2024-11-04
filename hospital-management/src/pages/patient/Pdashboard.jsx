@@ -11,7 +11,7 @@ import UserInfo from './profile.jsx'
 import PatientBills from '../../components/bills/patientbills.jsx';
 
 const pdashboard = () => {
-  const { pdashboardState } = useContext(AuthContext);
+  const { pdashboardState, backend_url } = useContext(AuthContext);
   const navigate = useNavigate();
   const [patientData, setPatientData] = useState(null);
   const [doctors, setDoctors] = useState([]);
@@ -30,7 +30,7 @@ const pdashboard = () => {
     } else {
       const fetchPatientData = async () => {
         try {
-          const response = await fetch(`http://localhost:8080/patients/${id}`, {
+          const response = await fetch(`${backend_url}/patients/${id}`, {
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ const pdashboard = () => {
 
       const fetchDoctors = async () => {
         try {
-          const response = await fetch('http://localhost:8080/doctor');
+          const response = await fetch(`${backend_url}/doctor`);
           if (response.ok) {
             const data = await response.json();
             setDoctors(data);
@@ -61,65 +61,65 @@ const pdashboard = () => {
         }
       };
 
-      const fetchAppointments = async () => {
-        try {
-          // Fetch requested appointments
-          const requestedResponse = await fetch(`http://localhost:8080/appointments/patient/${id}/requested`, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          });
-          if (requestedResponse.ok) {
-            const requestedData = await requestedResponse.json();
-            setRequestedAppointments(requestedData);
-          } else {
-            console.error('Failed to fetch requested appointments');
-          }
       
-          // Fetch upcoming appointments
-          const upcomingResponse = await fetch(`http://localhost:8080/appointments/patient/${id}/upcoming`, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          });
-          if (upcomingResponse.ok) {
-            const upcomingData = await upcomingResponse.json();
-            setUpcomingAppointments(upcomingData);
-          } else {
-            console.error('Failed to fetch upcoming appointments');
-          }
-      
-          // Fetch previous appointments
-          const previousResponse = await fetch(`http://localhost:8080/appointments/patient/${id}/previous`, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          });
-          if (previousResponse.ok) {
-            const previousData = await previousResponse.json();
-            setPreviousAppointments(previousData);
-          } else {
-            console.error('Failed to fetch previous appointments');
-          }
-        } catch (error) {
-          console.error('Error fetching appointments:', error);
-        }
-      };
-
       fetchPatientData();
       fetchDoctors();
       fetchAppointments();
     }
   }, [navigate, token, userType, id]);
+  const fetchAppointments = async () => {
+    try {
+      // Fetch requested appointments
+      const requestedResponse = await fetch(`${backend_url}/appointments/patient/${id}/requested`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (requestedResponse.ok) {
+        const requestedData = await requestedResponse.json();
+        setRequestedAppointments(requestedData);
+      } else {
+        console.error('Failed to fetch requested appointments');
+      }
+  
+      // Fetch upcoming appointments
+      const upcomingResponse = await fetch(`${backend_url}/appointments/patient/${id}/upcoming`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (upcomingResponse.ok) {
+        const upcomingData = await upcomingResponse.json();
+        setUpcomingAppointments(upcomingData);
+      } else {
+        console.error('Failed to fetch upcoming appointments');
+      }
+  
+      // Fetch previous appointments
+      const previousResponse = await fetch(`${backend_url}/appointments/patient/${id}/previous`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (previousResponse.ok) {
+        const previousData = await previousResponse.json();
+        setPreviousAppointments(previousData);
+      } else {
+        console.error('Failed to fetch previous appointments');
+      }
+    } catch (error) {
+      console.error('Error fetching appointments:', error);
+    }
+  };
 
   const handleRequestAppointment = async (e) => {
     e.preventDefault();
     if (selectedDoctorID) {
       try {
-        const response = await fetch(`http://localhost:8080/appointments/patient/${id}/request?doctorID=${selectedDoctorID}`, {
+        const response = await fetch(`${backend_url}/appointments/patient/${id}/request?doctorID=${selectedDoctorID}`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
