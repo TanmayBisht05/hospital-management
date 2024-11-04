@@ -1,7 +1,7 @@
 // DoctorHistory.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './doctorHistory.css'; // Optional: For styling
+import './doctorHistory.css'; 
 
 const DoctorHistory = ({ doctorID }) => {
     const [previousAppointments, setPreviousAppointments] = useState([]);

@@ -75,6 +75,7 @@ const DoctorAppointments = ({ doctorID }) => {
                 )
             );
             setSchedulingData({ appointmentID: null, time: '', cost: '' }); // Reset scheduling data
+            window.location.reload();
         } catch (error) {
             console.error('Error scheduling appointment:', error);
             alert('Error scheduling appointment');
