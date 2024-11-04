@@ -17,7 +17,7 @@ const Navbar = () => {
                     Heal
                 </a>
                 <div className="nav-menu">
-                    {location.pathname !== "/" && location.pathname !== "#" && location.pathname !== "/patients" && location.pathname !== "/admin" && location.pathname !== "/chemist" && location.pathname !== "doctor" && <div className="nav-item">
+                    {location.pathname !== "/" && location.pathname !== "#" && location.pathname !== "/patients" && location.pathname !== "/admin" && location.pathname !== "/chemist" && location.pathname !== "/doctor" && <div className="nav-item">
                         <a href="/" className="nav-links">
                             Home
                         </a>

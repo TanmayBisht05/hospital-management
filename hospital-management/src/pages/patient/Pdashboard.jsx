@@ -242,6 +242,14 @@ const pdashboard = () => {
             <center><h1 className="dashboard-header">History</h1></center>
             <UserInfo cookie={"ejkjjs"} />
           </>}
+          {pdashboardState === 5 && <>
+            <center><h1 className="dashboard-header">Book Room</h1></center>
+            
+          </>}
+          {pdashboardState === 6 && <>
+            <center><h1 className="dashboard-header">Pharmacy</h1></center>
+
+          </>}
         </div>
       </div>
     </div>
