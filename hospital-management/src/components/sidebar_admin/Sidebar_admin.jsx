@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { FaHome } from 'react-icons/fa';
 import { MdOutlineSell, MdOutlineInventory } from 'react-icons/md';
+import { CiMoneyCheck1 } from 'react-icons/ci'
 import { AiOutlineMedicineBox } from 'react-icons/ai';
 import './sidebar_admin.css';
 import AuthContext from '../../AuthContext';
@@ -21,6 +22,8 @@ const Sidebar_admin = () => {
                 ele.current = document.getElementById('idmachinery');
             } else if(adashboardState === 3) {
                 ele.current = document.getElementById('idrequests');
+            } else if(adashboardState === 4) {
+                ele.current = document.getElementById('idsal');
             }
             if(ele.current) {
                 ele.current.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
@@ -40,6 +43,8 @@ const Sidebar_admin = () => {
             ele.current = document.getElementById('idmachinery');
         } else if(num === 3) {
             ele.current = document.getElementById('idrequests');
+        } else if(num === 4) {
+            ele.current = document.getElementById('idsal');
         }
         if(ele.current) {
             ele.current.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
@@ -63,6 +68,9 @@ const Sidebar_admin = () => {
                 </a>
                 <a onClick={() => {handleClick(3)}} id='idrequests'>
                     <MdOutlineSell /> Requests
+                </a>
+                <a onClick={() => {handleClick(4)}} id='idsal'>
+                    <CiMoneyCheck1 /> Salary
                 </a>
         </div>
     );

@@ -13,12 +13,26 @@ const Admin = () => {
   const token = Cookies.get('token');
   const userType = Cookies.get('userType');
   const id = parseInt(Cookies.get('id'), 10);
+
   const [requests, setRequests] = useState([]);
   const should_fetch = useRef(true);
+
+  const [chemists, setChemists] = useState([]); // New state for chemists list
+  const [selectedChemist, setSelectedChemist] = useState(''); 
+  const [salary, setSalary] = useState(''); 
+  const [issueDate, setIssueDate] = useState(''); 
+
+  const [doctors, setDoctors] = useState([]);
+  const [selectedDoctor, setSelectedDoctor] = useState('');
+  const [doctorSalary, setDoctorSalary] = useState('');
+  const [doctorIssueDate, setDoctorIssueDate] = useState('');
+
 
     useEffect(() => {
         if(should_fetch.current) {
             fetchRequests();
+            fetchChemists();
+            fetchDoctors();
             should_fetch.current = false;
         }
     }, []);
@@ -28,6 +42,69 @@ const Admin = () => {
         const data = await response.json();
         setRequests(data);
     };
+
+    const fetchDoctors = async () => {
+        const response = await fetch(`${backend_url}/doctor`);
+        const data = await response.json();
+        setDoctors(data);
+      };
+
+    const fetchChemists = async () => {
+        const response = await fetch(`${backend_url}/chemist`);
+        const data = await response.json();
+        setChemists(data);
+      };
+
+    const handleSalarySubmit = async (e) => {
+        e.preventDefault();
+        const data = {
+            chemistID: parseInt(selectedChemist),
+            salary: parseFloat(salary),
+            issueDate,
+        };
+
+        const response = await fetch(`${backend_url}/chemist-salaries`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+            alert('Salary record created successfully!');
+            setSelectedChemist('');
+            setSalary('');
+            setIssueDate('');
+        } else {
+            alert('Failed to create salary record.');
+        }
+    };
+
+
+
+  const handleDoctorSalarySubmit = async (e) => {
+    e.preventDefault();
+    const data = {
+      doctorID: parseInt(selectedDoctor),
+      salary: parseFloat(doctorSalary),
+      issueDate: doctorIssueDate,
+    };
+
+    const response = await fetch(`${backend_url}/doctor-salaries`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+      alert('Doctor salary record created successfully!');
+      setSelectedDoctor('');
+      setDoctorSalary('');
+      setDoctorIssueDate('');
+    } else {
+      alert('Failed to create doctor salary record.');
+    }
+  };
+    
 
     const handleAcceptRequest = async (requestID) => {
         const response = await fetch(`${backend_url}/medicine-requests/${requestID}/accept`, { method: 'POST' });
@@ -321,6 +398,88 @@ const Admin = () => {
             </table>
         </div>
         </>}
+        {adashboardState === 4 && ( // Dashboard state 4 for Salary Management
+            <>
+              <center><h1 className="dashboard-header">Manage Chemist Salaries</h1></center>
+              <div className="login_div">
+                <h2>Add Salary for Chemist</h2>
+                <form onSubmit={handleSalarySubmit} className="login_form">
+                  <div className="login_div">
+                    <label htmlFor="chemistSelect" className="login_label">Select Chemist: </label>
+                    <select
+                        id="chemistSelect"
+                        value={selectedChemist}
+                        onChange={(e) => setSelectedChemist(parseInt(e.target.value, 10))}
+                        className="login_input"
+                        required
+                        >
+                        <option value="" disabled>Select Chemist</option>
+                        {chemists.map((chemist) => (
+                            <option key={chemist.chemistID} value={chemist.chemistID}>
+                            {chemist.firstName} {chemist.lastName}
+                            </option>
+                        ))}
+                    </select>
+                  </div>
+                  <div className="login_div">
+                    <label htmlFor="salary" className="login_label">Salary Amount: </label>
+                    <input
+                      type="number"
+                      id="salary"
+                      value={salary}
+                      onChange={(e) => setSalary(e.target.value)}
+                      className="login_input"
+                      placeholder="Salary Amount"
+                      required
+                    />
+                  </div>
+                  <div className="login_div">
+                    <label htmlFor="issueDate" className="login_label">Issue Date: </label>
+                    <input
+                      type="date"
+                      id="issueDate"
+                      value={issueDate}
+                      onChange={(e) => setIssueDate(e.target.value)}
+                      className="login_input"
+                      required
+                    />
+                  </div>
+                  <button type="submit" className="login_button">Submit Salary</button>
+                </form>
+                <center><h1 className="dashboard-header">Manage Doctor Salaries</h1></center>
+              <form onSubmit={handleDoctorSalarySubmit} className="login_form">
+                <label>Select Doctor:</label>
+                <select
+                  value={selectedDoctor}
+                  onChange={(e) => setSelectedDoctor(e.target.value)}
+                  required
+                >
+                  <option value="" disabled>Select Doctor</option>
+                  {doctors.map((doctor) => (
+                    <option key={doctor.doctorID} value={doctor.doctorID}>
+                      {doctor.firstName} {doctor.lastName}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="number"
+                  placeholder="Salary Amount"
+                  value={doctorSalary}
+                  onChange={(e) => setDoctorSalary(e.target.value)}
+                  required
+                />
+                <input
+                  type="date"
+                  placeholder="Issue Date"
+                  value={doctorIssueDate}
+                  onChange={(e) => setDoctorIssueDate(e.target.value)}
+                  required
+                />
+                <button type="submit">Submit Salary</button>
+              </form>
+              </div>
+            </>
+          )}
       </div>
     </div>
     </div>

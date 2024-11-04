@@ -11,6 +11,7 @@ import SurgeryForm from '../../components/surgery/surgeryform.jsx';
 import SurgeryList from '../../components/surgery/surgeryList.jsx';
 import DoctorAppointments from '../../components/doctorAppointments/DoctorAppointments.jsx';
 import DoctorHistory from '../../components/doctorHistory/DoctorHistory.jsx';
+import DoctorSalaries from '../../components/doctorSalaries/DoctorSalaries.jsx';
 
 const Ddashboard = () => {
   const { pdashboardState, setPdashboardState } = useContext(AuthContext);
@@ -93,8 +94,12 @@ const Ddashboard = () => {
           </div>
         );
 
-      // case 4:
-      //   DoctorHistory
+        case 4:
+          return (
+            <div>
+              <DoctorSalaries doctorID={doctorId} />
+            </div>
+          );
 
       default:
         return null;
