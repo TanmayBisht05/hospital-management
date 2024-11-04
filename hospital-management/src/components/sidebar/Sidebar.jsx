@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { FaHome, FaCalendarAlt, FaSyringe, FaUserInjured } from 'react-icons/fa';
-import { MdPending } from 'react-icons/md';
+import { MdPending, MdOutlineMeetingRoom, MdOutlineLocalPharmacy } from 'react-icons/md';
 import { CgProfile } from 'react-icons/cg';
 import './sidebar.css';
 import AuthContext from '../../AuthContext';
@@ -23,6 +23,10 @@ const Sidebar = () => {
                 ele.current = document.getElementById('idpending');
             } else if(pdashboardState === 4) {
                 ele = document.getElementById('idhistory');
+            } else if(pdashboardState === 5) {
+                ele = document.getElementById('idbookroom');
+            } else if(pdashboardState === 6) {
+                ele = document.getElementById('idpharmacy');
             }
             if(ele.current) {
                 ele.current.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
@@ -44,6 +48,10 @@ const Sidebar = () => {
             ele.current = document.getElementById('idpending');
         } else if(num === 4) {
             ele.current = document.getElementById('idhistory');
+        } else if(num === 5) {
+            ele.current = document.getElementById('idbookroom');
+        } else if(num === 6) {
+            ele.current = document.getElementById('idpharmacy');
         }
         if(ele.current) {
             ele.current.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
@@ -70,6 +78,12 @@ const Sidebar = () => {
                 </a>
                 <a onClick={() => {handleClick(4)}} id='idhistory'>
                     <FaUserInjured /> History
+                </a>
+                <a onClick={() => {handleClick(5)}} id='idbookroom'>
+                    <MdOutlineMeetingRoom /> Book Room
+                </a>
+                <a onClick={() => {handleClick(6)}} id='idpharmacy'>
+                    <MdOutlineLocalPharmacy /> Pharmacy
                 </a>
         </div>
     );
