@@ -11,6 +11,7 @@ import SurgeryForm from '../../components/surgery/surgeryform.jsx';
 import SurgeryList from '../../components/surgery/surgeryList.jsx';
 import DoctorAppointments from '../../components/doctorAppointments/DoctorAppointments.jsx';
 import DoctorHistory from '../../components/doctorHistory/DoctorHistory.jsx';
+import DoctorApprovesBills from '../../components/doctorApprovesBills/DoctorApprovesBills.jsx';
 import DoctorSalaries from '../../components/doctorSalaries/DoctorSalaries.jsx';
 
 const Ddashboard = () => {
@@ -87,13 +88,19 @@ const Ddashboard = () => {
           </div>
         );
 
-      case 3:
+        case 3:
+          return (
+            <div>
+              <DoctorApprovesBills doctorID={doctorId} />
+            </div>
+          );
+
+      case 5:
         return (
           <div>
             <DoctorHistory doctorID={doctorId} />
           </div>
         );
-
         case 4:
           return (
             <div>

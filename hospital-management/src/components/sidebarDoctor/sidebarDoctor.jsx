@@ -20,9 +20,11 @@ const SidebarDoctor = () => {
                 ele.current = document.getElementById('idapp');
             } else if (pdashboardState === 2) {
                 ele.current = document.getElementById('idnewapp');
-            } else if (pdashboardState === 3) {
-                ele.current = document.getElementById('idhistory');
-            } else if (pdashboardState === 4) {
+            } else if(pdashboardState === 3) {
+                ele = document.getElementById('idapproves');
+            } else if(pdashboardState === 4) {
+                ele = document.getElementById('idsalary');
+            } else if (pdashboardState === 5) {
                 ele.current = document.getElementById('idsalary');
             }
             if (ele.current) {
@@ -43,9 +45,11 @@ const SidebarDoctor = () => {
         } else if (num === 2) {
             ele.current = document.getElementById('idnewapp');
         } else if (num === 3) {
-            ele.current = document.getElementById('idhistory');
+            ele.current = document.getElementById('idapproves');
         } else if (num === 4) {
             ele.current = document.getElementById('idsalary');
+        } else if (num === 5) {
+            ele.current = document.getElementById('idhistory');
         }
         if (ele.current) {
             ele.current.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
@@ -56,24 +60,27 @@ const SidebarDoctor = () => {
     return (
         <div className="sidebar">
             <h2 className="text-light mb-4">Doctor Dashboard</h2>
-            <Link to={'/'}>
-                <FaHome /> Home
-            </Link>
-            <a onClick={() => handleClick(0)} id="idprofile">
-                <CgProfile /> Profile
-            </a>
-            <a onClick={() => handleClick(1)} id="idapp">
-                <FaCalendarAlt /> Appointments
-            </a>
-            <a onClick={() => handleClick(2)} id="idnewapp">
-                <FaSyringe /> Surgery
-            </a>
-            <a onClick={() => handleClick(3)} id="idhistory">
-                <MdPending /> History
-            </a>
-            <a onClick={() => handleClick(4)} id="idsalary">
-                <MdAttachMoney /> Salary Records
-            </a>
+                <Link to={'/'}>
+                    <FaHome /> Home
+                </Link>
+                <a onClick={() => {handleClick(0)}} id='idprofile'>
+                    <CgProfile /> Profile
+                </a>
+                <a onClick={() => {handleClick(1)}} id='idapp'>
+                    <FaCalendarAlt /> Appointments
+                </a>
+                <a onClick={() => {handleClick(2)}} id='idnewapp'>
+                    <FaSyringe /> Surgery
+                </a>
+                <a onClick={() => {handleClick(3)}} id='idapproves'>
+                    <MdPending /> Approve Bills
+                </a>
+                <a onClick={() => {handleClick(4)}} id='idsalary'>
+                    <MdPending /> Salary 
+                </a>
+                <a onClick={() => {handleClick(5)}} id='idhistory'>
+                    <MdPending /> Salary 
+                </a>
         </div>
     );
 };
