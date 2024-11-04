@@ -14,9 +14,13 @@ const Admin = () => {
   const userType = Cookies.get('userType');
   const id = parseInt(Cookies.get('id'), 10);
   const [requests, setRequests] = useState([]);
+  const should_fetch = useRef(true);
 
     useEffect(() => {
-        fetchRequests();
+        if(should_fetch.current) {
+            fetchRequests();
+            should_fetch.current = false;
+        }
     }, []);
 
     const fetchRequests = async () => {
@@ -52,7 +56,8 @@ const Admin = () => {
       navigate('/');
     }
   }, [token])
-  const handleRegDoc = async () => {
+  const handleRegDoc = async (e) => {
+        e.preventDefault();
         const data = {
             firstName: document.getElementById('dfirstName').value,
             lastName: document.getElementById('dlastName').value,
@@ -73,7 +78,8 @@ const Admin = () => {
             alert('Invalid credentials');
         }
     }
-    const handleRegChem = async () => {
+    const handleRegChem = async (e) => {
+        e.preventDefault();
         const data = {
             firstName: document.getElementById('cfirstName').value,
             lastName: document.getElementById('clastName').value,
@@ -248,43 +254,71 @@ const Admin = () => {
         </>}
         {adashboardState === 2 && <>
             <center><h1 className="dashboard-header">Machinery</h1></center>
-          <div className="login_div">
-            <h1>{machineryID === -1 ? 'Add' : 'Edit'}</h1>
-            <form onSubmit={handleMachinerySubmit} className="login_form">
+            <div className="appointments">
                 <div className="login_div">
-                    <label htmlFor="mname" className="login_label">Machine Name : </label>
-                    <input className='login_input' id='mname' maxLength="50" required type="text" placeholder="Machine Name" />
+                    <h1>{machineryID === -1 ? 'Add' : 'Edit'}</h1>
+                    <form onSubmit={handleMachinerySubmit} className="login_form">
+                        <div className="login_div">
+                            <label htmlFor="mname" className="login_label">Machine Name : </label>
+                            <input className='login_input' id='mname' maxLength="50" required type="text" placeholder="Machine Name" />
+                        </div>
+                        <div className="login_div">
+                            <label htmlFor="mcost" className="login_label">Cost : </label>
+                            <input className='login_input' id='mcost' type="number" placeholder="Cost" required />
+                        </div>
+                        <button className="login_button" type='submit'>{machineryID === -1 ? 'Add' : 'Edit'}</button>
+                    </form>
                 </div>
-                <div className="login_div">
-                    <label htmlFor="mcost" className="login_label">Cost : </label>
-                    <input className='login_input' id='mcost' type="number" placeholder="Cost" required />
-                </div>
-                <button className="login_button" type='submit'>{machineryID === -1 ? 'Add' : 'Edit'}</button>
-            </form>
-          </div>
-            <center><h1>Machinery List</h1></center>
-            <ul>
-                {machineryList.map((machinery) => (
-                    <li key={machinery.machineID}>
-                        {machinery.name} - ${machinery.cost}{' '}
-                        <button onClick={() => handleEditMachinery(machinery)}>Edit</button>
-                    </li>
-                ))}
-            </ul>
+                <center><h1>Machinery List</h1></center>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Machine ID</th>
+                            <th>Machine Name</th>
+                            <th>Cost</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {machineryList.map((machinery) => (
+                            <tr key={machinery.machineID}>
+                                <td>{machinery.machineID}</td>
+                                <td>{machinery.name}</td>
+                                <td>{machinery.cost}</td>
+                                <td>
+                                    <button className='login_button' onClick={() => handleEditMachinery(machinery)}>Edit</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </>}
         {adashboardState === 3 && <>
             <center><h1 className="dashboard-header">Requests</h1></center>
-          <div>
+          <div className='appointments'>
             <h2>Medicine Requests</h2>
-            <ul>
-                {requests.map((request) => (
-                    <li key={request.requestID}>
-                        <p>{request.medicineName} - {request.amount}</p>
-                        <button onClick={() => handleAcceptRequest(request.requestID)}>Accept</button>
-                        <button onClick={() => handleDenyRequest(request.requestID)}>Deny</button>
-                    </li>
-                ))}
-            </ul>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Medicine Name</th>
+                        <th>Amount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {requests.map((request) => (
+                        <tr key={request.requestID}>
+                            <td>{request.medicineName}</td>
+                            <td>{request.amount}</td>
+                            <td className='req_table_data'>
+                                <button className='login_button button_green' onClick={() => handleAcceptRequest(request.requestID)}>Accept</button>
+                                <button className='login_button button_red' onClick={() => handleDenyRequest(request.requestID)}>Deny</button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
         </>}
       </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useContext, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
 import './chemist.css'
 import AuthContext from '../../AuthContext.jsx'
@@ -8,18 +8,34 @@ import Fake from '../../utility/Fake';
 import Sidebar_chemist from '../../components/sidebar_chemist/Sidebar_chemist';
 
 const Chemist = () => {
-  const { cdashboardState, backend_url } = React.useContext(AuthContext);
-  const navigate = useNavigate();
-  const token = Cookies.get('token');
-  const userType = Cookies.get('userType');
-  const id = parseInt(Cookies.get('id'), 10);
-  const [medicineName, setMedicineName] = useState('');
+    const { cdashboardState, backend_url } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const token = Cookies.get('token');
+    const userType = Cookies.get('userType');
+    const id = parseInt(Cookies.get('id'), 10);
+    const [medicineName, setMedicineName] = useState('');
     const [cost, setCost] = useState('');
     const [type, setType] = useState('');
     const [companyName, setCompanyName] = useState('');
     const [amount, setAmount] = useState('');
+    const [inventory, setInventory] = useState([]);
+    const should_fetch = useRef(true);
 
-    const handleRequestMedicine = async () => {
+    useEffect(() => {
+      if(should_fetch.current) {
+        fetchInventory();
+        should_fetch.current = false;
+
+      }
+    }, [])
+    const fetchInventory = async () => {
+      const response = await fetch(`${backend_url}/medicines`);
+      const data = await response.json();
+      setInventory(data);
+  }
+
+    const handleRequestMedicine = async (e) => {
+      e.preventDefault();
         const data = {
             medicineName,
             cost: parseInt(cost),
@@ -36,6 +52,7 @@ const Chemist = () => {
 
         if (requestResponse.ok) {
             alert("Request submitted successfully!");
+            window.location.reload();
         } else {
             alert("Failed to submit request.");
         }
@@ -58,6 +75,32 @@ const Chemist = () => {
       <div className="main-content">
         {cdashboardState === 0 && <>
           <center><h1 className="dashboard-header">Inventory</h1></center>
+          <div className="appointments">
+            <table>
+              <thead>
+                <tr>
+                  <th>Medicine Id</th>
+                  <th>Medicine Name</th>
+                  <th>Cost</th>
+                  <th>Type</th>
+                  <th>Company Name</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {inventory.map((item) => (
+                  <tr key={item.medicineID}>
+                    <td>{item.medicineID}</td>
+                    <td>{item.medicineName}</td>
+                    <td>{item.cost}</td>
+                    <td>{item.type}</td>
+                    <td>{item.companyName}</td>
+                    <td>{item.amount}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </>}
         {cdashboardState === 1 && <>
           <center><h1 className="dashboard-header">Order Medicines</h1></center>

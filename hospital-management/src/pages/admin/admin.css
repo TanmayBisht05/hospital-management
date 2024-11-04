@@ -1,0 +1,17 @@
+.req_table_data {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.button_red {
+    background-color: rgb(232, 30, 30);
+}
+.button_green {
+    background-color: green;
+}
+.button_green:hover {
+    background-color: rgb(9, 182, 9);
+}
+.button_red:hover {
+    background-color: rgb(255, 0, 0);
+}
