@@ -224,6 +224,7 @@ const pdashboard = () => {
           </>}
           {pdashboardState === 3 && <>
             <h1 className="dashboard-header">Pending Bills</h1>
+            <PatientBills patientID={id} /> 
           </>}
           {pdashboardState === 4 && <>
             <h1 className="dashboard-header">History</h1>
