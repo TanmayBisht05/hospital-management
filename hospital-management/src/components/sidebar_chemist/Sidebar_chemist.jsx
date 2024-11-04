@@ -18,7 +18,7 @@ const Sidebar_chemist = () => {
             } else if(cdashboardState === 1) {
                 ele.current = document.getElementById('idorder');
             } else if(cdashboardState === 2) {
-                ele.current = document.getElementById('idsell');
+                ele.current = document.getElementById('idsal');
             }
             if(ele.current) {
                 ele.current.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
@@ -35,7 +35,7 @@ const Sidebar_chemist = () => {
         } else if(num === 1) {
             ele.current = document.getElementById('idorder');
         } else if(num === 2) {
-            ele.current = document.getElementById('idsell');
+            ele.current = document.getElementById('idsal');
         }
         if(ele.current) {
             ele.current.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
@@ -54,8 +54,8 @@ const Sidebar_chemist = () => {
                 <a onClick={() => {handleClick(1)}} id='idorder'>
                     <AiOutlineMedicineBox /> Order Medicines
                 </a>
-                <a onClick={() => {handleClick(2)}} id='idsell'>
-                    <MdOutlineSell /> Sell Requests
+                <a onClick={() => {handleClick(2)}} id='idsal'>
+                    <MdOutlineSell /> Salary Requests
                 </a>
         </div>
     );

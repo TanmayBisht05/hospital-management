@@ -18,7 +18,7 @@ const Chemist = () => {
     const [type, setType] = useState('');
     const [companyName, setCompanyName] = useState('');
     const [amount, setAmount] = useState('');
-    const [inventory, setInventory] = useState([]);
+    const [inventory, setInventory] = useState([]);    const [salaries, setSalaries] = useState([]);
     const should_fetch = useRef(true);
 
     useEffect(() => {
@@ -57,14 +57,31 @@ const Chemist = () => {
             alert("Failed to submit request.");
         }
     };
+    const fetchSalaries = async () => {
+      const response = await fetch(`${backend_url}/chemist-salaries/take/${id}`);
+      const data = await response.json();
+      setSalaries(data);
+    };
+  
+    const handleAcceptSalary = async (salaryID) => {
+      const response = await fetch(`${backend_url}/chemist-salaries/${salaryID}`, { method: 'DELETE' });
+      if (response.ok) {
+        alert("Salary accepted!");
+        setSalaries(salaries.filter(salary => salary.csID !== salaryID));
+      } else {
+        alert("Failed to accept salary.");
+      }
+    };
   if (isNaN(id)) {
     console.error('Invalid chemist ID');
   }
   useEffect(() => {
     if (!token || userType !== 'CHEMIST') {
       navigate('/');
+    } else {
+      fetchSalaries(); // Fetch salary records for the chemist upon loading
     }
-  }, [token])
+  }, [token]);
   return (
     <div>
             <Navbar />
@@ -134,8 +151,20 @@ const Chemist = () => {
         </div>
         </>}
         {cdashboardState === 2 && <>
-          <center><h1 className="dashboard-header">Sell Requests</h1></center>
-        </>}
+            <center><h1 className="dashboard-header">Salary Records</h1></center>
+            <div className="salary-list">
+              <h2>Your Salary Records</h2>
+              <ul>
+                {salaries.map((salary) => (
+                  <li key={salary.csID}>
+                    <p>Date Issued: {salary.issueDate}</p>
+                    <p>Amount: ${salary.amount}</p>
+                    <button onClick={() => handleAcceptSalary(salary.csID)}>Accept Salary</button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </>}
       </div>
     </div>
     </div>
