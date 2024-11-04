@@ -1,13 +1,13 @@
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from '../../components/sidebar/Sidebar.jsx'
-import './pdashboard.css'
-import AuthContext from '../../AuthContext.jsx'
-import App_cards from '../../components/app_cards/App_cards.jsx'
+import Sidebar from '../../components/sidebar/Sidebar.jsx';
+import './pdashboard.css';
+import AuthContext from '../../AuthContext.jsx';
+import App_cards from '../../components/app_cards/App_cards.jsx';
 import Cookies from 'js-cookie';
 import Navbar from '../../components/navbar/navbar';
 import Fake from '../../utility/Fake';
-import UserInfo from './profile.jsx'
+import UserInfo from './profile.jsx';
 import PatientBills from '../../components/bills/patientbills.jsx';
 
 const pdashboard = () => {
@@ -28,48 +28,47 @@ const pdashboard = () => {
     if (!token || userType !== 'PATIENT') {
       navigate('/login');
     } else {
-      const fetchPatientData = async () => {
-        try {
-          const response = await fetch(`${backend_url}/patients/${id}`, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          });
-          if (response.ok) {
-            const data = await response.json();
-            setPatientData(data);
-          } else {
-            console.error('Failed to fetch patient data');
-          }
-        } catch (error) {
-          console.error('Error:', error);
-        }
-      };
-
-      const fetchDoctors = async () => {
-        try {
-          const response = await fetch(`${backend_url}/doctor`);
-          if (response.ok) {
-            const data = await response.json();
-            setDoctors(data);
-          } else {
-            console.error('Failed to fetch doctors');
-          }
-        } catch (error) {
-          console.error('Error fetching doctor data:', error);
-        }
-      };
-
-      
       fetchPatientData();
       fetchDoctors();
       fetchAppointments();
     }
   }, [navigate, token, userType, id]);
+
+  const fetchPatientData = async () => {
+    try {
+      const response = await fetch(`${backend_url}/patients/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setPatientData(data);
+      } else {
+        console.error('Failed to fetch patient data');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const fetchDoctors = async () => {
+    try {
+      const response = await fetch(`${backend_url}/doctor`);
+      if (response.ok) {
+        const data = await response.json();
+        setDoctors(data);
+      } else {
+        console.error('Failed to fetch doctors');
+      }
+    } catch (error) {
+      console.error('Error fetching doctor data:', error);
+    }
+  };
+
   const fetchAppointments = async () => {
     try {
-      // Fetch requested appointments
       const requestedResponse = await fetch(`${backend_url}/appointments/patient/${id}/requested`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -82,8 +81,7 @@ const pdashboard = () => {
       } else {
         console.error('Failed to fetch requested appointments');
       }
-  
-      // Fetch upcoming appointments
+
       const upcomingResponse = await fetch(`${backend_url}/appointments/patient/${id}/upcoming`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -96,8 +94,7 @@ const pdashboard = () => {
       } else {
         console.error('Failed to fetch upcoming appointments');
       }
-  
-      // Fetch previous appointments
+
       const previousResponse = await fetch(`${backend_url}/appointments/patient/${id}/previous`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -144,6 +141,32 @@ const pdashboard = () => {
     setSelectedDoctorID(event.target.value);
   };
 
+  const handleDeleteAppointment = async (appointmentID) => {
+    if (window.confirm("Are you sure you want to delete this appointment?")) {
+      try {
+        console.log(appointmentID);
+
+        const response = await fetch(`${backend_url}/appointments/${appointmentID}/delete`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        if (response.ok) {
+          alert('Appointment successfully deleted.');
+          fetchAppointments(); // Refresh the appointments after deletion
+        } else {
+          console.log(response);
+          const message = await response.text();
+          alert(message || 'Failed to delete appointment.');
+        }
+      } catch (error) {
+        console.error('Error deleting appointment:', error);
+      }
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -168,92 +191,60 @@ const pdashboard = () => {
               <p>Loading patient data...</p>
             )}
           </>}
-          {pdashboardState === 1 && <>
-            <center><h1 className="dashboard-header">Appointments</h1></center>
-            <div className="appointments">
-              <h2>Upcoming Appointments</h2>
-              {upcomingAppointments.length === 0 ? 
-              <p>No Upcoming Appointments</p>
-              :
-              <div className="appointment_cards">
-                {upcomingAppointments.map(app => (
-                  <App_cards key={app.appointmentID} param={app} flag ={false} />
-                ))}
-              </div>}
-            </div>
-            <div className="appointments">
-              <h2>Previous Appointments</h2>
-              {previousAppointments.length === 0 ? 
-              <p>No Previous Appointments</p>
-              :
-              <div className="appointment_cards">
-                {previousAppointments.map(app => (
-                  <App_cards key={app.appointmentID} param={app} flag = {false} />
-                ))}
-              </div>}
-            </div>
-            <div className="appointments">
-              <h2>Requested Appointments</h2>
-              {requestedAppointments.length === 0 ?
-              <p>No Requested Appointments</p>
-              :
-              <div className="appointment_cards">
-                {requestedAppointments.map(app => (
-                  <App_cards key={app.appointmentID} param={app} flag = {false} />
-                ))}
-              </div>}
-            </div>
-          </>}
-          {pdashboardState === 2 && <>
-            <center><h1 className="dashboard-header">New Appointment</h1></center>
-            <div className='appointments'>
-              <center><h2>Available Doctors:</h2></center>
-              <div className="appointment_cards">
-              {doctors.map(doctor => (
-                <App_cards key = {doctor.doctorID} param = {doctor} flag = {false} />
-              ))}
+          {pdashboardState === 1 && (
+            <div>
+              <center><h1 className="dashboard-header">Upcoming Appointments</h1></center>
+              <div className="appointments">
+                {upcomingAppointments.length > 0 ? (
+                  upcomingAppointments.map((appointment) => (
+                    <App_cards key={appointment.appointmentID} param={appointment} flag={false} onDelete={handleDeleteAppointment} />
+                  ))
+                ) : (
+                  <p>No upcoming appointments.</p>
+                )}
+              </div>
+              <center><h1 className="dashboard-header">Previous Appointments</h1></center>
+              <div className="appointments">
+                {previousAppointments.length > 0 ? (
+                  previousAppointments.map((appointment) => (
+                    <App_cards key={appointment.appointmentID} param={appointment} flag={false} onDelete={handleDeleteAppointment} />
+                  ))
+                ) : (
+                  <p>No previous appointments.</p>
+                )}
               </div>
             </div>
-            <div className="login_div">
-            <h2>Request an Appointment:</h2>
-            <form onSubmit={handleRequestAppointment} className="login_form">
-              <div className="login_div">
-            <label className='login_label' htmlFor="doctorSelect">Select a Doctor : </label>
-            <select className='login_select' id="doctorSelect" value={selectedDoctorID} onChange={handleDoctorChange}>
-              <option value="">--Select Doctor--</option>
-              {doctors.map(doctor => (
-                <option key={doctor.doctorID} value={doctor.doctorID}>
-                  {doctor.doctorID} - {doctor.firstName} {doctor.lastName}
-                </option>
-              ))}
-            </select>
+          )}
+          {pdashboardState === 2 && (
+            <div>
+              <center><h1 className="dashboard-header">Requested Appointments</h1></center>
+              <div className="appointments">
+                {requestedAppointments.length > 0 ? (
+                  requestedAppointments.map((appointment) => (
+                    <App_cards key={appointment.appointmentID} param={appointment} flag={false} onDelete={handleDeleteAppointment} />
+                  ))
+                ) : (
+                  <p>No requested appointments.</p>
+                )}
               </div>
-            <button type='submit' className='login_button'>Request Appointment</button>
-              </form>
-              </div>
-          </>}
-          {pdashboardState === 3 && <>
-            <center><h1 className="dashboard-header">Pending Bills</h1></center>
-            <div className="appointments">
-            <PatientBills patientID={id} /> 
             </div>
-          </>}
-          {pdashboardState === 4 && <>
-            <center><h1 className="dashboard-header">History</h1></center>
-            <UserInfo cookie={"ejkjjs"} />
-          </>}
-          {pdashboardState === 5 && <>
-            <center><h1 className="dashboard-header">Book Room</h1></center>
-            
-          </>}
-          {pdashboardState === 6 && <>
-            <center><h1 className="dashboard-header">Pharmacy</h1></center>
-
-          </>}
+          )}
+          {pdashboardState === 3 && (
+            <div>
+              <h1>Consult a Doctor</h1>
+              <select onChange={handleDoctorChange} value={selectedDoctorID}>
+                <option value="">Select a Doctor</option>
+                {doctors.map((doctor) => (
+                  <option key={doctor.id} value={doctor.id}>{doctor.name}</option>
+                ))}
+              </select>
+              <button onClick={handleRequestAppointment}>Request Appointment</button>
+            </div>
+          )}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default pdashboard;

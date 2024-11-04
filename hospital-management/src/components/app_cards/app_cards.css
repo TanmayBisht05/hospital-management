@@ -63,3 +63,17 @@
     /* justify-content: center; */
     gap: 10px;
 }
+
+.delete-button {
+    background-color: red; /* Change this to your preferred color */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 10px; /* Add some space above the button */
+  }
+  
+  .delete-button:hover {
+    background-color: darkred; /* Darker shade on hover */
+  }
+  
