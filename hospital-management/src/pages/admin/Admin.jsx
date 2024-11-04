@@ -56,7 +56,7 @@ const Admin = () => {
       navigate('/');
     }
   }, [token])
-  const handleRegDoc = async () => {
+  const handleRegDoc = async (e) => {
         e.preventDefault();
         const data = {
             firstName: document.getElementById('dfirstName').value,
@@ -78,7 +78,7 @@ const Admin = () => {
             alert('Invalid credentials');
         }
     }
-    const handleRegChem = async () => {
+    const handleRegChem = async (e) => {
         e.preventDefault();
         const data = {
             firstName: document.getElementById('cfirstName').value,

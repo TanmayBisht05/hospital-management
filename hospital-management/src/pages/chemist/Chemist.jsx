@@ -34,7 +34,8 @@ const Chemist = () => {
       setInventory(data);
   }
 
-    const handleRequestMedicine = async () => {
+    const handleRequestMedicine = async (e) => {
+      e.preventDefault();
         const data = {
             medicineName,
             cost: parseInt(cost),
@@ -51,6 +52,7 @@ const Chemist = () => {
 
         if (requestResponse.ok) {
             alert("Request submitted successfully!");
+            window.location.reload();
         } else {
             alert("Failed to submit request.");
         }

@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useContext, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/sidebar/Sidebar.jsx'
 import './pdashboard.css'
@@ -23,10 +23,18 @@ const pdashboard = () => {
   const [upcomingAppointments, setUpcomingAppointments] = useState([]);
   const [previousAppointments, setPreviousAppointments] = useState([]);
   const [requestedAppointments, setRequestedAppointments] = useState([]);
+  const [roomBookings, setRoomBookings] = useState([]);
 
   const token = Cookies.get('token');
   const userType = Cookies.get('userType');
   const id = parseInt(Cookies.get('id'), 10);
+  const should_fetch = useRef(true);
+  useEffect(() => {
+    if(should_fetch.current === true) {
+      fetchRooms();
+      should_fetch.current = false;
+    }
+  })
 
   useEffect(() => {
     if (!token || userType !== 'PATIENT') {
@@ -132,7 +140,11 @@ const pdashboard = () => {
       console.error('Error fetching appointments:', error);
     }
   };
-
+  const fetchRooms = async () => {
+    const response = await fetch(`${backend_url}/api/roomBookings/patient/${id}`);
+    const data = await response.json();
+    setRoomBookings(data);
+  }
   const handleRoomBooking = async (e) => {
     e.preventDefault();
     if (selectedRoomID && bookingStartDate && bookingEndDate) {
@@ -199,6 +211,10 @@ const pdashboard = () => {
   const handleDoctorChange = (event) => {
     setSelectedDoctorID(event.target.value);
   };
+  const getRoomType = (roomID) => {
+    const room = rooms.find(room => room.roomID === roomID);
+    return room ? room.roomType : 'Unknown';
+  }
 
   return (
     <div>
@@ -300,56 +316,85 @@ const pdashboard = () => {
           </>}
           {pdashboardState === 5 && <>
             <center><h1 className="dashboard-header">Book Room</h1></center>
-            <div className="room-list">
+            <div className="appointments">
               <h2>Available Rooms:</h2>
               {rooms.length > 0 ? (
-                rooms.map(room => (
-                  <div key={room.roomID} className="room-card">
-                    <p><strong>Room Type:</strong> {room.roomType}</p>
-                    <p><strong>Cost/Day:</strong> ₹{room.cost}</p>
-                  </div>
-                ))
-              ) : (
-                <p>No rooms available.</p>
-              )}
+                <div className="appointment_cards">
+                {rooms.length > 0 ? (
+                  rooms.map(room => (
+                    <div key={room.roomID} className="room-card">
+                      <p><strong>Room Type :</strong> {room.roomType}</p>
+                      <p><strong>Cost (1 Day) :</strong> ₹{room.cost}</p>
+                    </div>
+                  ))
+                ) : (
+                  <p>No rooms available.</p>
+                )}
+              </div>
+              ) : <p>No rooms available!</p>}
             </div>
-            <form onSubmit={handleRoomBooking} className="booking-form">
-              <h2>Book a Room:</h2>
-              <label>
-                Select Room ID:
-                <select
-                  value={selectedRoomID}
-                  onChange={(e) => setSelectedRoomID(e.target.value)}
-                  required
-                >
-                  <option value="">--Select Room--</option>
-                  {rooms.map(room => (
-                    <option key={room.roomID} value={room.roomID}>
-                      {room.roomID} - {room.roomType}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                Booking Start Date:
-                <input
-                  type="date"
-                  value={bookingStartDate}
-                  onChange={(e) => setBookingStartDate(e.target.value)}
-                  required
-                />
-              </label>
-              <label>
-                Booking End Date:
-                <input
-                  type="date"
-                  value={bookingEndDate}
-                  onChange={(e) => setBookingEndDate(e.target.value)}
-                  required
-                />
-              </label>
-              <button type="submit" className="booking-button">Book Room</button>
-            </form>
+            <div className="login_div">
+                <h2>Book a Room:</h2>
+              <form onSubmit={handleRoomBooking} className="login_form">
+                <div className="login_div">
+                <label className='login_label'>
+                  Select Room ID:
+                  </label>
+                  <select className='login_select'
+                    value={selectedRoomID}
+                    onChange={(e) => setSelectedRoomID(e.target.value)}
+                    required
+                  >
+                    <option value="">--Select Room--</option>
+                    {rooms.map(room => (
+                      <option key={room.roomID} value={room.roomID}>
+                        {room.roomID} - {room.roomType}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="login_div">
+                <label className='login_label'>
+                  Booking Start Date:
+                  </label>
+                  <input className='login_input'
+                    type="date"
+                    value={bookingStartDate}
+                    onChange={(e) => setBookingStartDate(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="login_div">
+                <label className='login_label'>
+                  Booking End Date:
+                  </label>
+                  <input className='login_input'
+                    type="date"
+                    value={bookingEndDate}
+                    onChange={(e) => setBookingEndDate(e.target.value)}
+                    required
+                  />
+                  </div>
+                <button type="submit" className="login_button">Book Room</button>
+              </form>
+            </div>
+            <div className="appointments">
+              <h2>Your Booked Rooms :</h2>
+                {roomBookings.length > 0 ? (
+                  roomBookings.map(room => (
+                    <div className="appointment_cards">
+                    <div key={room.roomBookingID} className="room-card">
+                      <p><strong>Room ID :</strong> {room.roomID}</p>
+                      <p><strong>Room Type :</strong> {getRoomType(room.roomID)}</p>
+                      <p><strong>Booked From :</strong> {room.bookFrom}</p>
+                      <p><strong>Booked Till :</strong> {room.bookTill}</p>
+                    </div>
+                    </div>
+                  ))
+                ) : (
+                  <p>No rooms booked.</p>
+                )}
+            </div>
           </>}
           {pdashboardState === 6 && <>
             <center><h1 className="dashboard-header">Pharmacy</h1></center>
