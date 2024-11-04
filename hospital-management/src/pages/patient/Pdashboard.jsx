@@ -16,6 +16,10 @@ const pdashboard = () => {
   const [patientData, setPatientData] = useState(null);
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctorID, setSelectedDoctorID] = useState('');
+  const [rooms, setRooms] = useState([]);
+  const [selectedRoomID, setSelectedRoomID] = useState('');
+  const [bookingStartDate, setBookingStartDate] = useState('');
+  const [bookingEndDate, setBookingEndDate] = useState([]);
   const [upcomingAppointments, setUpcomingAppointments] = useState([]);
   const [previousAppointments, setPreviousAppointments] = useState([]);
   const [requestedAppointments, setRequestedAppointments] = useState([]);
@@ -47,6 +51,20 @@ const pdashboard = () => {
         }
       };
 
+      const fetchRooms = async () => {
+        try {
+          const response = await fetch(`${backend_url}/rooms`);
+          if (response.ok) {
+            const data = await response.json();
+            setRooms(data);
+          } else {
+            console.error('Failed to fetch rooms');
+          }
+        } catch (error) {
+          console.error('Error fetching rooms:', error);
+        }
+      };
+
       const fetchDoctors = async () => {
         try {
           const response = await fetch(`${backend_url}/doctor`);
@@ -61,7 +79,7 @@ const pdashboard = () => {
         }
       };
 
-      
+      fetchRooms();
       fetchPatientData();
       fetchDoctors();
       fetchAppointments();
@@ -113,6 +131,44 @@ const pdashboard = () => {
     } catch (error) {
       console.error('Error fetching appointments:', error);
     }
+  };
+
+  const handleRoomBooking = async (e) => {
+    e.preventDefault();
+    if (selectedRoomID && bookingStartDate && bookingEndDate) {
+      try {
+        const response = await fetch(`${backend_url}/api/roomBookings`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            patientID: id,
+            roomID: selectedRoomID,
+            bookFrom: bookingStartDate,
+            bookTill: bookingEndDate,
+            numDays: calculateNumDays(bookingStartDate, bookingEndDate)
+          }),
+        });
+        if (response.ok) {
+          alert('Room booking created successfully.');
+          fetchRooms(); // Update room list after booking
+        } else {
+          alert('Failed to create room booking.');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    } else {
+      alert('Please fill in all booking details.');
+    }
+  };
+
+  const calculateNumDays = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    return Math.ceil((end - start) / (1000 * 60 * 60 * 24));
   };
 
   const handleRequestAppointment = async (e) => {
@@ -244,7 +300,56 @@ const pdashboard = () => {
           </>}
           {pdashboardState === 5 && <>
             <center><h1 className="dashboard-header">Book Room</h1></center>
-            
+            <div className="room-list">
+              <h2>Available Rooms:</h2>
+              {rooms.length > 0 ? (
+                rooms.map(room => (
+                  <div key={room.roomID} className="room-card">
+                    <p><strong>Room Type:</strong> {room.roomType}</p>
+                    <p><strong>Cost/Day:</strong> ₹{room.cost}</p>
+                  </div>
+                ))
+              ) : (
+                <p>No rooms available.</p>
+              )}
+            </div>
+            <form onSubmit={handleRoomBooking} className="booking-form">
+              <h2>Book a Room:</h2>
+              <label>
+                Select Room ID:
+                <select
+                  value={selectedRoomID}
+                  onChange={(e) => setSelectedRoomID(e.target.value)}
+                  required
+                >
+                  <option value="">--Select Room--</option>
+                  {rooms.map(room => (
+                    <option key={room.roomID} value={room.roomID}>
+                      {room.roomID} - {room.roomType}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Booking Start Date:
+                <input
+                  type="date"
+                  value={bookingStartDate}
+                  onChange={(e) => setBookingStartDate(e.target.value)}
+                  required
+                />
+              </label>
+              <label>
+                Booking End Date:
+                <input
+                  type="date"
+                  value={bookingEndDate}
+                  onChange={(e) => setBookingEndDate(e.target.value)}
+                  required
+                />
+              </label>
+              <button type="submit" className="booking-button">Book Room</button>
+            </form>
           </>}
           {pdashboardState === 6 && <>
             <center><h1 className="dashboard-header">Pharmacy</h1></center>
