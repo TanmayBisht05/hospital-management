@@ -82,7 +82,7 @@ const Ddashboard = () => {
 
       case 2:
         return (
-          <div>
+          <div className='appointments'>
             <SurgeryForm doctorID={doctorId} />
             <SurgeryList doctorID={doctorId} />
           </div>

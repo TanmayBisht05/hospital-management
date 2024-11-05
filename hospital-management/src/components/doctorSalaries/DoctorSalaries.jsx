@@ -40,12 +40,12 @@ const DoctorSalaries = ({ doctorID }) => {
         }
     };
 
-    if (loading) return <h3>Loading...</h3>;
-    if (error) return <h3>{error}</h3>;
+    if (loading) return <center><h3>Loading...</h3></center>;
+    if (error) return <center><h3>{error}</h3></center>;
 
     return (
         <div>
-            <h2>Salary Records</h2>
+            <center><h2>Salary Records</h2></center>
             <ul>
                 {salaries.map((salary) => (
                     <li key={salary.dsID}>

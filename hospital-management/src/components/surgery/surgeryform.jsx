@@ -61,14 +61,12 @@ const SurgeryForm = ({ doctorID }) => {
   };
 
   return (
-    <div className="surgery-form">
+    <div className="login_div">
       <h2>Register New Surgery</h2>
       {successMessage && <p className="success-message">{successMessage}</p>}
       {errorMessage && <p className="error-message">{errorMessage}</p>}
       <div className="login_div">
-      <form onSubmit={handleSubmit}>
-        
-        <div>
+      <form className='login_form' onSubmit={handleSubmit}>
           <div className="login_div">
 
           <label className='login_label'>Patient Email:</label>
@@ -80,10 +78,8 @@ const SurgeryForm = ({ doctorID }) => {
             required
           />
           </div>
-        </div>
 
 
-        <div>
           <div className="login_div">
 
           <label className='login_label'>Type:</label>
@@ -95,10 +91,8 @@ const SurgeryForm = ({ doctorID }) => {
             required
           />
           </div>
-        </div>
 
 
-        <div>
           <div className="login_div">
 
           <label className='login_label'>Critical Level:</label>
@@ -110,9 +104,7 @@ const SurgeryForm = ({ doctorID }) => {
             required
           />
           </div>
-        </div>
         
-        <div>
           <div className="login_div">
           <label className='login_label'>Cost:</label>
           <input className='login_input'
@@ -123,10 +115,9 @@ const SurgeryForm = ({ doctorID }) => {
             required
           />
           </div>
-        </div>
 
 
-        <button className='login_input' type="submit">Add Surgery</button>
+        <button className='login_button' type="submit">Add Surgery</button>
       </form>
       </div>
       {/* <SurgeryList doctorID={doctorID} /> */}

@@ -313,9 +313,11 @@ const pdashboard = () => {
               <center><h1 className="dashboard-header">Upcoming Appointments</h1></center>
               <div className="appointments">
                 {upcomingAppointments.length > 0 ? (
-                  upcomingAppointments.map((appointment) => (
-                    <App_cards key={appointment.appointmentID} param={appointment} flag={false} onDelete={handleDeleteAppointment} />
-                  ))
+                  <div className="appointment_cards">
+                    {upcomingAppointments.map((appointment) => (
+                      <App_cards key={appointment.appointmentID} param={appointment} flag={false} onDelete={handleDeleteAppointment} />
+                    ))}
+                  </div>
                 ) : (
                   <p>No upcoming appointments.</p>
                 )}
@@ -323,9 +325,11 @@ const pdashboard = () => {
               <center><h1 className="dashboard-header">Previous Appointments</h1></center>
               <div className="appointments">
                 {previousAppointments.length > 0 ? (
-                  previousAppointments.map((appointment) => (
+                  <div className="appointment_cards">
+                  {previousAppointments.map((appointment) => (
                     <App_cards key={appointment.appointmentID} param={appointment} flag={false} onDelete={handleDeleteAppointment} />
-                  ))
+                  ))}
+                  </div>
                 ) : (
                   <p>No previous appointments.</p>
                 )}
@@ -333,9 +337,11 @@ const pdashboard = () => {
               <center><h1 className="dashboard-header">Requested Appointments</h1></center>
               <div className="appointments">
                 {requestedAppointments.length > 0 ? (
-                  requestedAppointments.map((appointment) => (
+                  <div className="appointment_cards">
+                  {requestedAppointments.map((appointment) => (
                     <App_cards key={appointment.appointmentID} param={appointment} flag={false} onDelete={handleDeleteAppointment} />
-                  ))
+                  ))}
+                  </div>
                 ) : (
                   <p>No Requested appointments.</p>
                 )}
@@ -373,22 +379,22 @@ const pdashboard = () => {
             </div>
           )}
           {pdashboardState === 3 && (
-            <div>
+            <div className='appointments'>
               <h1>Pending Bills</h1>
-              <div className="bills-list">
                 {unpaidBills.length > 0 ? (
-                  unpaidBills.map((bill) => (
-                    <div key={bill.billID} className="bill-item">
-                      <p><strong>Bill ID:</strong> {bill.billID}</p>
-                      <p><strong>Amount:</strong> {bill.totalCost}</p>
-                      <p><strong>Type:</strong> {bill.type}</p>
-                      <button onClick={() => handlePayBill(bill.billID)} className="pay-button">Pay</button>
-                    </div>
-                  ))
+                  <div className="appointment_cards">
+                    {unpaidBills.map((bill) => (
+                      <div key={bill.billID} className="bill-item">
+                        <p><strong>Bill ID:</strong> {bill.billID}</p>
+                        <p><strong>Amount:</strong> {bill.totalCost}</p>
+                        <p><strong>Type:</strong> {bill.type}</p>
+                        <button onClick={() => handlePayBill(bill.billID)} className="pay-button">Pay</button>
+                      </div>
+                    ))}
+                  </div>
                 ) : (
                   <p>No pending bills.</p>
                 )}
-              </div>
             </div>
           )}
           {pdashboardState === 4 && (

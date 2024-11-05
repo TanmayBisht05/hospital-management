@@ -103,11 +103,11 @@ const DoctorAppointments = ({ doctorID }) => {
 
     return (
         <div>
-            <h2>Appointments for Doctor ID: {doctorID}</h2>
+            <center><h1>Appointments for Doctor ID: {doctorID}</h1></center>
 
             {upcomingAppointments.length > 0 ? (
                 <div>
-                    <h3>Upcoming Appointments</h3>
+                    <center><h2>Upcoming Appointments</h2></center>
                     <table>
                         <thead>
                             <tr>
@@ -128,7 +128,7 @@ const DoctorAppointments = ({ doctorID }) => {
                                     <td>Upcoming</td>
                                     <td>{appointment.time ? appointment.time : "N/A"}</td>
                                     <td>
-                                        <button onClick={() => handleScheduleClick(appointment.appointmentID, appointment.patientID)}>
+                                        <button className='app_cards_details_button' onClick={() => handleScheduleClick(appointment.appointmentID, appointment.patientID)}>
                                             Reschedule
                                         </button>
                                     </td>
@@ -143,7 +143,7 @@ const DoctorAppointments = ({ doctorID }) => {
 
             {requestedAppointments.length > 0 ? (
                 <div>
-                    <h3>Requested Appointments</h3>
+                    <center><h2>Requested Appointments</h2></center>
                     <table>
                         <thead>
                             <tr>
@@ -160,7 +160,7 @@ const DoctorAppointments = ({ doctorID }) => {
                                     <td>{appointment.patientID}</td>
                                     <td>Requested</td>
                                     <td>
-                                        <button onClick={() => handleScheduleClick(appointment.appointmentID, appointment.patientID)}>
+                                        <button className='app_cards_details_button' onClick={() => handleScheduleClick(appointment.appointmentID, appointment.patientID)}>
                                             Schedule
                                         </button>
                                     </td>
@@ -174,38 +174,45 @@ const DoctorAppointments = ({ doctorID }) => {
             )}
 
             {schedulingData.appointmentID && (
-                <div>
-                    <h3>Schedule Appointment</h3>
-                    <form onSubmit={handleScheduleSubmit}>
-                        <div>
-                            <label>
+                <div className='appointments'>
+                    <div className="login_div">
+
+                    <h2>Schedule Appointment</h2>
+                    <form className='login_form' onSubmit={handleScheduleSubmit}>
+                        <div className='login_div'>
+                            <label className='login_label'>
                                 Time:
-                                <input
+                            </label>
+                                <input className='login_label'
                                     type="datetime-local"
                                     name="time"
                                     value={schedulingData.time}
                                     onChange={handleInputChange}
                                     required
                                 />
-                            </label>
                         </div>
-                        <div>
-                            <label>
+                        <div className='login_div'>
+                            <label className='login_label'>
                                 Cost:
-                                <input
+                            </label>
+                                <input className='login_input'
                                     type="number"
                                     name="cost"
                                     value={schedulingData.cost}
                                     onChange={handleInputChange}
                                     required
                                 />
-                            </label>
                         </div>
-                        <button type="submit">Confirm Schedule</button>
-                        <button type="button" onClick={() => setSchedulingData({ appointmentID: null, time: '', cost: '', patientID: null })}>
+                        <div className="login_div">
+                        <button className='login_button' type="submit">Confirm Schedule</button>
+                        </div>
+                        <div className="login_div">
+                        <button className='login_button' type="button" onClick={() => setSchedulingData({ appointmentID: null, time: '', cost: '', patientID: null })}>
                             Cancel
                         </button>
+                        </div>
                     </form>
+                    </div>
                 </div>
             )}
         </div>
