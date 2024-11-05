@@ -29,6 +29,7 @@ const pdashboard = () => {
   const [requestedAppointments, setRequestedAppointments] = useState([]);
   const [roomBookings, setRoomBookings] = useState([]);
   const [unpaidBills, setUnpaidBills] = useState([]);
+  const [surgeries, setSurgeries] = useState([]);
 
   const token = Cookies.get('token');
   const userType = Cookies.get('userType');
@@ -89,6 +90,22 @@ const pdashboard = () => {
     }
   }, [])
 
+  const fetchSurgeriesForPatient = async (patientID) => {
+    try {
+      const response = await fetch(`http://localhost:8080/surgeries/patient/${patientID}`);
+      const data = await response.json();
+      setSurgeries(data);
+    } catch (error) {
+      console.error('Error fetching surgeries:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (pdashboardState === 3) {
+      fetchSurgeriesForPatient(id); // Replace with actual patient ID
+    }
+  }, [pdashboardState, id]);
+
   useEffect(() => {
     if (!token || userType !== 'PATIENT') {
       navigate('/login');
@@ -96,7 +113,7 @@ const pdashboard = () => {
       fetchPatientData();
       fetchDoctors();
       fetchAppointments();
-      if (pdashboardState === 3) fetchUnpaidBills(); // Fetch unpaid bills when pdashboardState is 3
+      if (pdashboardState === 4) fetchUnpaidBills(); // Fetch unpaid bills when pdashboardState is 4
     }
   }, [navigate, token, userType, id, pdashboardState]);
   const fetchAppointments = async () => {
@@ -381,6 +398,27 @@ const pdashboard = () => {
             </div>
           )}
           {pdashboardState === 3 && (
+            <div className='surgeries_for_patient'>
+              <h1>Surgeries</h1>
+              {surgeries.length > 0 ? (
+                <div className="surgery_cards">
+                  {surgeries.map((surgery) => (
+                    <div key={surgery.surgeryID} className="surgery-item">
+                      <p><strong>Surgery ID:</strong> {surgery.surgeryID}</p>
+                      <p><strong>Doctor ID:</strong> {surgery.doctorID}</p>                    
+                      <p><strong>Date and Time:</strong> {new Date(surgery.time).toLocaleString()}</p>                      
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p>No surgeries found.</p>
+              )}
+            </div>
+          )}
+
+
+
+          {pdashboardState === 4 && (
             <div className='appointments'>
               <h1>Pending Bills</h1>
                 {unpaidBills.length > 0 ? (
@@ -399,7 +437,7 @@ const pdashboard = () => {
                 )}
             </div>
           )}
-          {pdashboardState === 4 && (
+          {pdashboardState === 5 && (
             <div>
               <center><h1 className="dashboard-header">Previous Appointments</h1></center>
               <div className="appointments">
@@ -414,7 +452,7 @@ const pdashboard = () => {
             </div>
           )}
       
-          {pdashboardState === 5 && <>
+          {pdashboardState === 6 && <>
             <center><h1 className="dashboard-header">Book Room</h1></center>
             <div className="appointments">
               <h2>Available Rooms:</h2>
@@ -494,7 +532,7 @@ const pdashboard = () => {
                 </div>
             </div>
           </>}
-          {pdashboardState === 6 && <>
+          {pdashboardState === 7 && <>
             <center><h1 className="dashboard-header">Pharmacy</h1></center>
             <AddPharmacyRequestForm patientID={id} />
             <PendingRequests patientID={id} />
