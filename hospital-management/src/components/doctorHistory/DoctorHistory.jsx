@@ -53,7 +53,7 @@ const DoctorHistory = ({ doctorID }) => {
 
     return (
         <div>
-            <h2>Previous Appointments for Doctor ID: {doctorID}</h2>
+            <center><h1>Previous Appointments</h1></center>
             {previousAppointments.length > 0 ? (
                 <table>
                     <thead>
@@ -82,12 +82,12 @@ const DoctorHistory = ({ doctorID }) => {
                     </tbody>
                 </table>
             ) : (
-                <p>No previous appointments found.</p>
+                <center><p>No previous appointments found.</p></center>
             )}
 
             {selectedAppointmentID && (
                 <div>
-                    <h3>Add Prescription for Appointment ID: {selectedAppointmentID}</h3>
+                    <center><h2>Add Prescription for Appointment ID: {selectedAppointmentID}</h2></center>
                     <textarea
                         value={prescription}
                         onChange={handlePrescriptionChange}

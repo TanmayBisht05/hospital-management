@@ -9,12 +9,13 @@ table {
 th, td {
     padding: 12px; /* Padding inside cells */
     text-align: left; /* Align text to the left */
-    border: 1px solid #ddd; /* Light border around cells */
+    border: 1px solid white; /* Light border around cells */
 }
 
 th {
-    background-color: #f2f2f2; /* Light gray background for table headers */
+    background-color: rgb(0, 87, 97); /* Light gray background for table headers */
     font-weight: bold; /* Bold text for headers */
+    color: white;
 }
 
 tr:nth-child(even) {

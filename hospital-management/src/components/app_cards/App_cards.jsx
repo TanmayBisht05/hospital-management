@@ -18,8 +18,8 @@ const App_cards = ({ param, flag, onDelete }) => {
               <p><strong>Appointment ID:</strong> {param.appointmentID}</p>
               <p><strong>Doctor ID:</strong> {param.doctorID}</p>
               <p><strong>Status:</strong> {param.status === 0 ? 'Requested' : 'Granted'}</p>
+              <button onClick={handleDelete} className="delete_button_app_cards">Delete</button> {/* Delete Button */}
             </div>
-            <button onClick={handleDelete} className="delete-button">Delete</button> {/* Delete Button */}
           </div>
         ) : (
           <div className="app_cards">

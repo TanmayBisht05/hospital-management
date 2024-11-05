@@ -44,15 +44,15 @@
 .app_cards_details p {
     margin: 0;
 }
-.app_cards_details button {
+.app_cards_details_button {
     width: 100px;
-    height: 30px;
     border-radius: 3px;
     background-color: rgb(0, 87, 97);
     color: white;
     border: 1px solid rgb(0, 87, 97);
+    width: fit-content;
 }
-.app_cards_details button:hover {
+.app_cards_details_button:hover {
     background-color: white;
     color: black;
     cursor: pointer;
@@ -64,16 +64,17 @@
     gap: 10px;
 }
 
-.delete-button {
+.delete_button_app_cards {
     background-color: red; /* Change this to your preferred color */
     color: white;
-    border: none;
-    padding: 5px 10px;
+    border: 1px solid red;
     cursor: pointer;
-    margin-top: 10px; /* Add some space above the button */
+    width: fit-content;
+    border-radius: 3px;
   }
   
-  .delete-button:hover {
+  .delete_button_app_cards:hover {
+    border: 1px solid darkred;
     background-color: darkred; /* Darker shade on hover */
   }
   

@@ -401,7 +401,7 @@ const Admin = () => {
         {adashboardState === 4 && ( // Dashboard state 4 for Salary Management
             <>
               <center><h1 className="dashboard-header">Manage Chemist Salaries</h1></center>
-              <div className="login_div">
+              <div className="appointments">
                 <h2>Add Salary for Chemist</h2>
                 <form onSubmit={handleSalarySubmit} className="login_form">
                   <div className="login_div">
@@ -446,10 +446,12 @@ const Admin = () => {
                   </div>
                   <button type="submit" className="login_button">Submit Salary</button>
                 </form>
-                <center><h1 className="dashboard-header">Manage Doctor Salaries</h1></center>
+                <center><h2>Manage Doctor Salaries</h2></center>
+                <div className="login_div">
               <form onSubmit={handleDoctorSalarySubmit} className="login_form">
-                <label>Select Doctor:</label>
-                <select
+                <div className="login_div">
+                <label className='login_label'>Select Doctor :</label>
+                <select className='login_select'
                   value={selectedDoctor}
                   onChange={(e) => setSelectedDoctor(e.target.value)}
                   required
@@ -461,22 +463,30 @@ const Admin = () => {
                     </option>
                   ))}
                 </select>
-                <input
+                </div>
+                <div className="login_div">
+                <label className='login_label'>Salary Amount :</label>
+                <input className='login_input'
                   type="number"
                   placeholder="Salary Amount"
                   value={doctorSalary}
                   onChange={(e) => setDoctorSalary(e.target.value)}
                   required
                 />
-                <input
+                </div>
+                <div className="login_div">
+                <label className='login_label'>Issue Date :</label>
+                <input className='login_input'
                   type="date"
                   placeholder="Issue Date"
                   value={doctorIssueDate}
                   onChange={(e) => setDoctorIssueDate(e.target.value)}
                   required
                 />
-                <button type="submit">Submit Salary</button>
+                </div>
+                <button type="submit" className='login_button'>Submit Salary</button>
               </form>
+              </div>
               </div>
             </>
           )}
