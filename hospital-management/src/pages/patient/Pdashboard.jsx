@@ -10,6 +10,8 @@ import Navbar from '../../components/navbar/navbar';
 import Fake from '../../utility/Fake';
 import UserInfo from './profile.jsx';
 import PatientBills from '../../components/bills/patientbills.jsx';
+import AddPharmacyRequestForm from '../../components/pharmacy/pharmacyRequestform.jsx';
+import PendingRequests from '../../components/pharmacy/pendingRequests.jsx';
 
 
 const pdashboard = () => {
@@ -494,6 +496,9 @@ const pdashboard = () => {
           </>}
           {pdashboardState === 6 && <>
             <center><h1 className="dashboard-header">Pharmacy</h1></center>
+            <AddPharmacyRequestForm patientID={id} />
+            <PendingRequests patientID={id} />
+
 
           </>}
         </div>

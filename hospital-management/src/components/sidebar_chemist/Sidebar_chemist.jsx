@@ -10,53 +10,63 @@ const Sidebar_chemist = () => {
     const { cdashboardState, setCdashboardState } = React.useContext(AuthContext);
     let ele = useRef(null);
     let shouldSetEle = useRef(true);
+
     useEffect(() => {
-        if(shouldSetEle.current) {
+        if (shouldSetEle.current) {
             shouldSetEle.current = false;
-            if(cdashboardState === 0) {
+            if (cdashboardState === 0) {
                 ele.current = document.getElementById('idinventory');
-            } else if(cdashboardState === 1) {
+            } else if (cdashboardState === 1) {
                 ele.current = document.getElementById('idorder');
-            } else if(cdashboardState === 2) {
+            } else if (cdashboardState === 2) {
                 ele.current = document.getElementById('idsal');
+            } else if (cdashboardState === 3) { // New condition for pharmacy requests
+                ele.current = document.getElementById('idpharmacy');
             }
-            if(ele.current) {
+            if (ele.current) {
                 ele.current.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
             }
         }
     }, []);
+
     const handleClick = (num) => {
-        if(ele.current) {
+        if (ele.current) {
             ele.current.style.backgroundColor = 'rgb(0, 87, 97)';
             ele.current = null;
         }
-        if(num === 0) {
+        if (num === 0) {
             ele.current = document.getElementById('idinventory');
-        } else if(num === 1) {
+        } else if (num === 1) {
             ele.current = document.getElementById('idorder');
-        } else if(num === 2) {
+        } else if (num === 2) {
             ele.current = document.getElementById('idsal');
+        } else if (num === 3) { // New case for pharmacy requests
+            ele.current = document.getElementById('idpharmacy');
         }
-        if(ele.current) {
+        if (ele.current) {
             ele.current.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
         }
         setCdashboardState(num);
     }
+
     return (
         <div className="sidebar">
             <h2 className="text-light mb-4">Chemist Dashboard</h2>
-                <Link to={'/'}>
-                    <FaHome /> Home
-                </Link>
-                <a onClick={() => {handleClick(0)}} id='idinventory'>
-                    <MdOutlineInventory /> Inventory
-                </a>
-                <a onClick={() => {handleClick(1)}} id='idorder'>
-                    <AiOutlineMedicineBox /> Order Medicines
-                </a>
-                <a onClick={() => {handleClick(2)}} id='idsal'>
-                    <MdOutlineSell /> Salary Requests
-                </a>
+            <Link to={'/'}>
+                <FaHome /> Home
+            </Link>
+            <a onClick={() => { handleClick(0) }} id='idinventory'>
+                <MdOutlineInventory /> Inventory
+            </a>
+            <a onClick={() => { handleClick(1) }} id='idorder'>
+                <AiOutlineMedicineBox /> Order Medicines
+            </a>
+            <a onClick={() => { handleClick(2) }} id='idsal'>
+                <MdOutlineSell /> Salary Requests
+            </a>
+            <a onClick={() => { handleClick(3) }} id='idpharmacy'> {/* New button for Pharmacy Requests */}
+                <MdOutlineSell /> Pharmacy Requests
+            </a>
         </div>
     );
 };
