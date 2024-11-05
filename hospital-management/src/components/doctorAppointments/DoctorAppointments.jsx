@@ -11,39 +11,34 @@ const DoctorAppointments = ({ doctorID }) => {
         appointmentID: null,
         time: '',
         cost: '',
-        patientID: null, // To hold the patient ID when scheduling
+        patientID: null,
+        mode: null // 'schedule' or 'reschedule'
     });
 
     useEffect(() => {
         const fetchAppointments = async () => {
             try {
-                // Fetch upcoming appointments
                 const upcomingResponse = await axios.get(`http://localhost:8080/appointments/doctor/${doctorID}/upcoming`);
                 if (Array.isArray(upcomingResponse.data)) {
                     const updatedAppointments = await Promise.all(upcomingResponse.data.map(async (appointment) => {
-                        // Fetch cost from the corresponding bill
-                        const billResponse = await axios.get(`http://localhost:8080/bill/${appointment.billID}`); // Assuming billID is part of the appointment
+                        const billResponse = await axios.get(`http://localhost:8080/bill/${appointment.billID}`);
                         return {
                             ...appointment,
-                            cost: billResponse.data.totalCost, // Add cost from the bill
+                            cost: billResponse.data.totalCost,
                         };
                     }));
                     setUpcomingAppointments(updatedAppointments);
                 } else {
-                    console.error('Unexpected response format for upcoming appointments:', upcomingResponse.data);
                     setError('Unexpected response format for upcoming appointments');
                 }
 
-                // Fetch requested appointments
                 const requestedResponse = await axios.get(`http://localhost:8080/appointments/doctor/${doctorID}/requested`);
                 if (Array.isArray(requestedResponse.data)) {
                     setRequestedAppointments(requestedResponse.data);
                 } else {
-                    console.error('Unexpected response format for requested appointments:', requestedResponse.data);
                     setError('Unexpected response format for requested appointments');
                 }
             } catch (error) {
-                console.error('Error fetching appointments:', error);
                 setError('Error fetching appointments');
             } finally {
                 setLoading(false);
@@ -53,43 +48,37 @@ const DoctorAppointments = ({ doctorID }) => {
         fetchAppointments();
     }, [doctorID]);
 
-    const handleScheduleClick = (appointmentID, patientID) => {
-        // Set the appointment ID and patient ID for the one being scheduled
-        setSchedulingData({ ...schedulingData, appointmentID, patientID });
+    const handleScheduleClick = (appointmentID, patientID, mode) => {
+        setSchedulingData({ ...schedulingData, appointmentID, patientID, mode });
     };
 
     const handleScheduleSubmit = async (event) => {
         event.preventDefault();
-
-        const { appointmentID, time, cost, patientID } = schedulingData;
-
-        // Format the time to ISO string if not already formatted
-        const formattedTime = new Date(time).toISOString();
-        const costNumber = parseInt(cost, 10);
+        const { appointmentID, time, cost, patientID, mode } = schedulingData;
 
         try {
-            const response = await axios.put(
-                `http://localhost:8080/appointments/doctor/${doctorID}/grant`,
-                {
-                    appointmentID,
-                    appointmentTime: formattedTime,
-                    patientID,
-                    totalCost: costNumber,
-                    type: 'Appointment', // You can modify this type as necessary
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                }
-            );
+            if (mode === 'schedule') {
+                const formattedTime = new Date(time).toISOString();
+                const costNumber = parseInt(cost, 10);
 
-            alert(response.data); // Show success or failure message
-            // Refresh the appointments after scheduling
+                const response = await axios.put(
+                    `http://localhost:8080/appointments/doctor/${doctorID}/grant`,
+                    { appointmentID, appointmentTime: formattedTime, patientID, totalCost: costNumber, type: 'Appointment' },
+                    { headers: { 'Content-Type': 'application/json' } }
+                );
+                alert(response.data);
+            } else if (mode === 'reschedule') {
+                const formattedTime = new Date(time).toISOString();
+                const response = await axios.put(
+                    `http://localhost:8080/appointments/${appointmentID}/update-time`,
+                    null,
+                    { params: { newTime: formattedTime } }
+                );
+                alert(response.data);
+            }
             window.location.reload();
         } catch (error) {
-            console.error('Error scheduling appointment:', error);
-            alert('Error scheduling appointment');
+            alert('Error submitting form');
         }
     };
 
@@ -128,7 +117,7 @@ const DoctorAppointments = ({ doctorID }) => {
                                     <td>Upcoming</td>
                                     <td>{appointment.time ? appointment.time : "N/A"}</td>
                                     <td>
-                                        <button className='app_cards_details_button' onClick={() => handleScheduleClick(appointment.appointmentID, appointment.patientID)}>
+                                        <button className='app_cards_details_button' onClick={() => handleScheduleClick(appointment.appointmentID, appointment.patientID, 'reschedule')}>
                                             Reschedule
                                         </button>
                                     </td>
@@ -160,7 +149,7 @@ const DoctorAppointments = ({ doctorID }) => {
                                     <td>{appointment.patientID}</td>
                                     <td>Requested</td>
                                     <td>
-                                        <button className='app_cards_details_button' onClick={() => handleScheduleClick(appointment.appointmentID, appointment.patientID)}>
+                                        <button className='app_cards_details_button' onClick={() => handleScheduleClick(appointment.appointmentID, appointment.patientID, 'schedule')}>
                                             Schedule
                                         </button>
                                     </td>
@@ -176,42 +165,41 @@ const DoctorAppointments = ({ doctorID }) => {
             {schedulingData.appointmentID && (
                 <div className='appointments'>
                     <div className="login_div">
-
-                    <h2>Schedule Appointment</h2>
-                    <form className='login_form' onSubmit={handleScheduleSubmit}>
-                        <div className='login_div'>
-                            <label className='login_label'>
-                                Time:
-                            </label>
-                                <input className='login_label'
+                        <h2>{schedulingData.mode === 'schedule' ? 'Schedule Appointment' : 'Reschedule Appointment'}</h2>
+                        <form className='login_form' onSubmit={handleScheduleSubmit}>
+                            <div className='login_div'>
+                                <label className='login_label'>Time:</label>
+                                <input
+                                    className='login_label'
                                     type="datetime-local"
                                     name="time"
                                     value={schedulingData.time}
                                     onChange={handleInputChange}
                                     required
                                 />
-                        </div>
-                        <div className='login_div'>
-                            <label className='login_label'>
-                                Cost:
-                            </label>
-                                <input className='login_input'
-                                    type="number"
-                                    name="cost"
-                                    value={schedulingData.cost}
-                                    onChange={handleInputChange}
-                                    required
-                                />
-                        </div>
-                        <div className="login_div">
-                        <button className='login_button' type="submit">Confirm Schedule</button>
-                        </div>
-                        <div className="login_div">
-                        <button className='login_button' type="button" onClick={() => setSchedulingData({ appointmentID: null, time: '', cost: '', patientID: null })}>
-                            Cancel
-                        </button>
-                        </div>
-                    </form>
+                            </div>
+                            {schedulingData.mode === 'schedule' && (
+                                <div className='login_div'>
+                                    <label className='login_label'>Cost:</label>
+                                    <input
+                                        className='login_input'
+                                        type="number"
+                                        name="cost"
+                                        value={schedulingData.cost}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
+                                </div>
+                            )}
+                            <div className="login_div">
+                                <button className='login_button' type="submit">Confirm {schedulingData.mode === 'schedule' ? 'Schedule' : 'Reschedule'}</button>
+                            </div>
+                            <div className="login_div">
+                                <button className='login_button' type="button" onClick={() => setSchedulingData({ appointmentID: null, time: '', cost: '', patientID: null, mode: null })}>
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}
