@@ -20,12 +20,14 @@ const Sidebar = () => {
             } else if(pdashboardState === 2) {
                 ele.current = document.getElementById('idnewapp');
             } else if(pdashboardState === 3) {
-                ele.current = document.getElementById('idpending');
+                ele.current = document.getElementById('idsurgeries');
             } else if(pdashboardState === 4) {
-                ele = document.getElementById('idhistory');
+                ele.current = document.getElementById('idpending');
             } else if(pdashboardState === 5) {
-                ele = document.getElementById('idbookroom');
+                ele = document.getElementById('idhistory');
             } else if(pdashboardState === 6) {
+                ele = document.getElementById('idbookroom');
+            } else if(pdashboardState === 7) {
                 ele = document.getElementById('idpharmacy');
             }
             if(ele.current) {
@@ -45,12 +47,14 @@ const Sidebar = () => {
         } else if(num === 2) {
             ele.current = document.getElementById('idnewapp');
         } else if(num === 3) {
-            ele.current = document.getElementById('idpending');
+            ele.current = document.getElementById('idsurgeries');
         } else if(num === 4) {
-            ele.current = document.getElementById('idhistory');
+            ele.current = document.getElementById('idpending');
         } else if(num === 5) {
-            ele.current = document.getElementById('idbookroom');
+            ele.current = document.getElementById('idhistory');
         } else if(num === 6) {
+            ele.current = document.getElementById('idbookroom');
+        } else if(num === 7) {
             ele.current = document.getElementById('idpharmacy');
         }
         if(ele.current) {
@@ -73,16 +77,19 @@ const Sidebar = () => {
                 <a onClick={() => {handleClick(2)}} id='idnewapp'>
                     <FaSyringe /> New Appointment
                 </a>
-                <a onClick={() => {handleClick(3)}} id='idpending'>
+                <a onClick={() => {handleClick(3)}} id='idsurgeries'>
+                    <MdPending /> Surgeries
+                </a>
+                <a onClick={() => {handleClick(4)}} id='idpending'>
                     <MdPending /> Pending Bills
                 </a>
-                <a onClick={() => {handleClick(4)}} id='idhistory'>
+                <a onClick={() => {handleClick(5)}} id='idhistory'>
                     <FaUserInjured /> History
                 </a>
-                <a onClick={() => {handleClick(5)}} id='idbookroom'>
+                <a onClick={() => {handleClick(6)}} id='idbookroom'>
                     <MdOutlineMeetingRoom /> Book Room
                 </a>
-                <a onClick={() => {handleClick(6)}} id='idpharmacy'>
+                <a onClick={() => {handleClick(7)}} id='idpharmacy'>
                     <MdOutlineLocalPharmacy /> Pharmacy
                 </a>
         </div>
