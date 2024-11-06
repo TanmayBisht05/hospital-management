@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import './doctorAppointments.css';
+import AuthContext from '../../AuthContext';
 
 const DoctorAppointments = ({ doctorID }) => {
+    const {getMinDateTime} = useContext(AuthContext);
     const [upcomingAppointments, setUpcomingAppointments] = useState([]);
     const [requestedAppointments, setRequestedAppointments] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -175,6 +177,7 @@ const DoctorAppointments = ({ doctorID }) => {
                                     name="time"
                                     value={schedulingData.time}
                                     onChange={handleInputChange}
+                                    min={getMinDateTime()}
                                     required
                                 />
                             </div>
@@ -191,11 +194,9 @@ const DoctorAppointments = ({ doctorID }) => {
                                     />
                                 </div>
                             )}
-                            <div className="login_div">
+                            <div className="login_div_horizontal">
                                 <button className='login_button' type="submit">Confirm {schedulingData.mode === 'schedule' ? 'Schedule' : 'Reschedule'}</button>
-                            </div>
-                            <div className="login_div">
-                                <button className='login_button' type="button" onClick={() => setSchedulingData({ appointmentID: null, time: '', cost: '', patientID: null, mode: null })}>
+                                <button className='login_button button_red' type="button" onClick={() => setSchedulingData({ appointmentID: null, time: '', cost: '', patientID: null, mode: null })}>
                                     Cancel
                                 </button>
                             </div>

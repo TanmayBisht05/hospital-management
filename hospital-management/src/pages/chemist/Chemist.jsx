@@ -183,11 +183,11 @@ const Chemist = () => {
                     </>}
                     {cdashboardState === 2 && <>
                         <center><h1 className="dashboard-header">Salary Records</h1></center>
-                        <div className="salary-list">
+                        <div className="appointments">
                             <h2>Your Salary Records</h2>
+                            <div className="appointment_cards">
                             {salaries.length > 0 ?
-                                <div className="appointment_cards">
-                                    {salaries.map((salary) => (
+                                    <>{salaries.map((salary) => (
                                         <div className='app_cards' key={salary.csID}>
                                             <div className="app_cards_date">
                                                 <p>{new Date(salary.issueDate).toLocaleString()}</p>
@@ -197,11 +197,11 @@ const Chemist = () => {
                                                 <button className='login_button' onClick={() => handleAcceptSalary(salary.csID)}>Accept Salary</button>
                                             </div>
                                         </div>
-                                    ))}
+                                    ))}</>
+                                    :
+                                    <center><p>No salary records found.</p></center>
+                                }
                                 </div>
-                                :
-                                <center><p>No salary records found.</p></center>
-                            }
                         </div>
                     </>}
                     {cdashboardState === 3 && <>

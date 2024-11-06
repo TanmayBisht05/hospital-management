@@ -5,7 +5,7 @@ import Fake from '../../utility/Fake';
 import './signup.css';
 import { useNavigate } from 'react-router-dom';
 const Signup = () => {
-    let {signup} = useContext(AuthContext);
+    let {signup, formattedDate} = useContext(AuthContext);
     const navigate = useNavigate();
     const handleSignup = async (e) => {
         e.preventDefault();
@@ -36,15 +36,15 @@ const Signup = () => {
                 <div className="login_form_left">
                     <div className="login_div">
                         <label htmlFor="firstName" className="login_label">First Name : </label>
-                        <input className='login_input' id='firstName' type="text" required placeholder="First Name" />
+                        <input className='login_input' id='firstName' type="text" placeholder="First Name" required />
                     </div>
                     <div className="login_div">
                         <label htmlFor="lastName" className="login_label">Last Name : </label>
-                        <input className='login_input' id='lastName' type="text" required placeholder="Last Name" />
+                        <input className='login_input' id='lastName' type="text" placeholder="Last Name" required />
                     </div>
                     <div className="login_div">
                         <label htmlFor="dob" className="login_label">Date of Birth : </label>
-                        <input className='login_input' id='dob' type="date" placeholder="Date of Birth" />
+                        <input className='login_input' id='dob' type="date" placeholder="Date of Birth" max={formattedDate(new Date())} />
                     </div>
                     <div className="login_div">
                         <label htmlFor="address" className="login_label">Address : </label>
@@ -65,7 +65,7 @@ const Signup = () => {
                     </div>
                     <div className="login_div">
                         <label htmlFor="email" className="login_label">Email : </label>
-                        <input className='login_input' id='email' type="text" placeholder="Email" required/>
+                        <input className='login_input' id='email' type="text" placeholder="Email" required />
                     </div>
                     <div className="login_div">
                         <label htmlFor="password" className="login_label">Password : </label>

@@ -46,9 +46,9 @@ const DoctorSalaries = ({ doctorID }) => {
     return (
         <div>
             <center><h2>Salary Records</h2></center>
+            <div className="appointment_cards">
             {salaries.length === 0 ? <center><h3>No salary records found</h3></center> :
-                <div className="appointment_cards">
-                    {salaries.map((salary) => (
+                    <>{salaries.map((salary) => (
                         <div className='app_cards' key={salary.dsID}>
                             <div className="app_cards_date"><p>{new Date(salary.issueDate).toLocaleDateString()}</p></div>
                             <div className="app_cards_details">
@@ -56,9 +56,9 @@ const DoctorSalaries = ({ doctorID }) => {
                             <button className='login_button' onClick={() => handleAccept(salary.dsID)}>Accept</button>
                             </div>
                         </div>
-                    ))}
-                </div>
-            }
+                    ))}</>
+                }
+            </div>
         </div>
     );
 };

@@ -12,6 +12,21 @@ export const AuthProvider = ({ children }) => {
     const [userType, setUserType] = useState('');
     const [userId, setUserId] = useState(-1);
     const [userEmail, setUserEmail] = useState('');
+    const [pharmacyRequests, setPharmacyRequests] = useState([]);
+
+    const fetchPharmacyRequests = async () => {
+        const response = await fetch(`${backend_url}/pharmacy`);
+        const data = await response.json();
+        setPharmacyRequests(data);
+    };
+
+    const handleDenyRequest = async (requestId) => {
+        // Call the deny request API here (like the existing API to deny the request)
+        console.log(`Denying request ${requestId}`);
+        // Example of API call to deny the request
+        await fetch(`${backend_url}/pharmacy/${requestId}`, { method: 'DELETE' });
+        fetchPharmacyRequests(); // Refresh the list after denying
+    };
 
     const shouldSetAuthenticated = useRef(true);
     useEffect(() => {
@@ -96,6 +111,22 @@ export const AuthProvider = ({ children }) => {
         should_set_animate.current = false;
     }
     const should_animate = useRef(true);
+    const formattedDate = (today) => { return today.getFullYear() + '-' + 
+    String(today.getMonth() + 1).padStart(2, '0') + '-' + 
+    String(today.getDate()).padStart(2, '0');
+    }
+    const getMinDateTime = () => {
+        const now = new Date();
+        now.setMinutes(now.getMinutes() + 30); // Add 30 minutes to the current time
+      
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+      
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+      };
     let contextData = {
         backend_url,
         pdashboardState,
@@ -115,6 +146,12 @@ export const AuthProvider = ({ children }) => {
         animate,
         setAnimate,
         should_animate,
+        formattedDate,
+        getMinDateTime,
+        handleDenyRequest,
+        fetchPharmacyRequests,
+        pharmacyRequests,
+        setPharmacyRequests,
     };
     return (
         <AuthContext.Provider value={contextData}>

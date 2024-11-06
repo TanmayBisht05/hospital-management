@@ -1,22 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import AuthContext from '../../AuthContext';
 
 const PendingRequests = ({ patientID }) => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const { handleDenyRequest, backend_url } = useContext(AuthContext);
+  const fetch_requests = () => {
+    axios.get(`${backend_url}/pharmacy/${patientID}`)
+      .then(response => {
+        setRequests(response.data);
+        setLoading(false);
+      })
+      .catch(error => {
+        setError('Failed to fetch requests.');
+        setLoading(false);
+      });
+  }
   useEffect(() => {
     if (patientID) {
-      axios.get(`http://localhost:8080/pharmacy/${patientID}`)
-        .then(response => {
-          setRequests(response.data);
-          setLoading(false);
-        })
-        .catch(error => {
-          setError('Failed to fetch requests.');
-          setLoading(false);
-        });
+      fetch_requests();
     }
   }, [patientID]);
 
@@ -33,6 +37,7 @@ const PendingRequests = ({ patientID }) => {
               <th>Request ID</th>
               <th>Medicine Name</th>
               <th>Amount</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -41,12 +46,13 @@ const PendingRequests = ({ patientID }) => {
                 <td>{request.requestID}</td>
                 <td>{request.medicineName}</td>
                 <td>{request.amount}</td>
+                <td><button className='login_button button_red' onClick={async () => { await handleDenyRequest(request.requestID); fetch_requests();}}>Cancel</button></td>
               </tr>
             ))}
           </tbody>
         </table>
       ) : (
-        <p>No pending requests found for this patient.</p>
+        <center><p>No pending requests found for this patient.</p></center>
       )}
     </div>
   );
