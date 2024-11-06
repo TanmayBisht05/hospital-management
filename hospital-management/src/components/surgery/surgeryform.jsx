@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import AuthContext from '../../AuthContext';
 
 const SurgeryForm = ({ doctorID }) => {
+  const {getMinDateTime} = useContext(AuthContext);
   const [formData, setFormData] = useState({
     patientID: '', // Changed from patientEmail to patientID
     type: '',
@@ -114,6 +116,7 @@ const SurgeryForm = ({ doctorID }) => {
               name="time"
               value={formData.time}
               onChange={handleChange}
+              min={getMinDateTime()}
               required
             />
           </div>

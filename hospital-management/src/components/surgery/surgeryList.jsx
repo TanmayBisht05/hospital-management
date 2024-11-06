@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import AuthContext from '../../AuthContext';
 
 
 
 
 const SurgeryList = ({ doctorID }) => {
+  const {getMinDateTime} = useContext(AuthContext);
   const [surgeries, setSurgeries] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [schedulingData, setSchedulingData] = useState({ appointmentID: '', patientID: '', time: '', cost: '' });
@@ -144,8 +146,8 @@ const SurgeryList = ({ doctorID }) => {
                 <td>{surgery.criticalLevel}</td>
                 <td>{new Date(surgery.time).toLocaleString()}</td> {/* Display formatted time */}
                 <td>
-                  <button onClick={() => handleDelete(surgery.surgeryID)}>Delete</button>
-                  <button onClick={() => handleScheduleClick(surgery.surgeryID, surgery.patientID)}>Reschedule</button>
+                  <button onClick={() => handleDelete(surgery.surgeryID)} className='login_button button_red'>Delete</button>
+                  <button onClick={() => handleScheduleClick(surgery.surgeryID, surgery.patientID)} className='login_button'>Reschedule</button>
                 </td>
               </tr>
             ))}
@@ -154,23 +156,29 @@ const SurgeryList = ({ doctorID }) => {
       )}
 
       {showModal && (
-        <div className="modal">
+        <div className="login_div">
           <h3>Reschedule Surgery</h3>
-          <form onSubmit={handleScheduleSubmit}>
-            <label>
+          <div className="login_div">
+          <form className='login_form' onSubmit={handleScheduleSubmit}>
+            <div className="login_div">
+            <label className='login_label'>
               New Time:
-              <input
+            </label>
+              <input className='login_input'
                 type="datetime-local"
                 name="time"
                 value={schedulingData.time}
                 onChange={handleInputChange}
+                min={getMinDateTime()}
                 required
               />
-            </label>
-
-            <button type="submit">Submit</button>
-            <button type="button" onClick={() => setShowModal(false)}>Cancel</button>
+            </div>
+            <div className="login_div_horizontal">
+              <button type="submit" className='login_button'>Submit</button>
+              <button type="button" onClick={() => setShowModal(false)} className='login_button button_red'>Cancel</button>
+            </div>
           </form>
+          </div>
         </div>
       )}
     </div>
