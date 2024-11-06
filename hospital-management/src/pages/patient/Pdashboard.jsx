@@ -15,7 +15,7 @@ import PendingRequests from '../../components/pharmacy/pendingRequests.jsx';
 
 
 const pdashboard = () => {
-  const { pdashboardState, backend_url } = useContext(AuthContext);
+  const { pdashboardState, backend_url, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const [patientData, setPatientData] = useState(null);
   const [doctors, setDoctors] = useState([]);
@@ -37,6 +37,7 @@ const pdashboard = () => {
   const token = Cookies.get('token');
   const userType = Cookies.get('userType');
   const id = parseInt(Cookies.get('id'), 10);
+  const should_fetch = useRef(true);
 
   const fetchPatientData = async () => {
     try {
@@ -50,7 +51,9 @@ const pdashboard = () => {
         const data = await response.json();
         setPatientData(data);
       } else {
-        console.error('Failed to fetch patient data');
+        alert('Failed to fetch patient data');
+        logout();
+        navigate('/');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -84,7 +87,15 @@ const pdashboard = () => {
       console.error('Error fetching doctor data:', error);
     }
   };
-  const should_fetch = useRef(true);
+  const login_fetch = useRef(true);
+
+  useEffect(() => {
+    if(login_fetch.current === true) {
+      fetchPatientData();
+      login_fetch.current = false;
+    }
+  }, [])
+
   useEffect(() => {
     if(should_fetch.current === true) {
       fetchRoomsByPatientId();
@@ -113,7 +124,6 @@ const pdashboard = () => {
     if (!token || userType !== 'PATIENT') {
       navigate('/login');
     } else {
-      fetchPatientData();
       fetchDoctors();
       fetchAppointments();
       if (pdashboardState === 4) fetchUnpaidBills(); // Fetch unpaid bills when pdashboardState is 4

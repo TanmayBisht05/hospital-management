@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useCallback } from 'react';
+import React, { useEffect, useState, useContext, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import SidebarDoctor from '../../components/sidebarDoctor/sidebarDoctor.jsx';
@@ -13,9 +13,10 @@ import DoctorAppointments from '../../components/doctorAppointments/DoctorAppoin
 import DoctorHistory from '../../components/doctorHistory/DoctorHistory.jsx';
 import DoctorApprovesBills from '../../components/doctorApprovesBills/DoctorApprovesBills.jsx';
 import DoctorSalaries from '../../components/doctorSalaries/DoctorSalaries.jsx';
+import { all } from 'axios';
 
 const Ddashboard = () => {
-  const { pdashboardState, setPdashboardState } = useContext(AuthContext);
+  const { pdashboardState, setPdashboardState, logout } = useContext(AuthContext);
   const [doctorData, setDoctorData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -23,20 +24,26 @@ const Ddashboard = () => {
   const token = Cookies.get('token');
   const userType = Cookies.get('userType');
   const doctorId = parseInt(Cookies.get('id'), 10);
+  const should_fetch_doctor_data = useRef(true);
 
   useEffect(() => {
     if (!token || userType !== 'DOCTOR' || isNaN(doctorId)) {
       navigate('/login');
       return;
     }
-    fetchDoctorData(doctorId);
-  }, [navigate]);
+    if(should_fetch_doctor_data.current) {
+      fetchDoctorData(doctorId);
+      should_fetch_doctor_data.current = false;
+    }
+  }, []);
 
   const fetchDoctorData = useCallback(async (doctorId) => {
     try {
       const response = await fetch(`http://localhost:8080/doctor/${doctorId}`);
       if (!response.ok) {
-        throw new Error('Failed to fetch doctor data');
+        alert('Failed to fetch doctor data');
+        logout();
+        navigate('/');
       }
       const data = await response.json();
       setDoctorData(data);

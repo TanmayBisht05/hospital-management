@@ -9,7 +9,7 @@ import Sidebar_chemist from '../../components/sidebar_chemist/Sidebar_chemist';
 import ChemistPharmacyPanel from '../../components/pharmacy/chemistPharmacyPanel.jsx';
 
 const Chemist = () => {
-    const { cdashboardState, backend_url } = useContext(AuthContext);
+    const { cdashboardState, backend_url, logout } = useContext(AuthContext);
     const navigate = useNavigate();
     const token = Cookies.get('token');
     const userType = Cookies.get('userType');
@@ -24,8 +24,25 @@ const Chemist = () => {
     const [pharmacyRequests, setPharmacyRequests] = useState([]); // New state for pharmacy requests
     const should_fetch = useRef(true);
 
+
+    const fetchChemistData = async () => {
+          const response = await fetch(`${backend_url}/chemist/${id}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+          if (!response.ok) {
+            alert('Failed to fetch patient data');
+            logout();
+            navigate('/');
+          }
+        //   console.error('Error:', error);
+        };
+
     useEffect(() => {
         if (should_fetch.current) {
+            fetchChemistData();
             fetchInventory();
             fetchPharmacyRequests(); // Fetch pharmacy requests on initial load
             should_fetch.current = false;
