@@ -13,6 +13,7 @@ import Login from './pages/login/Login.jsx'
 import Signup from './pages/signup/Signup.jsx'
 import Chemist from './pages/chemist/Chemist.jsx'
 import Admin from './pages/admin/Admin.jsx'
+import NotFoundPage from './components/notfoundpage.jsx'
 function App() {
   return (
     <AuthProvider>
@@ -33,6 +34,8 @@ function App() {
           <Route path = "/login" element = {<Login />} />
           <Route path = "/signup" element = {<Signup />} />
           <Route path = "/chemist" element = {<Chemist />} />
+          <Route path="*" element={<NotFoundPage />} /> {/* 404 fallback */}
+
         </Routes>
       </BrowserRouter>
     </AuthProvider>
