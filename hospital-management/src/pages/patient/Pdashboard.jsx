@@ -30,6 +30,9 @@ const pdashboard = () => {
   const [roomBookings, setRoomBookings] = useState([]);
   const [unpaidBills, setUnpaidBills] = useState([]);
   const [surgeries, setSurgeries] = useState([]);
+  const [rescheduleStartDate, setRescheduleStartDate] = useState('');
+  const [rescheduleEndDate, setRescheduleEndDate] = useState('');
+  const [roomBookingToReschedule, setRoomBookingToReschedule] = useState(null); // Track the booking being rescheduled
 
   const token = Cookies.get('token');
   const userType = Cookies.get('userType');
@@ -196,11 +199,76 @@ const pdashboard = () => {
       alert('Please fill in all booking details.');
     }
   };
+  const calculateCost = async (roomID, numDays) => {
+    
+    try {
+      const response = await fetch(`${backend_url}/rooms/${roomID}`);
+      
+      if (response.ok) {
+        const room = await response.json();
+        const dailyRate = room.cost; // assuming the cost is in the 'cost' field
+        
+        const totalCost = dailyRate * numDays;
+        return totalCost;
+      } else {
+        console.error('Failed to fetch room details');
+        return 0;
+      }
+    } catch (error) {
+      console.error('Error fetching room details:', error);
+      return 0;
+    }
+  };
+  
+
+
+  const handleReschedule = async (roomBookingID) => {
+    if (rescheduleStartDate && rescheduleEndDate) {
+      
+      try {
+        const response = await fetch(`${backend_url}/api/roomBookings/${roomBookingID}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          
+          body: JSON.stringify({
+            roomID: roomBookingToReschedule.roomID,
+            patientID: roomBookingToReschedule.patientID,
+            bookFrom: new Date(rescheduleStartDate).toISOString(),  // Convert to ISO string
+            bookTill: new Date(rescheduleEndDate).toISOString(),  // Convert to ISO string
+            numDays: calculateNumDays(rescheduleStartDate, rescheduleEndDate),
+            totalCost: await calculateCost(roomBookingToReschedule.roomID, calculateNumDays(rescheduleStartDate, rescheduleEndDate)), // Ensure it's an async call
+          }),
+        });
+
+        if (response.ok) {
+          alert('Room booking rescheduled successfully.');
+          fetchRoomsByPatientId(); // Update room list after rescheduling
+          setRoomBookingToReschedule(null); // Reset selected booking
+        } else {
+          alert('Failed to reschedule room booking.');
+        }
+      } catch (error) {
+        console.error('Error rescheduling booking:', error);
+      }
+    } else {
+      alert('Please fill in the new booking dates.');
+    }
+};
+
 
   const calculateNumDays = (startDate, endDate) => {
     const start = new Date(startDate);
     const end = new Date(endDate);
     return Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+  };
+
+  const openRescheduleModal = (room) => {
+    setRoomBookingToReschedule(room);
+    setRescheduleStartDate(room.bookFrom);
+    setRescheduleEndDate(room.bookTill);
   };
 
   const handleRequestAppointment = async (e) => {
@@ -302,6 +370,8 @@ const pdashboard = () => {
       console.error('Error updating bill status:', error);
     }
   };
+
+  
 
   return (
     <div>
@@ -515,22 +585,48 @@ const pdashboard = () => {
               </form>
             </div>
             <div className="appointments">
-              <h2>Your Booked Rooms :</h2>
-              <div className="appointment_cards">
-                {roomBookings.length > 0 ? (
-                  roomBookings.map(room => (
-                    <div key={room.roomBookingID} className="room-card">
-                      <p><strong>Room ID :</strong> {room.roomID}</p>
-                      <p><strong>Room Type :</strong> {getRoomType(room.roomID)}</p>
-                      <p><strong>Booked From :</strong> {room.bookFrom}</p>
-                      <p><strong>Booked Till :</strong> {room.bookTill}</p>
-                    </div>
-                  ))
-                ) : (
-                  <p>No rooms booked.</p>
-                )}
-                </div>
+      <h2>Your Booked Rooms:</h2>
+      <div className="appointment_cards">
+        {roomBookings.length > 0 ? (
+          roomBookings.map(room => (
+            <div key={room.roomBookingID} className="room-card">
+              <p><strong>Room ID:</strong> {room.roomID}</p>
+              <p><strong>Room Type:</strong> {getRoomType(room.roomID)}</p>
+              <p><strong>Booked From:</strong> {room.bookFrom}</p>
+              <p><strong>Booked Till:</strong> {room.bookTill}</p>
+              <button onClick={() => openRescheduleModal(room)}>Reschedule</button>
             </div>
+          ))
+        ) : (
+          <p>No rooms booked.</p>
+        )}
+      </div>
+
+      {/* Reschedule Modal */}
+      {roomBookingToReschedule && (
+        <div className="reschedule-modal">
+          <h3>Reschedule Booking for Room ID: {roomBookingToReschedule.roomID}</h3>
+          <label>
+            New Start Date:
+            <input
+              type="date"
+              value={rescheduleStartDate}
+              onChange={(e) => setRescheduleStartDate(e.target.value)}
+            />
+          </label>
+          <label>
+            New End Date:
+            <input
+              type="date"
+              value={rescheduleEndDate}
+              onChange={(e) => setRescheduleEndDate(e.target.value)}
+            />
+          </label>
+          <button onClick={() => handleReschedule(roomBookingToReschedule.roomBookingID)}>Confirm Reschedule</button>
+          <button onClick={() => setRoomBookingToReschedule(null)}>Cancel</button>
+        </div>
+              )}
+    </div>
           </>}
           {pdashboardState === 7 && <>
             <center><h1 className="dashboard-header">Pharmacy</h1></center>
