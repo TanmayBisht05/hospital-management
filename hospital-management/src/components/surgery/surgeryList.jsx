@@ -124,7 +124,9 @@ const SurgeryList = ({ doctorID }) => {
       <h2>Surgeries for Doctor ID: {doctorID}</h2>
       {errorMessage && <p className="error-message">{errorMessage}</p>}
       {surgeries.length === 0 ? (
-        <p>No surgeries found.</p>
+        <div className="appointment_cards">
+          <p>No surgeries found.</p>
+        </div>
       ) : (
         <table>
           <thead>

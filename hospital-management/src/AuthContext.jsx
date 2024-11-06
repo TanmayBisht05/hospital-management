@@ -13,12 +13,18 @@ export const AuthProvider = ({ children }) => {
     const [userId, setUserId] = useState(-1);
     const [userEmail, setUserEmail] = useState('');
     const [pharmacyRequests, setPharmacyRequests] = useState([]);
+    const [requestsPharmacy, setRequestsPharmacy] = useState([]);
 
     const fetchPharmacyRequests = async () => {
         const response = await fetch(`${backend_url}/pharmacy`);
         const data = await response.json();
         setPharmacyRequests(data);
     };
+    const fetch_requests_pharmacy = async (patientID) => {
+        const response = await fetch (`${backend_url}/pharmacy/${patientID}`);
+        const data = await response.json();
+        setRequestsPharmacy(data);
+    }
 
     const handleDenyRequest = async (requestId) => {
         // Call the deny request API here (like the existing API to deny the request)
@@ -152,6 +158,9 @@ export const AuthProvider = ({ children }) => {
         fetchPharmacyRequests,
         pharmacyRequests,
         setPharmacyRequests,
+        requestsPharmacy,
+        setRequestsPharmacy,
+        fetch_requests_pharmacy,
     };
     return (
         <AuthContext.Provider value={contextData}>

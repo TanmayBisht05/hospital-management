@@ -82,7 +82,9 @@ const DoctorHistory = ({ doctorID }) => {
                     </tbody>
                 </table>
             ) : (
-                <center><p>No previous appointments found.</p></center>
+                <div className="appointment_cards">
+                    <center><p>No previous appointments found.</p></center>
+                </div>
             )}
 
             {selectedAppointmentID && (

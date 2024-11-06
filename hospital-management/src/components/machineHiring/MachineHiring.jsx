@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import './machineHiring.css';
+import AuthContext from '../../AuthContext';
 
 const MachineHiring = ({ doctorID }) => {
+    const {backend_url, formattedDate} = useContext(AuthContext);
     const [machineHires, setMachineHires] = useState([]);
     const [machines, setMachines] = useState([]); // To store machine details in an array
     const [loading, setLoading] = useState(true);
@@ -15,21 +17,21 @@ const MachineHiring = ({ doctorID }) => {
     const [formError, setFormError] = useState('');
 
     // Fetch machine hire data and machine details
+    const fetchMachineHires = async () => {
+        try {
+            const response = await axios.get(`${backend_url}/machineHiring/doctor/${doctorID}`);
+            setMachineHires(response.data);
+        } catch (err) {
+            setError('Error fetching machine hire data');
+        } finally {
+            setLoading(false);
+        }
+    };
     useEffect(() => {
-        const fetchMachineHires = async () => {
-            try {
-                const response = await axios.get(`http://localhost:8080/machineHiring/doctor/${doctorID}`);
-                setMachineHires(response.data);
-            } catch (err) {
-                setError('Error fetching machine hire data');
-            } finally {
-                setLoading(false);
-            }
-        };
 
         const fetchMachineDetails = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/machinery');
+                const response = await axios.get(`${backend_url}/machinery`);
                 setMachines(response.data);  // Now it's an array of machinery objects
             } catch (err) {
                 setError('Error fetching machine details');
@@ -60,12 +62,12 @@ const MachineHiring = ({ doctorID }) => {
         }
 
         try {
-            const response = await axios.post(`http://localhost:8080/machineHiring/doctor/${doctorID}`, formData);
+            const response = await axios.post(`${backend_url}/machineHiring/doctor/${doctorID}`, formData);
             const newHire = response.data;
             setMachineHires((prevHires) => [...prevHires, newHire]);
             setFormData({ machineID: '', startDate: '', endDate: '' });
             setFormError('');
-            window.location.reload();
+            fetchMachineHires();
         } catch (err) {
             setFormError('Error adding new machine hire');
         }
@@ -74,7 +76,7 @@ const MachineHiring = ({ doctorID }) => {
     // Handle delete machine hire
     const handleDelete = async (hiringID) => {
         try {
-            await axios.delete(`http://localhost:8080/machineHiring/${hiringID}/doctor/${doctorID}`);
+            await axios.delete(`${backend_url}/machineHiring/${hiringID}/doctor/${doctorID}`);
             setMachineHires((prevHires) => prevHires.filter(hire => hire.hiringID !== hiringID));
         } catch (err) {
             setError('Error deleting machine hire');
@@ -85,15 +87,16 @@ const MachineHiring = ({ doctorID }) => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div>
+        <div className='appointments'>
             {/* Form to add new machine hire */}
-            <div className="form-container">
-                <h2>Hire a new Machine </h2>
+            <h1>Hire Machinery</h1>
+            <div className="login_div">
                 {formError && <p className="error">{formError}</p>}
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="machineID">Select Machine</label>
-                        <select
+                <form className='login_form' onSubmit={handleSubmit}>
+                    <h2>Machine Details </h2>
+                    <div className="login_div">
+                        <label className='login_label' htmlFor="machineID">Select Machine</label>
+                        <select className='login_select'
                             id="machineID"
                             name="machineID"
                             value={formData.machineID}
@@ -107,27 +110,30 @@ const MachineHiring = ({ doctorID }) => {
                             ))}
                         </select>
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="startDate">Start Date</label>
-                        <input
+                    <div className="login_div">
+                        <label className='login_label' htmlFor="startDate">Start Date</label>
+                        <input className='login_input'
                             type="date"
                             id="startDate"
                             name="startDate"
                             value={formData.startDate}
                             onChange={handleInputChange}
+                            min={formattedDate(new Date())}
                         />
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="endDate">End Date</label>
-                        <input
+                    <div className="login_div">
+                        <label className='login_label' htmlFor="endDate">End Date</label>
+                        <input className='login_input'
                             type="date"
                             id="endDate"
                             name="endDate"
                             value={formData.endDate}
                             onChange={handleInputChange}
+                            disabled={!formData.startDate}
+                            min={formData.startDate}
                         />
                     </div>
-                    <button type="submit">Add Hire</button>
+                    <button className='login_button' type="submit">Add Hire</button>
                 </form>
             </div>
 
@@ -156,7 +162,7 @@ const MachineHiring = ({ doctorID }) => {
                                     <td>{new Date(hire.startDate).toLocaleString().split(',')[0]}</td>
                                     <td>{new Date(hire.endDate).toLocaleString().split(',')[0]}</td>
                                     <td>
-                                        <button onClick={() => handleDelete(hire.hiringID)}>Delete</button> {/* Delete button */}
+                                        <button className='login_button button_red' onClick={() => handleDelete(hire.hiringID)}>Delete</button> {/* Delete button */}
                                     </td>
                                 </tr>
                             ))}
@@ -164,7 +170,9 @@ const MachineHiring = ({ doctorID }) => {
                     </table>
                 </div>
             ) : (
-                <p>No machine hire records found for this doctor.</p>
+                <div className="appointment_cards">
+                    <p>No machine hire records found for this doctor.</p>
+                </div>
             )}
         </div>
     );

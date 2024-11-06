@@ -95,13 +95,16 @@ const SurgeryForm = ({ doctorID }) => {
               value={formData.criticalLevel}
               onChange={handleChange}
               required
+              min={0}
+              max={10}
             />
           </div>
         
           <div className="login_div">
             <label className='login_label'>Cost:</label>
             <input className='login_input'
-              type="text"
+              type="number"
+              min={0}
               name="cost"
               value={formData.cost}
               onChange={handleChange}
