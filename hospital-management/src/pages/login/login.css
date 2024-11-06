@@ -8,6 +8,14 @@
     margin-bottom: 20px;
     font-family: Arial, sans-serif;
   }
+  .login_div_horizontal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+  }
   
 .login_heading {
     font-size: 2rem;
