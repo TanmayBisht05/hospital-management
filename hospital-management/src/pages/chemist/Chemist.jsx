@@ -79,7 +79,11 @@ const Chemist = () => {
 
         if (requestResponse.ok) {
             alert("Request submitted successfully!");
-            window.location.reload();
+            setMedicineName('');
+            setCost('');
+            setType('');
+            setCompanyName('');
+            setAmount('');
         } else {
             alert("Failed to submit request.");
         }

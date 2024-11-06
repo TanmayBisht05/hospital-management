@@ -3,7 +3,7 @@ import axios from 'axios';
 import AuthContext from '../../AuthContext';
 
 const AddPharmacyRequestForm = ({patientID}) => {
-  const {backend_url} = useContext(AuthContext);
+  const {backend_url, fetch_requests_pharmacy} = useContext(AuthContext);
   const [formData, setFormData] = useState({
     medicineName: '',
     patientID: '',
@@ -18,7 +18,7 @@ const AddPharmacyRequestForm = ({patientID}) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const body = {
@@ -26,20 +26,24 @@ const AddPharmacyRequestForm = ({patientID}) => {
         "amount": formData.amount,
         "patientID": patientID
     }
-
-    axios.post(`${backend_url}/pharmacy`, body)
-      .then(response => {
+      const response = await fetch(`${backend_url}/pharmacy`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+      if (await response.text() === "Pharmacy request added successfully!") {
         alert('Pharmacy request added successfully!');
         setFormData({
           medicineName: '',
           amount: '',
         });
-      })
-      .catch(error => {
-        console.error('There was an error!', error);
+        fetch_requests_pharmacy(patientID);
+
+      } else {
         alert('Failed to add pharmacy request.');
-      });
-      window.location.reload();
+      }
   };
 
   return (

@@ -57,7 +57,7 @@ const PharmacyRequests = () => {
                 };
     
                 // Make the PUT request to update the medicine details
-                const updateResponse = await fetch(`http://localhost:8080/medicines/${medicineId}`, {
+                const updateResponse = await fetch(`${backend_url}/medicines/${medicineId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ const PharmacyRequests = () => {
                     };
                     
                     createBill(patientID, totalCost, "Pharmacy");
-                    await fetch(`http://localhost:8080/pharmacy/${requestId}`, { method: 'DELETE' });
+                    await fetch(`${backend_url}/pharmacy/${requestId}`, { method: 'DELETE' });
                     fetchPharmacyRequests(); // Refresh the list after denying
 
 
@@ -98,7 +98,8 @@ const PharmacyRequests = () => {
         <div className='appointments'>
             <h2>Pharmacy Requests</h2>
             <div className="appointment_cards">
-                {pharmacyRequests.map((request) => (
+                {pharmacyRequests.length === 0 ? <p>No Requests as of now</p> :
+                <>{pharmacyRequests.map((request) => (
                     <div className="app_cards" key={request.requestID}>
                         <div className="app_cards_date">Request ID : {request.requestID}</div>
                         <div className="app_cards_details">
@@ -110,7 +111,7 @@ const PharmacyRequests = () => {
                             </div>
                         </div>
                     </div>
-                ))}
+                ))}</>}
             </div>
         </div>
     );

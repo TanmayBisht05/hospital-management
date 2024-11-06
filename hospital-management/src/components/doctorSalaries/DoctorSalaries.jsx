@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import AuthContext from '../../AuthContext';
 
 const DoctorSalaries = ({ doctorID }) => {
+    const {backend_url} = useContext(AuthContext);
     const [salaries, setSalaries] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -12,9 +14,9 @@ const DoctorSalaries = ({ doctorID }) => {
     const fetchSalaries = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:8080/doctor-salaries/take/${doctorID}`);
+            const response = await fetch(`${backend_url}/doctor-salaries/take/${doctorID}`);
             if (!response.ok) {
-                throw new Error('Failed to fetch salary data');
+                throw new Error('No salary data found');
             }
             const data = await response.json();
             setSalaries(data);
@@ -27,7 +29,7 @@ const DoctorSalaries = ({ doctorID }) => {
 
     const handleAccept = async (dsID) => {
         try {
-            const response = await fetch(`http://localhost:8080/doctor-salaries/${dsID}`, {
+            const response = await fetch(`${backend_url}/doctor-salaries/${dsID}`, {
                 method: 'DELETE',
             });
             if (!response.ok) {
