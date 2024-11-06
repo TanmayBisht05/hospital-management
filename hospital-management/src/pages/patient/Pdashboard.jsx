@@ -193,7 +193,8 @@ const pdashboard = () => {
             roomID: selectedRoomID,
             bookFrom: bookingStartDate,
             bookTill: bookingEndDate,
-            numDays: calculateNumDays(bookingStartDate, bookingEndDate)
+            numDays: calculateNumDays(bookingStartDate, bookingEndDate),
+            totalCost: await calculateCost(selectedRoomID, calculateNumDays(bookingStartDate, bookingEndDate))
           }),
         });
         if (response.ok) {
