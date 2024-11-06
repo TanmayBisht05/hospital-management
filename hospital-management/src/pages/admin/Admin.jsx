@@ -8,7 +8,7 @@ import Fake from '../../utility/Fake';
 import Sidebar_admin from '../../components/sidebar_admin/Sidebar_admin';
 
 const Admin = () => {
-  const { adashboardState, signup, backend_url } = React.useContext(AuthContext);
+  const { adashboardState, signup, backend_url, logout } = React.useContext(AuthContext);
   const navigate = useNavigate();
   const token = Cookies.get('token');
   const userType = Cookies.get('userType');
@@ -27,12 +27,19 @@ const Admin = () => {
   const [doctorSalary, setDoctorSalary] = useState('');
   const [doctorIssueDate, setDoctorIssueDate] = useState('');
 
+  const [roomType, setRoomType] = useState('');
+  const [roomCost, setRoomCost] = useState('');
+
+  const [rooms, setRooms] = useState([]);
+
 
     useEffect(() => {
         if(should_fetch.current) {
+            fetchAdminData();
             fetchRequests();
             fetchChemists();
             fetchDoctors();
+            fetchRooms();
             should_fetch.current = false;
         }
     }, []);
@@ -41,6 +48,39 @@ const Admin = () => {
         const response = await fetch(`${backend_url}/medicine-requests`);
         const data = await response.json();
         setRequests(data);
+    };
+
+    const fetchAdminData = async () => {
+        try {
+          const response = await fetch(`${backend_url}/api/admins/${id}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+          if (!response.ok) {
+            alert('Failed to fetch admin data');
+            logout();
+            navigate('/');
+          }
+            
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      };
+
+    const fetchRooms = async () => {
+        try {
+          const response = await fetch(`${backend_url}/rooms`);
+          if (response.ok) {
+            const data = await response.json();
+            setRooms(data);
+          } else {
+            console.error('Failed to fetch rooms');
+          }
+        } catch (error) {
+          console.error('Error fetching rooms:', error);
+        }
     };
 
     const fetchDoctors = async () => {
@@ -80,6 +120,27 @@ const Admin = () => {
     };
 
 
+    const handleRoomSubmit = async (e) => {
+        e.preventDefault();
+        const data = {
+          roomType : roomType,
+          cost : parseInt(roomCost)
+        };
+    
+        const response = await fetch(`${backend_url}/rooms`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+    
+        if (response.ok) {
+          alert('Room created successfully!');
+          setRoomType(''),
+          setRoomCost('')
+        } else {
+          alert('Failed to create room.');
+        }
+      };
 
   const handleDoctorSalarySubmit = async (e) => {
     e.preventDefault();
@@ -343,7 +404,14 @@ const Admin = () => {
                             <label htmlFor="mcost" className="login_label">Cost : </label>
                             <input className='login_input' id='mcost' type="number" placeholder="Cost" required />
                         </div>
+                        <div className="login_div_horizontal">
                         <button className="login_button" type='submit'>{machineryID === -1 ? 'Add' : 'Edit'}</button>
+                        {machineryID !==  -1 && <button className="login_button button_red" onClick={() => {
+                            setMachineryID(-1);
+                            document.getElementById('mname').value = '';
+                            document.getElementById('mcost').value = '';
+                        }}>Cancel</button>}
+                        </div>
                     </form>
                 </div>
                 <center><h1>Machinery List</h1></center>
@@ -447,7 +515,7 @@ const Admin = () => {
                   <button type="submit" className="login_button">Submit Salary</button>
                 </form>
                 <center><h2>Manage Doctor Salaries</h2></center>
-                <div className="login_div">
+                <>
               <form onSubmit={handleDoctorSalarySubmit} className="login_form">
                 <div className="login_div">
                 <label className='login_label'>Select Doctor :</label>
@@ -486,7 +554,52 @@ const Admin = () => {
                 </div>
                 <button type="submit" className='login_button'>Submit Salary</button>
               </form>
+              </>
               </div>
+            </>
+          )}{adashboardState === 5 && ( 
+            <>
+              <center><h1 className="dashboard-header">Manage Rooms</h1></center>
+              <div className="appointments">
+              <h2>Available Rooms:</h2>
+                <div className="appointment_cards">
+                {rooms.length > 0 ? (
+                  rooms.map(room => (
+                    <div key={room.roomID} className="room-card">
+                      <p><strong>Room Type :</strong> {room.roomType}</p>
+                      <p><strong>Cost (1 Day) :</strong> ₹{room.cost}</p>
+                    </div>
+                  ))
+                ) : (
+                  <p>No rooms available.</p>
+                )}
+              </div>
+            </div>
+            <center><h2>Create New Room</h2></center>
+                <div className="login_div">
+              <form onSubmit={handleRoomSubmit} className="login_form">
+                <div className="login_div">
+                <label className='login_label'>Room Type :</label>
+                <input className='login_input'
+                  type="text"
+                  placeholder="Room Type"
+                  value={roomType}
+                  onChange={(e) => setRoomType(e.target.value)}
+                  required
+                />
+                </div>
+                <div className="login_div">
+                <label className='login_label'>Room Cost :</label>
+                <input className='login_input'
+                  type="number"
+                  placeholder="0"
+                  value={roomCost}
+                  onChange={(e) => setRoomCost(e.target.value)}
+                  required
+                />
+                </div>
+                <button type="submit" className='login_button'>Submit Salary</button>
+              </form>
               </div>
             </>
           )}

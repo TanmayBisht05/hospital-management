@@ -15,7 +15,7 @@ import PendingRequests from '../../components/pharmacy/pendingRequests.jsx';
 
 
 const pdashboard = () => {
-  const { pdashboardState, backend_url } = useContext(AuthContext);
+  const { pdashboardState, backend_url, logout, formattedDate } = useContext(AuthContext);
   const navigate = useNavigate();
   const [patientData, setPatientData] = useState(null);
   const [doctors, setDoctors] = useState([]);
@@ -30,10 +30,14 @@ const pdashboard = () => {
   const [roomBookings, setRoomBookings] = useState([]);
   const [unpaidBills, setUnpaidBills] = useState([]);
   const [surgeries, setSurgeries] = useState([]);
+  const [rescheduleStartDate, setRescheduleStartDate] = useState('');
+  const [rescheduleEndDate, setRescheduleEndDate] = useState('');
+  const [roomBookingToReschedule, setRoomBookingToReschedule] = useState(null); // Track the booking being rescheduled
 
   const token = Cookies.get('token');
   const userType = Cookies.get('userType');
   const id = parseInt(Cookies.get('id'), 10);
+  const should_fetch = useRef(true);
 
   const fetchPatientData = async () => {
     try {
@@ -47,7 +51,9 @@ const pdashboard = () => {
         const data = await response.json();
         setPatientData(data);
       } else {
-        console.error('Failed to fetch patient data');
+        alert('Failed to fetch patient data');
+        logout();
+        navigate('/');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -81,7 +87,15 @@ const pdashboard = () => {
       console.error('Error fetching doctor data:', error);
     }
   };
-  const should_fetch = useRef(true);
+  const login_fetch = useRef(true);
+
+  useEffect(() => {
+    if(login_fetch.current === true) {
+      fetchPatientData();
+      login_fetch.current = false;
+    }
+  }, [])
+
   useEffect(() => {
     if(should_fetch.current === true) {
       fetchRoomsByPatientId();
@@ -110,7 +124,6 @@ const pdashboard = () => {
     if (!token || userType !== 'PATIENT') {
       navigate('/login');
     } else {
-      fetchPatientData();
       fetchDoctors();
       fetchAppointments();
       if (pdashboardState === 4) fetchUnpaidBills(); // Fetch unpaid bills when pdashboardState is 4
@@ -196,11 +209,76 @@ const pdashboard = () => {
       alert('Please fill in all booking details.');
     }
   };
+  const calculateCost = async (roomID, numDays) => {
+    
+    try {
+      const response = await fetch(`${backend_url}/rooms/${roomID}`);
+      
+      if (response.ok) {
+        const room = await response.json();
+        const dailyRate = room.cost; // assuming the cost is in the 'cost' field
+        
+        const totalCost = dailyRate * numDays;
+        return totalCost;
+      } else {
+        console.error('Failed to fetch room details');
+        return 0;
+      }
+    } catch (error) {
+      console.error('Error fetching room details:', error);
+      return 0;
+    }
+  };
+  
+
+
+  const handleReschedule = async (roomBookingID) => {
+    if (rescheduleStartDate && rescheduleEndDate) {
+      
+      try {
+        const response = await fetch(`${backend_url}/api/roomBookings/${roomBookingID}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          
+          body: JSON.stringify({
+            roomID: roomBookingToReschedule.roomID,
+            patientID: roomBookingToReschedule.patientID,
+            bookFrom: new Date(rescheduleStartDate).toISOString(),  // Convert to ISO string
+            bookTill: new Date(rescheduleEndDate).toISOString(),  // Convert to ISO string
+            numDays: calculateNumDays(rescheduleStartDate, rescheduleEndDate),
+            totalCost: await calculateCost(roomBookingToReschedule.roomID, calculateNumDays(rescheduleStartDate, rescheduleEndDate)), // Ensure it's an async call
+          }),
+        });
+
+        if (response.ok) {
+          alert('Room booking rescheduled successfully.');
+          fetchRoomsByPatientId(); // Update room list after rescheduling
+          setRoomBookingToReschedule(null); // Reset selected booking
+        } else {
+          alert('Failed to reschedule room booking.');
+        }
+      } catch (error) {
+        console.error('Error rescheduling booking:', error);
+      }
+    } else {
+      alert('Please fill in the new booking dates.');
+    }
+};
+
 
   const calculateNumDays = (startDate, endDate) => {
     const start = new Date(startDate);
     const end = new Date(endDate);
     return Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+  };
+
+  const openRescheduleModal = (room) => {
+    setRoomBookingToReschedule(room);
+    setRescheduleStartDate(room.bookFrom);
+    setRescheduleEndDate(room.bookTill);
   };
 
   const handleRequestAppointment = async (e) => {
@@ -303,6 +381,8 @@ const pdashboard = () => {
     }
   };
 
+  
+
   return (
     <div>
       <Navbar />
@@ -331,39 +411,39 @@ const pdashboard = () => {
             <div>
               <center><h1 className="dashboard-header">Upcoming Appointments</h1></center>
               <div className="appointments">
+                <div className="appointment_cards">
                 {upcomingAppointments.length > 0 ? (
-                  <div className="appointment_cards">
-                    {upcomingAppointments.map((appointment) => (
+                    <>{upcomingAppointments.map((appointment) => (
                       <App_cards key={appointment.appointmentID} param={appointment} flag={false} onDelete={handleDeleteAppointment} />
-                    ))}
-                  </div>
-                ) : (
-                  <p>No upcoming appointments.</p>
-                )}
+                    ))}</>
+                  ) : (
+                    <p>No upcoming appointments.</p>
+                  )}
+                </div>
               </div>
               <center><h1 className="dashboard-header">Previous Appointments</h1></center>
               <div className="appointments">
+                <div className="appointment_cards">
                 {previousAppointments.length > 0 ? (
-                  <div className="appointment_cards">
-                  {previousAppointments.map((appointment) => (
+                  <>{previousAppointments.map((appointment) => (
                     <App_cards key={appointment.appointmentID} param={appointment} flag={false} onDelete={handleDeleteAppointment} />
-                  ))}
-                  </div>
+                  ))}</>
                 ) : (
                   <p>No previous appointments.</p>
                 )}
+                </div>
               </div>
               <center><h1 className="dashboard-header">Requested Appointments</h1></center>
               <div className="appointments">
+                <div className="appointment_cards">
                 {requestedAppointments.length > 0 ? (
-                  <div className="appointment_cards">
-                  {requestedAppointments.map((appointment) => (
+                  <>{requestedAppointments.map((appointment) => (
                     <App_cards key={appointment.appointmentID} param={appointment} flag={false} onDelete={handleDeleteAppointment} />
-                  ))}
-                  </div>
+                  ))}</>
                 ) : (
                   <p>No Requested appointments.</p>
                 )}
+                </div>
               </div>
             </div>
           )}
@@ -398,21 +478,21 @@ const pdashboard = () => {
             </div>
           )}
           {pdashboardState === 3 && (
-            <div className='surgeries_for_patient'>
-              <h1>Surgeries</h1>
+            <div className='appointments'>
+              <center><h1>Surgeries</h1></center>
+              <div className="appointment_cards">
               {surgeries.length > 0 ? (
-                <div className="surgery_cards">
-                  {surgeries.map((surgery) => (
+                  <>{surgeries.map((surgery) => (
                     <div key={surgery.surgeryID} className="surgery-item">
                       <p><strong>Surgery ID:</strong> {surgery.surgeryID}</p>
                       <p><strong>Doctor ID:</strong> {surgery.doctorID}</p>                    
                       <p><strong>Date and Time:</strong> {new Date(surgery.time).toLocaleString()}</p>                      
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <p>No surgeries found.</p>
-              )}
+                  ))}</>
+                ) : (
+                  <center><p>No surgeries found.</p></center>
+                )}
+              </div>
             </div>
           )}
 
@@ -497,6 +577,7 @@ const pdashboard = () => {
                     type="date"
                     value={bookingStartDate}
                     onChange={(e) => setBookingStartDate(e.target.value)}
+                    min={formattedDate(new Date())}
                     required
                   />
                 </div>
@@ -508,29 +589,57 @@ const pdashboard = () => {
                     type="date"
                     value={bookingEndDate}
                     onChange={(e) => setBookingEndDate(e.target.value)}
+                    min = {bookingStartDate}
                     required
+                    disabled={!bookingStartDate}
                   />
                   </div>
                 <button type="submit" className="login_button">Book Room</button>
               </form>
             </div>
             <div className="appointments">
-              <h2>Your Booked Rooms :</h2>
-              <div className="appointment_cards">
-                {roomBookings.length > 0 ? (
-                  roomBookings.map(room => (
-                    <div key={room.roomBookingID} className="room-card">
-                      <p><strong>Room ID :</strong> {room.roomID}</p>
-                      <p><strong>Room Type :</strong> {getRoomType(room.roomID)}</p>
-                      <p><strong>Booked From :</strong> {room.bookFrom}</p>
-                      <p><strong>Booked Till :</strong> {room.bookTill}</p>
-                    </div>
-                  ))
-                ) : (
-                  <p>No rooms booked.</p>
-                )}
-                </div>
+      <h2>Your Booked Rooms:</h2>
+      <div className="appointment_cards">
+        {roomBookings.length > 0 ? (
+          roomBookings.map(room => (
+            <div key={room.roomBookingID} className="room-card">
+              <p><strong>Room ID:</strong> {room.roomID}</p>
+              <p><strong>Room Type:</strong> {getRoomType(room.roomID)}</p>
+              <p><strong>Booked From:</strong> {room.bookFrom}</p>
+              <p><strong>Booked Till:</strong> {room.bookTill}</p>
+              <button onClick={() => openRescheduleModal(room)}>Reschedule</button>
             </div>
+          ))
+        ) : (
+          <p>No rooms booked.</p>
+        )}
+      </div>
+
+      {/* Reschedule Modal */}
+      {roomBookingToReschedule && (
+        <div className="reschedule-modal">
+          <h3>Reschedule Booking for Room ID: {roomBookingToReschedule.roomID}</h3>
+          <label>
+            New Start Date:
+            <input
+              type="date"
+              value={rescheduleStartDate}
+              onChange={(e) => setRescheduleStartDate(e.target.value)}
+            />
+          </label>
+          <label>
+            New End Date:
+            <input
+              type="date"
+              value={rescheduleEndDate}
+              onChange={(e) => setRescheduleEndDate(e.target.value)}
+            />
+          </label>
+          <button onClick={() => handleReschedule(roomBookingToReschedule.roomBookingID)}>Confirm Reschedule</button>
+          <button onClick={() => setRoomBookingToReschedule(null)}>Cancel</button>
+        </div>
+              )}
+    </div>
           </>}
           {pdashboardState === 6 && <>
             <center><h1 className="dashboard-header">Pharmacy</h1></center>

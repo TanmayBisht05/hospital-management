@@ -13,10 +13,11 @@ const Login = () => {
         data.append('userType', document.getElementById('userType').value);
         data.append('email', document.getElementById('email').value);
         data.append('password', document.getElementById('password').value);
-        if(await login(data)) {
+        const {success, message} = await login(data);
+        if(success) {
             navigate('/');
         } else {
-            alert('Invalid credentials');
+            alert(message);
         }
     }
   return (

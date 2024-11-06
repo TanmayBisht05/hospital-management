@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
+import AuthContext from '../../AuthContext';
 
 const AddPharmacyRequestForm = ({patientID}) => {
+  const {backend_url} = useContext(AuthContext);
   const [formData, setFormData] = useState({
     medicineName: '',
     patientID: '',
@@ -25,7 +27,7 @@ const AddPharmacyRequestForm = ({patientID}) => {
         "patientID": patientID
     }
 
-    axios.post('http://localhost:8080/pharmacy', body)
+    axios.post(`${backend_url}/pharmacy`, body)
       .then(response => {
         alert('Pharmacy request added successfully!');
         setFormData({
@@ -34,16 +36,19 @@ const AddPharmacyRequestForm = ({patientID}) => {
         });
       })
       .catch(error => {
-        alert('Failed to add pharmacy request.');
         console.error('There was an error!', error);
+        alert('Failed to add pharmacy request.');
       });
+      window.location.reload();
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Medicine Name:</label>
-        <input
+    <div className="login_div">
+    <h2>Add Pharmacy Request</h2>
+    <form className='login_form' onSubmit={handleSubmit}>
+      <div className='login_div'>
+        <label className='login_label'>Medicine Name:</label>
+        <input className='login_input'
           type="text"
           name="medicineName"
           value={formData.medicineName}
@@ -51,9 +56,9 @@ const AddPharmacyRequestForm = ({patientID}) => {
           required
         />
       </div>
-      <div>
-        <label>Amount:</label>
-        <input
+      <div className='login_div'>
+        <label className='login_label'>Amount:</label>
+        <input className='login_input'
           type="number"
           name="amount"
           value={formData.amount}
@@ -61,8 +66,9 @@ const AddPharmacyRequestForm = ({patientID}) => {
           required
         />
       </div>
-      <button type="submit">Add Request</button>
+      <button className='login_button' type="submit">Add Request</button>
     </form>
+    </div>
   );
 };
 

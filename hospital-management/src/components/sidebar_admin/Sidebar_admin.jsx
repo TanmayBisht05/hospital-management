@@ -24,6 +24,8 @@ const Sidebar_admin = () => {
                 ele.current = document.getElementById('idrequests');
             } else if(adashboardState === 4) {
                 ele.current = document.getElementById('idsal');
+            } else if(adashboardState === 5) {
+                ele.current = document.getElementById('idroom');
             }
             if(ele.current) {
                 ele.current.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
@@ -45,6 +47,8 @@ const Sidebar_admin = () => {
             ele.current = document.getElementById('idrequests');
         } else if(num === 4) {
             ele.current = document.getElementById('idsal');
+        } else if(num === 5) {
+            ele.current = document.getElementById('idroom');
         }
         if(ele.current) {
             ele.current.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
@@ -71,6 +75,9 @@ const Sidebar_admin = () => {
                 </a>
                 <a onClick={() => {handleClick(4)}} id='idsal'>
                     <CiMoneyCheck1 /> Salary
+                </a>
+                <a onClick={() => {handleClick(5)}} id='idroom'>
+                    <CiMoneyCheck1 /> Rooms
                 </a>
         </div>
     );

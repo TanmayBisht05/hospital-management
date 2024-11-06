@@ -9,7 +9,7 @@ import Sidebar_chemist from '../../components/sidebar_chemist/Sidebar_chemist';
 import ChemistPharmacyPanel from '../../components/pharmacy/chemistPharmacyPanel.jsx';
 
 const Chemist = () => {
-    const { cdashboardState, backend_url } = useContext(AuthContext);
+    const { cdashboardState, backend_url, logout } = useContext(AuthContext);
     const navigate = useNavigate();
     const token = Cookies.get('token');
     const userType = Cookies.get('userType');
@@ -24,8 +24,25 @@ const Chemist = () => {
     const [pharmacyRequests, setPharmacyRequests] = useState([]); // New state for pharmacy requests
     const should_fetch = useRef(true);
 
+
+    const fetchChemistData = async () => {
+          const response = await fetch(`${backend_url}/chemist/${id}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+          if (!response.ok) {
+            alert('Failed to fetch patient data');
+            logout();
+            navigate('/');
+          }
+        //   console.error('Error:', error);
+        };
+
     useEffect(() => {
         if (should_fetch.current) {
+            fetchChemistData();
             fetchInventory();
             fetchPharmacyRequests(); // Fetch pharmacy requests on initial load
             should_fetch.current = false;
@@ -166,17 +183,25 @@ const Chemist = () => {
                     </>}
                     {cdashboardState === 2 && <>
                         <center><h1 className="dashboard-header">Salary Records</h1></center>
-                        <div className="salary-list">
+                        <div className="appointments">
                             <h2>Your Salary Records</h2>
-                            <ul>
-                                {salaries.map((salary) => (
-                                    <li key={salary.csID}>
-                                        <p>Date Issued: {salary.issueDate}</p>
-                                        <p>Amount: ${salary.amount}</p>
-                                        <button onClick={() => handleAcceptSalary(salary.csID)}>Accept Salary</button>
-                                    </li>
-                                ))}
-                            </ul>
+                            <div className="appointment_cards">
+                            {salaries.length > 0 ?
+                                    <>{salaries.map((salary) => (
+                                        <div className='app_cards' key={salary.csID}>
+                                            <div className="app_cards_date">
+                                                <p>{new Date(salary.issueDate).toLocaleString()}</p>
+                                            </div>
+                                            <div className="app_cards_details">
+                                                <p>Amount: ${salary.salary}</p>
+                                                <button className='login_button' onClick={() => handleAcceptSalary(salary.csID)}>Accept Salary</button>
+                                            </div>
+                                        </div>
+                                    ))}</>
+                                    :
+                                    <center><p>No salary records found.</p></center>
+                                }
+                                </div>
                         </div>
                     </>}
                     {cdashboardState === 3 && <>

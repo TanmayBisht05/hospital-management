@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import AuthContext from '../../AuthContext';
 
 
 
 
 const SurgeryList = ({ patientID }) => {
+  const {backend_url} = useContext(AuthContext);
   const [surgeries, setSurgeries] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -13,7 +15,7 @@ const SurgeryList = ({ patientID }) => {
   useEffect(() => {
     const fetchSurgeries = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/surgeries/patient/${patientID}`);
+        const response = await axios.get(`${backend_url}/surgeries/patient/${patientID}`);
         setSurgeries(response.data);
       } catch (error) {
         setErrorMessage('Failed to load surgeries.');
