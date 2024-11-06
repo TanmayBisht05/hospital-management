@@ -7,9 +7,9 @@ const DoctorTiles = ({params}) => {
     <div>
         <div className="tile_container">
             <div className="tile">
-                <div className="tile_image">
+                {/* <div className="tile_image">
                     <img src="#" alt="doctor" />
-                </div>
+                </div> */}
                 <div className='tile_details'>
                     <center>
                     <span className='tile_name'>{params.firstName} {params.lastName}</span><br />
