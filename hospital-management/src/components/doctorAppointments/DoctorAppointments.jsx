@@ -5,6 +5,7 @@ import './doctorAppointments.css';
 const DoctorAppointments = ({ doctorID }) => {
     const [upcomingAppointments, setUpcomingAppointments] = useState([]);
     const [requestedAppointments, setRequestedAppointments] = useState([]);
+    const [patientNames, setPatientNames] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [schedulingData, setSchedulingData] = useState({
@@ -19,6 +20,24 @@ const DoctorAppointments = ({ doctorID }) => {
         const fetchAppointments = async () => {
             try {
                 const upcomingResponse = await axios.get(`http://localhost:8080/appointments/doctor/${doctorID}/upcoming`);
+                const requestedResponse = await axios.get(`http://localhost:8080/appointments/doctor/${doctorID}/requested`);
+
+                const allAppointments = [...upcomingResponse.data, ...requestedResponse.data];
+                const patientIDs = [...new Set(allAppointments.map(app => app.patientID))];
+
+                // Fetch all unique patient names
+                const patientDataPromises = patientIDs.map(id =>
+                    axios.get(`http://localhost:8080/patients/${id}`).then(response => ({
+                        id,
+                        name: `${response.data.firstName} ${response.data.lastName}`
+                    }))
+                );
+
+                const patientData = await Promise.all(patientDataPromises);
+                const patientNameMap = Object.fromEntries(patientData.map(p => [p.id, p.name]));
+
+                setPatientNames(patientNameMap);
+
                 if (Array.isArray(upcomingResponse.data)) {
                     const updatedAppointments = await Promise.all(upcomingResponse.data.map(async (appointment) => {
                         const billResponse = await axios.get(`http://localhost:8080/bill/${appointment.billID}`);
@@ -32,7 +51,6 @@ const DoctorAppointments = ({ doctorID }) => {
                     setError('Unexpected response format for upcoming appointments');
                 }
 
-                const requestedResponse = await axios.get(`http://localhost:8080/appointments/doctor/${doctorID}/requested`);
                 if (Array.isArray(requestedResponse.data)) {
                     setRequestedAppointments(requestedResponse.data);
                 } else {
@@ -101,7 +119,7 @@ const DoctorAppointments = ({ doctorID }) => {
                         <thead>
                             <tr>
                                 <th>Appointment ID</th>
-                                <th>Patient ID</th>
+                                <th>Patient Name</th>
                                 <th>Cost</th>
                                 <th>Status</th>
                                 <th>Time</th>
@@ -112,7 +130,7 @@ const DoctorAppointments = ({ doctorID }) => {
                             {upcomingAppointments.map(appointment => (
                                 <tr key={appointment.appointmentID}>
                                     <td>{appointment.appointmentID}</td>
-                                    <td>{appointment.patientID}</td>
+                                    <td>{patientNames[appointment.patientID] || "Loading..."}</td>
                                     <td>{appointment.cost}</td>
                                     <td>Upcoming</td>
                                     <td>{appointment.time ? appointment.time : "N/A"}</td>
@@ -137,7 +155,7 @@ const DoctorAppointments = ({ doctorID }) => {
                         <thead>
                             <tr>
                                 <th>Appointment ID</th>
-                                <th>Patient ID</th>
+                                <th>Patient Name</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -146,7 +164,7 @@ const DoctorAppointments = ({ doctorID }) => {
                             {requestedAppointments.map(appointment => (
                                 <tr key={appointment.appointmentID}>
                                     <td>{appointment.appointmentID}</td>
-                                    <td>{appointment.patientID}</td>
+                                    <td>{patientNames[appointment.patientID] || "Loading..."}</td>
                                     <td>Requested</td>
                                     <td>
                                         <button className='app_cards_details_button' onClick={() => handleScheduleClick(appointment.appointmentID, appointment.patientID, 'schedule')}>

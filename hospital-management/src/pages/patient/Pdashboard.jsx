@@ -320,7 +320,7 @@ const pdashboard = () => {
                 <p><strong>Address:</strong> {patientData.address}</p>
                 <p><strong>Email:</strong> {patientData.email}</p>
                 <p><strong>Gender:</strong> {patientData.gender}</p>
-                <p><strong>History:</strong> {patientData.history}</p>
+                {/* <p><strong>History:</strong> {patientData.history}</p> */}
                 <p><strong>Date of Birth:</strong> {patientData.dob}</p>
               </div>
             ) : (
@@ -437,7 +437,7 @@ const pdashboard = () => {
                 )}
             </div>
           )}
-          {pdashboardState === 5 && (
+          {/* {pdashboardState === 5 && (
             <div>
               <center><h1 className="dashboard-header">Previous Appointments</h1></center>
               <div className="appointments">
@@ -450,9 +450,9 @@ const pdashboard = () => {
                 )}
               </div>
             </div>
-          )}
+          )} */}
       
-          {pdashboardState === 6 && <>
+          {pdashboardState === 5 && <>
             <center><h1 className="dashboard-header">Book Room</h1></center>
             <div className="appointments">
               <h2>Available Rooms:</h2>
@@ -532,7 +532,7 @@ const pdashboard = () => {
                 </div>
             </div>
           </>}
-          {pdashboardState === 7 && <>
+          {pdashboardState === 6 && <>
             <center><h1 className="dashboard-header">Pharmacy</h1></center>
             <AddPharmacyRequestForm patientID={id} />
             <PendingRequests patientID={id} />

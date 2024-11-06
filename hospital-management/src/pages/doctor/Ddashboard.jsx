@@ -13,6 +13,7 @@ import DoctorAppointments from '../../components/doctorAppointments/DoctorAppoin
 import DoctorHistory from '../../components/doctorHistory/DoctorHistory.jsx';
 import DoctorApprovesBills from '../../components/doctorApprovesBills/DoctorApprovesBills.jsx';
 import DoctorSalaries from '../../components/doctorSalaries/DoctorSalaries.jsx';
+import MachineHiring from '../../components/machineHiring/MachineHiring.jsx';
 
 const Ddashboard = () => {
   const { pdashboardState, setPdashboardState } = useContext(AuthContext);
@@ -53,25 +54,59 @@ const Ddashboard = () => {
 
     switch (pdashboardState) {
       case 0:
+
         return (
-          <div className="doctor-profile">
-            <h1 className="dashboard-header">Profile</h1>
-            {doctorData && (
+
+            <div className="doctor-profile">
+              <h1 className="dashboard-header">Doctor Profile</h1>
+              {doctorData && (
               <>
-                <p><strong>First Name:</strong> {doctorData.firstName}</p>
-                <p><strong>Last Name:</strong> {doctorData.lastName}</p>
-                <p><strong>Date of Birth:</strong> {new Date(doctorData.dob).toLocaleDateString()}</p>
-                <p><strong>Education:</strong> {doctorData.education}</p>
-                <p><strong>Gender:</strong> {doctorData.gender}</p>
-                <p><strong>Phone:</strong> {doctorData.phone}</p>
-                <p><strong>Email:</strong> {doctorData.email}</p>
-                <p><strong>Post:</strong> {doctorData.post}</p>
-                <p><strong>Department:</strong> {doctorData.department}</p>
-                <p><strong>Specialization:</strong> {doctorData.specialization}</p>
+                <div className="profile-detail">
+                  <span className="profile-icon">👤</span>
+                  <p className="profile-text"><span className="profile-label">First Name:</span> <span className="profile-value">{doctorData.firstName}</span></p>
+                </div>
+                <div className="profile-detail">
+                  <span className="profile-icon">👤</span>
+                  <p className="profile-text"><span className="profile-label">Last Name:</span> <span className="profile-value">{doctorData.lastName}</span></p>
+                </div>
+                <div className="profile-detail">
+                  <span className="profile-icon">🎂</span>
+                  <p className="profile-text"><span className="profile-label">Date of Birth:</span> <span className="profile-value">{new Date(doctorData.dob).toLocaleDateString()}</span></p>
+                </div>
+                <div className="profile-detail">
+                  <span className="profile-icon">🎓</span>
+                  <p className="profile-text"><span className="profile-label">Education:</span> <span className="profile-value">{doctorData.education}</span></p>
+                </div>
+                <div className="profile-detail">
+                  <span className="profile-icon">⚧️</span>
+                  <p className="profile-text"><span className="profile-label">Gender:</span> <span className="profile-value">{doctorData.gender}</span></p>
+                </div>
+                <div className="profile-detail">
+                  <span className="profile-icon">📞</span>
+                  <p className="profile-text"><span className="profile-label">Phone:</span> <span className="profile-value">{doctorData.phone}</span></p>
+                </div>
+                <div className="profile-detail">
+                  <span className="profile-icon">📧</span>
+                  <p className="profile-text"><span className="profile-label">Email:</span> <span className="profile-value">{doctorData.email}</span></p>
+                </div>
+                <div className="profile-detail">
+                  <span className="profile-icon">🏷️</span>
+                  <p className="profile-text"><span className="profile-label">Post:</span> <span className="profile-value">{doctorData.post}</span></p>
+                </div>
+                <div className="profile-detail">
+                  <span className="profile-icon">🏥</span>
+                  <p className="profile-text"><span className="profile-label">Department:</span> <span className="profile-value">{doctorData.department}</span></p>
+                </div>
+                <div className="profile-detail">
+                  <span className="profile-icon">🩺</span>
+                  <p className="profile-text"><span className="profile-label">Specialization:</span> <span className="profile-value">{doctorData.specialization}</span></p>
+                </div>
               </>
             )}
           </div>
-        );
+);
+
+        
 
       case 1:
         return (
@@ -95,18 +130,25 @@ const Ddashboard = () => {
             </div>
           );
 
-      case 5:
-        return (
-          <div>
-            <DoctorHistory doctorID={doctorId} />
-          </div>
-        );
+      
         case 4:
           return (
             <div>
               <DoctorSalaries doctorID={doctorId} />
             </div>
           );
+
+        case 5:
+          return (
+            <div>
+              <DoctorHistory doctorID={doctorId} />
+            </div>
+          );
+
+
+        case 6:
+        return <MachineHiring doctorID={doctorId} />; 
+
 
       default:
         return null;
