@@ -95,6 +95,10 @@ export const AuthProvider = ({ children }) => {
         should_set_animate.current = false;
     }
     const should_animate = useRef(true);
+    const formattedDate = (today) => { return today.getFullYear() + '-' + 
+    String(today.getMonth() + 1).padStart(2, '0') + '-' + 
+    String(today.getDate()).padStart(2, '0');
+    }
     let contextData = {
         backend_url,
         pdashboardState,
@@ -114,6 +118,7 @@ export const AuthProvider = ({ children }) => {
         animate,
         setAnimate,
         should_animate,
+        formattedDate,
     };
     return (
         <AuthContext.Provider value={contextData}>

@@ -15,7 +15,7 @@ import PendingRequests from '../../components/pharmacy/pendingRequests.jsx';
 
 
 const pdashboard = () => {
-  const { pdashboardState, backend_url, logout } = useContext(AuthContext);
+  const { pdashboardState, backend_url, logout, formattedDate } = useContext(AuthContext);
   const navigate = useNavigate();
   const [patientData, setPatientData] = useState(null);
   const [doctors, setDoctors] = useState([]);
@@ -341,39 +341,39 @@ const pdashboard = () => {
             <div>
               <center><h1 className="dashboard-header">Upcoming Appointments</h1></center>
               <div className="appointments">
+                <div className="appointment_cards">
                 {upcomingAppointments.length > 0 ? (
-                  <div className="appointment_cards">
-                    {upcomingAppointments.map((appointment) => (
+                    <>{upcomingAppointments.map((appointment) => (
                       <App_cards key={appointment.appointmentID} param={appointment} flag={false} onDelete={handleDeleteAppointment} />
-                    ))}
-                  </div>
-                ) : (
-                  <p>No upcoming appointments.</p>
-                )}
+                    ))}</>
+                  ) : (
+                    <p>No upcoming appointments.</p>
+                  )}
+                </div>
               </div>
               <center><h1 className="dashboard-header">Previous Appointments</h1></center>
               <div className="appointments">
+                <div className="appointment_cards">
                 {previousAppointments.length > 0 ? (
-                  <div className="appointment_cards">
-                  {previousAppointments.map((appointment) => (
+                  <>{previousAppointments.map((appointment) => (
                     <App_cards key={appointment.appointmentID} param={appointment} flag={false} onDelete={handleDeleteAppointment} />
-                  ))}
-                  </div>
+                  ))}</>
                 ) : (
                   <p>No previous appointments.</p>
                 )}
+                </div>
               </div>
               <center><h1 className="dashboard-header">Requested Appointments</h1></center>
               <div className="appointments">
+                <div className="appointment_cards">
                 {requestedAppointments.length > 0 ? (
-                  <div className="appointment_cards">
-                  {requestedAppointments.map((appointment) => (
+                  <>{requestedAppointments.map((appointment) => (
                     <App_cards key={appointment.appointmentID} param={appointment} flag={false} onDelete={handleDeleteAppointment} />
-                  ))}
-                  </div>
+                  ))}</>
                 ) : (
                   <p>No Requested appointments.</p>
                 )}
+                </div>
               </div>
             </div>
           )}
@@ -409,7 +409,7 @@ const pdashboard = () => {
           )}
           {pdashboardState === 3 && (
             <div className='surgeries_for_patient'>
-              <h1>Surgeries</h1>
+              <center><h1>Surgeries</h1></center>
               {surgeries.length > 0 ? (
                 <div className="surgery_cards">
                   {surgeries.map((surgery) => (
@@ -421,7 +421,7 @@ const pdashboard = () => {
                   ))}
                 </div>
               ) : (
-                <p>No surgeries found.</p>
+                <center><p>No surgeries found.</p></center>
               )}
             </div>
           )}
@@ -507,6 +507,7 @@ const pdashboard = () => {
                     type="date"
                     value={bookingStartDate}
                     onChange={(e) => setBookingStartDate(e.target.value)}
+                    min={formattedDate(new Date())}
                     required
                   />
                 </div>
@@ -518,7 +519,9 @@ const pdashboard = () => {
                     type="date"
                     value={bookingEndDate}
                     onChange={(e) => setBookingEndDate(e.target.value)}
+                    min = {bookingStartDate}
                     required
+                    disabled={!bookingStartDate}
                   />
                   </div>
                 <button type="submit" className="login_button">Book Room</button>
