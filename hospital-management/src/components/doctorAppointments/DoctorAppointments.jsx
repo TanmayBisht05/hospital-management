@@ -127,7 +127,7 @@ const DoctorAppointments = ({ doctorID }) => {
                     </table>
                 </div>
             ) : (
-                <div>No upcoming appointments found.</div>
+                <center><div>No upcoming appointments found.</div></center>
             )}
 
             {requestedAppointments.length > 0 ? (
@@ -159,7 +159,7 @@ const DoctorAppointments = ({ doctorID }) => {
                     </table>
                 </div>
             ) : (
-                <div>No requested appointments found.</div>
+                <center><div>No requested appointments found.</div></center>
             )}
 
             {schedulingData.appointmentID && (

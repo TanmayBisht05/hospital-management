@@ -168,15 +168,23 @@ const Chemist = () => {
                         <center><h1 className="dashboard-header">Salary Records</h1></center>
                         <div className="salary-list">
                             <h2>Your Salary Records</h2>
-                            <ul>
-                                {salaries.map((salary) => (
-                                    <li key={salary.csID}>
-                                        <p>Date Issued: {salary.issueDate}</p>
-                                        <p>Amount: ${salary.amount}</p>
-                                        <button onClick={() => handleAcceptSalary(salary.csID)}>Accept Salary</button>
-                                    </li>
-                                ))}
-                            </ul>
+                            {salaries.length > 0 ?
+                                <div className="appointment_cards">
+                                    {salaries.map((salary) => (
+                                        <div className='app_cards' key={salary.csID}>
+                                            <div className="app_cards_date">
+                                                <p>{new Date(salary.issueDate).toLocaleString()}</p>
+                                            </div>
+                                            <div className="app_cards_details">
+                                                <p>Amount: ${salary.salary}</p>
+                                                <button className='login_button' onClick={() => handleAcceptSalary(salary.csID)}>Accept Salary</button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                :
+                                <center><p>No salary records found.</p></center>
+                            }
                         </div>
                     </>}
                     {cdashboardState === 3 && <>

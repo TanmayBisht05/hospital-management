@@ -343,7 +343,14 @@ const Admin = () => {
                             <label htmlFor="mcost" className="login_label">Cost : </label>
                             <input className='login_input' id='mcost' type="number" placeholder="Cost" required />
                         </div>
+                        <div className="login_div_horizontal">
                         <button className="login_button" type='submit'>{machineryID === -1 ? 'Add' : 'Edit'}</button>
+                        {machineryID !==  -1 && <button className="login_button button_red" onClick={() => {
+                            setMachineryID(-1);
+                            document.getElementById('mname').value = '';
+                            document.getElementById('mcost').value = '';
+                        }}>Cancel</button>}
+                        </div>
                     </form>
                 </div>
                 <center><h1>Machinery List</h1></center>
@@ -447,7 +454,7 @@ const Admin = () => {
                   <button type="submit" className="login_button">Submit Salary</button>
                 </form>
                 <center><h2>Manage Doctor Salaries</h2></center>
-                <div className="login_div">
+                <>
               <form onSubmit={handleDoctorSalarySubmit} className="login_form">
                 <div className="login_div">
                 <label className='login_label'>Select Doctor :</label>
@@ -486,7 +493,7 @@ const Admin = () => {
                 </div>
                 <button type="submit" className='login_button'>Submit Salary</button>
               </form>
-              </div>
+              </>
               </div>
             </>
           )}
