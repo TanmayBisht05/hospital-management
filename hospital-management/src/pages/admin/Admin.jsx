@@ -8,7 +8,7 @@ import Fake from '../../utility/Fake';
 import Sidebar_admin from '../../components/sidebar_admin/Sidebar_admin';
 
 const Admin = () => {
-  const { adashboardState, signup, backend_url, logout } = React.useContext(AuthContext);
+  const { adashboardState, signup, backend_url, logout, formattedDate } = React.useContext(AuthContext);
   const navigate = useNavigate();
   const token = Cookies.get('token');
   const userType = Cookies.get('userType');
@@ -135,8 +135,9 @@ const Admin = () => {
     
         if (response.ok) {
           alert('Room created successfully!');
-          setRoomType(''),
+          setRoomType('');
           setRoomCost('')
+          fetchRooms();
         } else {
           alert('Failed to create room.');
         }
@@ -178,7 +179,7 @@ const Admin = () => {
     };
 
     const handleDenyRequest = async (requestID) => {
-        const response = await fetch(`/medicine-requests/${requestID}/deny`, { method: 'DELETE' });
+        const response = await fetch(`${backend_url}/medicine-requests/${requestID}/deny`, { method: 'DELETE' });
         if (response.ok) {
             alert("Request denied.");
             fetchRequests();
@@ -211,7 +212,17 @@ const Admin = () => {
         }
         if(await signup(data, "doctor")) {
             alert('Doctor registered successfully');
-            window.location.reload();
+            document.getElementById('dfirstName').value = '';
+            document.getElementById('dlastName').value = '';
+            document.getElementById('ddob').value = '';
+            document.getElementById('deducation').value = '';
+            document.getElementById('dgender').value = 'Male';
+            document.getElementById('dphone').value = '';
+            document.getElementById('demail').value = '';
+            document.getElementById('dpost').value = '';
+            document.getElementById('ddepartment').value = '';
+            document.getElementById('dspecialization').value = '';
+            document.getElementById('dpassword').value = '';
         } else {
             alert('Invalid credentials');
         }
@@ -229,7 +240,13 @@ const Admin = () => {
         }
         if(await signup(data, "chemist")) {
             alert('Chemist registered successfully');
-            window.location.reload();
+            document.getElementById('cfirstName').value = '';
+            document.getElementById('clastName').value = '';
+            document.getElementById('cdob').value = '';
+            document.getElementById('cgender').value = 'M';
+            document.getElementById('cphone').value = '';
+            document.getElementById('cemail').value = '';
+            document.getElementById('cpassword').value = '';
         } else {
             alert('Invalid credentials');
         }
@@ -254,7 +271,10 @@ const Admin = () => {
         if(response.status === 201 || response.status === 200) {
             setMachineryID(-1);
             alert('Success');
-            window.location.reload();
+            // window.location.reload();
+            fetchMachinery();
+            document.getElementById('mname').value = '';
+            document.getElementById('mcost').value = '';
         } else {
             alert('Error');
         }
@@ -294,15 +314,15 @@ const Admin = () => {
                 <div className="login_form_left">
                     <div className="login_div">
                         <label htmlFor="dfirstName" className="login_label">First Name : </label>
-                        <input className='login_input' id='dfirstName' type="text" placeholder="First Name" />
+                        <input className='login_input' id='dfirstName' type="text" placeholder="First Name" required />
                     </div>
                     <div className="login_div">
                         <label htmlFor="dlastName" className="login_label">Last Name : </label>
-                        <input className='login_input' id='dlastName' type="text" placeholder="Last Name" />
+                        <input className='login_input' id='dlastName' type="text" placeholder="Last Name" required />
                     </div>
                     <div className="login_div">
                         <label htmlFor="ddob" className="login_label">Date of Birth : </label>
-                        <input className='login_input' id='ddob' type="date" placeholder="Date of Birth" />
+                        <input className='login_input' id='ddob' type="date" placeholder="Date of Birth" min={formattedDate(new Date())} />
                     </div>
                     <div className="login_div">
                         <label htmlFor="deducation" className="login_label">Education : </label>
@@ -323,7 +343,7 @@ const Admin = () => {
                 <div className="login_form_right">
                     <div className="login_div">
                         <label htmlFor="demail" className="login_label">Email : </label>
-                        <input className='login_input' id='demail' type="text" placeholder="Email" />
+                        <input className='login_input' id='demail' type="text" placeholder="Email" required />
                     </div>
                     <div className="login_div">
                         <label htmlFor="dpost" className="login_label">Post : </label>
@@ -339,7 +359,7 @@ const Admin = () => {
                     </div>
                     <div className="login_div">
                         <label htmlFor="dpassword" className="login_label">Password : </label>
-                        <input className='login_input' id='dpassword' type="password" placeholder="Password" />
+                        <input className='login_input' id='dpassword' type="password" placeholder="Password" required />
                     </div>
                     <button className='login_button' type="submit">Register</button>
                 </div>
@@ -354,15 +374,15 @@ const Admin = () => {
                 <div className="login_form_left">
                     <div className="login_div">
                         <label htmlFor="cfirstName" className="login_label">First Name : </label>
-                        <input className='login_input' id='cfirstName' type="text" placeholder="First Name" />
+                        <input className='login_input' id='cfirstName' type="text" placeholder="First Name" required />
                     </div>
                     <div className="login_div">
                         <label htmlFor="clastName" className="login_label">Last Name : </label>
-                        <input className='login_input' id='clastName' type="text" placeholder="Last Name" />
+                        <input className='login_input' id='clastName' type="text" placeholder="Last Name" required />
                     </div>
                     <div className="login_div">
                         <label htmlFor="cdob" className="login_label">Date of Birth : </label>
-                        <input className='login_input' id='cdob' type="date" placeholder="Date of Birth" />
+                        <input className='login_input' id='cdob' type="date" placeholder="Date of Birth" min={formattedDate(new Date())} />
                     </div>
                     <div className="login_div">
                         <label htmlFor="cgender" className="login_label">Gender : </label>
@@ -379,11 +399,11 @@ const Admin = () => {
                     </div>
                     <div className="login_div">
                         <label htmlFor="cemail" className="login_label">Email : </label>
-                        <input className='login_input' id='cemail' type="text" placeholder="Email" />
+                        <input className='login_input' id='cemail' type="text" placeholder="Email" required />
                     </div>
                     <div className="login_div">
                         <label htmlFor="cpassword" className="login_label">Password : </label>
-                        <input className='login_input' id='cpassword' type="password" placeholder="Password" />
+                        <input className='login_input' id='cpassword' type="password" placeholder="Password" required />
                     </div>
                     <button className='login_button' type="submit">Register</button>
                 </div>
@@ -457,8 +477,8 @@ const Admin = () => {
                             <td>{request.medicineName}</td>
                             <td>{request.amount}</td>
                             <td className='req_table_data'>
-                                <button className='login_button button_green' onClick={() => handleAcceptRequest(request.requestID)}>Accept</button>
-                                <button className='login_button button_red' onClick={() => handleDenyRequest(request.requestID)}>Deny</button>
+                                <button className='login_button button_green' onClick={(e) => {e.preventDefault(); handleAcceptRequest(request.requestID)}}>Accept</button>
+                                <button className='login_button button_red' onClick={(e) => {e.preventDefault(); handleDenyRequest(request.requestID)}}>Deny</button>
                             </td>
                         </tr>
                     ))}
@@ -598,7 +618,7 @@ const Admin = () => {
                   required
                 />
                 </div>
-                <button type="submit" className='login_button'>Submit Salary</button>
+                <button type="submit" className='login_button'>Add Room</button>
               </form>
               </div>
             </>

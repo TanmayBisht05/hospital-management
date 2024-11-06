@@ -4,7 +4,7 @@ import './doctorAppointments.css';
 import AuthContext from '../../AuthContext';
 
 const DoctorAppointments = ({ doctorID }) => {
-    const {getMinDateTime} = useContext(AuthContext);
+    const {getMinDateTime, backend_url} = useContext(AuthContext);
     const [upcomingAppointments, setUpcomingAppointments] = useState([]);
     const [requestedAppointments, setRequestedAppointments] = useState([]);
     const [patientNames, setPatientNames] = useState({});
@@ -21,15 +21,15 @@ const DoctorAppointments = ({ doctorID }) => {
     useEffect(() => {
         const fetchAppointments = async () => {
             try {
-                const upcomingResponse = await axios.get(`http://localhost:8080/appointments/doctor/${doctorID}/upcoming`);
-                const requestedResponse = await axios.get(`http://localhost:8080/appointments/doctor/${doctorID}/requested`);
+                const upcomingResponse = await axios.get(`${backend_url}/appointments/doctor/${doctorID}/upcoming`);
+                const requestedResponse = await axios.get(`${backend_url}/appointments/doctor/${doctorID}/requested`);
 
                 const allAppointments = [...upcomingResponse.data, ...requestedResponse.data];
                 const patientIDs = [...new Set(allAppointments.map(app => app.patientID))];
 
                 // Fetch all unique patient names
                 const patientDataPromises = patientIDs.map(id =>
-                    axios.get(`http://localhost:8080/patients/${id}`).then(response => ({
+                    axios.get(`${backend_url}/patients/${id}`).then(response => ({
                         id,
                         name: `${response.data.firstName} ${response.data.lastName}`
                     }))
@@ -42,7 +42,7 @@ const DoctorAppointments = ({ doctorID }) => {
 
                 if (Array.isArray(upcomingResponse.data)) {
                     const updatedAppointments = await Promise.all(upcomingResponse.data.map(async (appointment) => {
-                        const billResponse = await axios.get(`http://localhost:8080/bill/${appointment.billID}`);
+                        const billResponse = await axios.get(`${backend_url}/bill/${appointment.billID}`);
                         return {
                             ...appointment,
                             cost: billResponse.data.totalCost,
@@ -82,7 +82,7 @@ const DoctorAppointments = ({ doctorID }) => {
                 const costNumber = parseInt(cost, 10);
 
                 const response = await axios.put(
-                    `http://localhost:8080/appointments/doctor/${doctorID}/grant`,
+                    `${backend_url}/appointments/doctor/${doctorID}/grant`,
                     { appointmentID, appointmentTime: formattedTime, patientID, totalCost: costNumber, type: 'Appointment' },
                     { headers: { 'Content-Type': 'application/json' } }
                 );
@@ -90,7 +90,7 @@ const DoctorAppointments = ({ doctorID }) => {
             } else if (mode === 'reschedule') {
                 const formattedTime = new Date(time).toISOString();
                 const response = await axios.put(
-                    `http://localhost:8080/appointments/${appointmentID}/update-time`,
+                    `${backend_url}/appointments/${appointmentID}/update-time`,
                     null,
                     { params: { newTime: formattedTime } }
                 );
@@ -111,12 +111,12 @@ const DoctorAppointments = ({ doctorID }) => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div>
+        <div className='appointments'>
             <center><h1>Appointments for Doctor ID: {doctorID}</h1></center>
 
+            <center><h2>Upcoming Appointments</h2></center>
             {upcomingAppointments.length > 0 ? (
                 <div>
-                    <center><h2>Upcoming Appointments</h2></center>
                     <table>
                         <thead>
                             <tr>
@@ -147,12 +147,14 @@ const DoctorAppointments = ({ doctorID }) => {
                     </table>
                 </div>
             ) : (
-                <center><div>No upcoming appointments found.</div></center>
+                <div className="appointment_cards">
+                    <center><div>No upcoming appointments found.</div></center>
+                </div>
             )}
 
+            <center><h2>Requested Appointments</h2></center>
             {requestedAppointments.length > 0 ? (
                 <div>
-                    <center><h2>Requested Appointments</h2></center>
                     <table>
                         <thead>
                             <tr>
@@ -179,7 +181,9 @@ const DoctorAppointments = ({ doctorID }) => {
                     </table>
                 </div>
             ) : (
-                <center><div>No requested appointments found.</div></center>
+                <div className="appointment_cards">
+                    <center><div>No requested appointments found.</div></center>
+                </div>
             )}
 
             {schedulingData.appointmentID && (

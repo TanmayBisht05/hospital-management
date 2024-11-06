@@ -15,7 +15,7 @@ import PendingRequests from '../../components/pharmacy/pendingRequests.jsx';
 
 
 const pdashboard = () => {
-  const { pdashboardState, backend_url, logout, formattedDate } = useContext(AuthContext);
+  const { pdashboardState, backend_url, logout, formattedDate, setPdashboardState } = useContext(AuthContext);
   const navigate = useNavigate();
   const [patientData, setPatientData] = useState(null);
   const [doctors, setDoctors] = useState([]);
@@ -23,7 +23,7 @@ const pdashboard = () => {
   const [rooms, setRooms] = useState([]);
   const [selectedRoomID, setSelectedRoomID] = useState('');
   const [bookingStartDate, setBookingStartDate] = useState('');
-  const [bookingEndDate, setBookingEndDate] = useState([]);
+  const [bookingEndDate, setBookingEndDate] = useState('');
   const [upcomingAppointments, setUpcomingAppointments] = useState([]);
   const [previousAppointments, setPreviousAppointments] = useState([]);
   const [requestedAppointments, setRequestedAppointments] = useState([]);
@@ -198,6 +198,9 @@ const pdashboard = () => {
         });
         if (response.ok) {
           alert('Room booking created successfully.');
+          setSelectedRoomID('');
+          setBookingStartDate('');
+          setBookingEndDate('');
           fetchRoomsByPatientId(); // Update room list after booking
         } else {
           alert('Failed to create room booking.');
@@ -277,8 +280,8 @@ const pdashboard = () => {
 
   const openRescheduleModal = (room) => {
     setRoomBookingToReschedule(room);
-    setRescheduleStartDate(room.bookFrom);
-    setRescheduleEndDate(room.bookTill);
+    // setRescheduleStartDate(room.bookFrom);
+    // setRescheduleEndDate(room.bookTill);
   };
 
   const handleRequestAppointment = async (e) => {
@@ -295,6 +298,8 @@ const pdashboard = () => {
         if (response.ok) {
           alert('Appointment request successfully created.');
           fetchAppointments();
+          setSelectedDoctorID('')
+          setPdashboardState(1);
         } else {
           alert('Failed to create appointment request.');
         }
@@ -391,21 +396,45 @@ const pdashboard = () => {
         <Sidebar />
         <div className="main-content">
           {pdashboardState === 0 && <>
+            <div className="appointments">
+              <div className="doctor-profile">
             <center><h1 className="dashboard-header">Profile</h1></center>
             {patientData ? (
-              <div className="patient-profile">
-                <p><strong>Patient ID:</strong> {patientData.patientID}</p>
-                <p><strong>First Name:</strong> {patientData.firstName}</p>
-                <p><strong>Last Name:</strong> {patientData.lastName}</p>
-                <p><strong>Address:</strong> {patientData.address}</p>
-                <p><strong>Email:</strong> {patientData.email}</p>
-                <p><strong>Gender:</strong> {patientData.gender}</p>
-                {/* <p><strong>History:</strong> {patientData.history}</p> */}
-                <p><strong>Date of Birth:</strong> {patientData.dob}</p>
-              </div>
+              <>
+                <div className="profile-detail">
+                  <span className="profil-icon">🪪</span>
+                  <p className="profile-text"><span className="profile-label">Patient ID:</span> <span className="profile-value">{patientData.patientID}</span></p>
+                </div>
+                <div className="profile-detail">
+                  <span className="profile-icon">👤</span>
+                  <p className="profile-text"><span className="profile-label">First Name:</span> <span className="profile-value">{patientData.firstName}</span></p>
+                </div>
+                <div className="profile-detail">
+                  <span className="profile-icon">👤</span>
+                  <p className="profile-text"><span className="profile-label">Last Name:</span> <span className="profile-value">{patientData.lastName}</span></p>
+                </div>
+                <div className="profile-detail">
+                  <span className="profile-icon">🎂</span>
+                  <p className="profile-text"><span className="profile-label">Date of Birth:</span> <span className="profile-value">{new Date(patientData.dob).toLocaleDateString()}</span></p>
+                </div>
+                <div className="profile-detail">
+                  <span className="profile-icon">⚧️</span>
+                  <p className="profile-text"><span className="profile-label">Gender:</span> <span className="profile-value">{patientData.gender}</span></p>
+                </div>
+                <div className="profile-detail">
+                  <span className="profile-icon">📧</span>
+                  <p className="profile-text"><span className="profile-label">Email:</span> <span className="profile-value">{patientData.email}</span></p>
+                </div>
+                <div className="profile-detail">
+                  <span className="profile-icon">🏡</span>
+                  <p className="profile-text"><span className="profile-label">Address:</span> <span className="profile-value">{patientData.address}</span></p>
+                </div>
+              </>
             ) : (
               <p>Loading patient data...</p>
             )}
+              </div>
+            </div>
           </>}
           {pdashboardState === 1 && (
             <div>
@@ -501,36 +530,26 @@ const pdashboard = () => {
           {pdashboardState === 4 && (
             <div className='appointments'>
               <h1>Pending Bills</h1>
+              <div className="appointment_cards">
                 {unpaidBills.length > 0 ? (
-                  <div className="appointment_cards">
-                    {unpaidBills.map((bill) => (
-                      <div key={bill.billID} className="bill-item">
-                        <p><strong>Bill ID:</strong> {bill.billID}</p>
-                        <p><strong>Amount:</strong> {bill.totalCost}</p>
-                        <p><strong>Type:</strong> {bill.type}</p>
-                        <button onClick={() => handlePayBill(bill.billID)} className="pay-button">Pay</button>
+                    <>{unpaidBills.map((bill) => (
+                      <div key={bill.billID} className="app_cards">
+                        <div className="app_cards_date">
+                          <p><strong>Bill ID:</strong> {bill.billID}</p>
+                        </div>
+                        <div className="app_cards_details">
+                          <p><strong>Amount:</strong> {bill.totalCost}</p>
+                          <p><strong>Type:</strong> {bill.type}</p>
+                          <button onClick={() => handlePayBill(bill.billID)} className="login_button">Pay</button>
+                        </div>
                       </div>
-                    ))}
-                  </div>
+                    ))}</>
                 ) : (
                   <p>No pending bills.</p>
                 )}
+                  </div>
             </div>
           )}
-          {/* {pdashboardState === 5 && (
-            <div>
-              <center><h1 className="dashboard-header">Previous Appointments</h1></center>
-              <div className="appointments">
-                {previousAppointments.length > 0 ? (
-                  previousAppointments.map((appointment) => (
-                    <App_cards_2 key={appointment.appointmentID} param={appointment} flag={false} onDelete={handleDeleteAppointment} />
-                  ))
-                ) : (
-                  <p>No previous appointments.</p>
-                )}
-              </div>
-            </div>
-          )} */}
       
           {pdashboardState === 5 && <>
             <center><h1 className="dashboard-header">Book Room</h1></center>
@@ -602,12 +621,16 @@ const pdashboard = () => {
       <div className="appointment_cards">
         {roomBookings.length > 0 ? (
           roomBookings.map(room => (
-            <div key={room.roomBookingID} className="room-card">
-              <p><strong>Room ID:</strong> {room.roomID}</p>
-              <p><strong>Room Type:</strong> {getRoomType(room.roomID)}</p>
-              <p><strong>Booked From:</strong> {room.bookFrom}</p>
-              <p><strong>Booked Till:</strong> {room.bookTill}</p>
-              <button onClick={() => openRescheduleModal(room)}>Reschedule</button>
+            <div key={room.roomBookingID} className="app_cards">
+              <div className="app_cards_date">
+                <p><strong>Booking ID:</strong> {room.roomBookingID}</p>
+              </div>
+              <div className="app_cards_details">
+                <p><strong>Room Type:</strong> {getRoomType(room.roomID)}</p>
+                <p><strong>Booked From:</strong> {room.bookFrom}</p>
+                <p><strong>Booked Till:</strong> {room.bookTill}</p>
+                <button className='login_button' onClick={() => openRescheduleModal(room)}>Reschedule</button>
+              </div>
             </div>
           ))
         ) : (
@@ -617,26 +640,35 @@ const pdashboard = () => {
 
       {/* Reschedule Modal */}
       {roomBookingToReschedule && (
-        <div className="reschedule-modal">
+        <div className="login_div">
           <h3>Reschedule Booking for Room ID: {roomBookingToReschedule.roomID}</h3>
-          <label>
-            New Start Date:
-            <input
-              type="date"
-              value={rescheduleStartDate}
-              onChange={(e) => setRescheduleStartDate(e.target.value)}
-            />
-          </label>
-          <label>
-            New End Date:
-            <input
-              type="date"
-              value={rescheduleEndDate}
-              onChange={(e) => setRescheduleEndDate(e.target.value)}
-            />
-          </label>
-          <button onClick={() => handleReschedule(roomBookingToReschedule.roomBookingID)}>Confirm Reschedule</button>
-          <button onClick={() => setRoomBookingToReschedule(null)}>Cancel</button>
+          <form onSubmit={(e) => {e.preventDefault(); handleReschedule(roomBookingToReschedule.roomBookingID)}} className="login_form">
+          <div className="login_div">
+            <label className='login_label'>
+              New Start Date:
+            </label>
+              <input className='login_input'
+                type="date"
+                onChange={(e) => setRescheduleStartDate(e.target.value)}
+                min={formattedDate(new Date())}
+              />
+          </div>
+          <div className="login_div">
+            <label className='login_label'>
+              New End Date:
+            </label>
+              <input className='login_input'
+                type="date"
+                onChange={(e) => setRescheduleEndDate(e.target.value)}
+                min={rescheduleStartDate}
+                disabled={!rescheduleStartDate}
+              />
+          </div>
+          <div className="login_div_horizontal">
+            <button type='submit' className='login_button'>Confirm Reschedule</button>
+            <button className='login_button button_red' onClick={() => setRoomBookingToReschedule(null)}>Cancel</button>
+          </div>
+          </form>
         </div>
               )}
     </div>
