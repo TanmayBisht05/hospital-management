@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { FaHome, FaCalendarAlt, FaSyringe, FaUserInjured } from 'react-icons/fa';
 import { MdPending, MdOutlineMeetingRoom, MdOutlineLocalPharmacy } from 'react-icons/md';
+import { MdEngineering } from 'react-icons/md';
 import { CgProfile } from 'react-icons/cg';
 import './sidebar.css';
 import AuthContext from '../../AuthContext';
@@ -23,16 +24,20 @@ const Sidebar = () => {
                 ele.current = document.getElementById('idsurgeries');
             } else if(pdashboardState === 4) {
                 ele.current = document.getElementById('idpending');
-            } else if(pdashboardState === 5) {
-                ele = document.getElementById('idhistory');
-            } else if(pdashboardState === 6) {
+            }  else if(pdashboardState === 5) {
                 ele = document.getElementById('idbookroom');
-            } else if(pdashboardState === 7) {
+            } else if(pdashboardState === 6) {
                 ele = document.getElementById('idpharmacy');
             }
+
+            // else if(pdashboardState === 5) {
+            //     ele = document.getElementById('idhistory');
+            // }
+
             if(ele.current) {
                 ele.current.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
             }
+            
         }
     }, []);
     const handleClick = (num) => {
@@ -50,13 +55,17 @@ const Sidebar = () => {
             ele.current = document.getElementById('idsurgeries');
         } else if(num === 4) {
             ele.current = document.getElementById('idpending');
-        } else if(num === 5) {
-            ele.current = document.getElementById('idhistory');
-        } else if(num === 6) {
+        }  else if(num === 5) {
             ele.current = document.getElementById('idbookroom');
-        } else if(num === 7) {
+        } else if(num === 6) {
             ele.current = document.getElementById('idpharmacy');
         }
+
+
+        else if(num === 5) {
+            ele.current = document.getElementById('idhistory');
+        }
+
         if(ele.current) {
             ele.current.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
         }
@@ -83,15 +92,19 @@ const Sidebar = () => {
                 <a onClick={() => {handleClick(4)}} id='idpending'>
                     <MdPending /> Pending Bills
                 </a>
-                <a onClick={() => {handleClick(5)}} id='idhistory'>
-                    <FaUserInjured /> History
-                </a>
-                <a onClick={() => {handleClick(6)}} id='idbookroom'>
+                
+                <a onClick={() => {handleClick(5)}} id='idbookroom'>
                     <MdOutlineMeetingRoom /> Book Room
                 </a>
-                <a onClick={() => {handleClick(7)}} id='idpharmacy'>
+                <a onClick={() => {handleClick(6)}} id='idpharmacy'>
                     <MdOutlineLocalPharmacy /> Pharmacy
                 </a>
+
+
+                {/* <a onClick={() => {handleClick(5)}} id='idhistory'>
+                    <FaUserInjured /> History
+                </a> */}
+
         </div>
     );
 };

@@ -1,6 +1,60 @@
+
+
+/* Doctor Profile Styling */
 .doctor-profile {
-  margin-left: 40px; /* Increase margin for more spacing */
+  margin: 40px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  font-family: 'Roboto', sans-serif;
 }
+
+.doctor-profile h1 {
+  font-size: 26px;
+  color: #2c3e50;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #2980b9;
+  padding-bottom: 8px;
+  text-align: center;
+}
+
+.profile-detail {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.profile-icon {
+  font-size: 20px;
+  color: #2980b9;
+  margin-right: 10px;
+}
+
+.profile-text {
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+.profile-label {
+  font-weight: bold;
+  color: #34495e;
+}
+
+.profile-value {
+  margin-left: 5px;
+  color: #7f8c8d;
+}
+
+/* Enhancing Hover Effect */
+.doctor-profile p:hover {
+  background-color: #ecf0f1;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+
 
 /* Sidebar Styles */
 .surgery-container {

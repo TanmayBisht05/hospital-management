@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { FaHome, FaCalendarAlt, FaSyringe, FaUserInjured } from 'react-icons/fa';
 import { MdPending, MdAttachMoney } from 'react-icons/md';
+import { MdEngineering } from 'react-icons/md';
 import { CgProfile } from 'react-icons/cg';
 import './sidebarDoctor.css';
 import AuthContext from '../../AuthContext';
@@ -26,6 +27,8 @@ const SidebarDoctor = () => {
                 ele = document.getElementById('idsalary');
             } else if (pdashboardState === 5) {
                 ele.current = document.getElementById('idsalary');
+            } else if (pdashboardState === 6) {
+                ele.current = document.getElementById('idhiremachine');
             }
             if (ele.current) {
                 ele.current.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
@@ -38,19 +41,14 @@ const SidebarDoctor = () => {
             ele.current.style.backgroundColor = 'rgb(0, 87, 97)';
             ele.current = null;
         }
-        if (num === 0) {
-            ele.current = document.getElementById('idprofile');
-        } else if (num === 1) {
-            ele.current = document.getElementById('idapp');
-        } else if (num === 2) {
-            ele.current = document.getElementById('idnewapp');
-        } else if (num === 3) {
-            ele.current = document.getElementById('idapproves');
-        } else if (num === 4) {
-            ele.current = document.getElementById('idsalary');
-        } else if (num === 5) {
-            ele.current = document.getElementById('idhistory');
-        }
+        if (num === 0) ele.current = document.getElementById('idprofile');
+        else if (num === 1) ele.current = document.getElementById('idapp');
+        else if (num === 2) ele.current = document.getElementById('idnewapp');
+        else if (num === 3) ele.current = document.getElementById('idapproves');
+        else if (num === 4) ele.current = document.getElementById('idsalary');
+        else if (num === 5) ele.current = document.getElementById('idhistory');
+        else if (num === 6) ele.current = document.getElementById('idhiremachine'); // Machine Hiring
+
         if (ele.current) {
             ele.current.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
         }
@@ -80,6 +78,9 @@ const SidebarDoctor = () => {
                 </a>
                 <a onClick={() => {handleClick(5)}} id='idhistory'>
                     <MdPending /> History 
+                </a>
+                <a onClick={() => handleClick(6)} id='idhiremachine'>
+                <MdEngineering /> Hire Machine
                 </a>
         </div>
     );
