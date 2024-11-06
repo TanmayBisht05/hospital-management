@@ -41,9 +41,9 @@ export const AuthProvider = ({ children }) => {
             },
             body: reqData.toString(),
         });
-        const data = await response.json();
-        console.log(data, response);
         if(response.status === 200) {
+            const data = await response.json();
+            console.log(data, response);
             Cookies.set('token', data.token);
             Cookies.set('userType', data.userType);
             Cookies.set('id', data.id);
@@ -52,10 +52,11 @@ export const AuthProvider = ({ children }) => {
             setUserId(data.id);
             setUserEmail(data.email);
             setIsAuthenticated(true);
-            return true;
+            return {success: true, message: ''};
         }
         else {
-            return false;
+            const resp  = await response.text();
+            return {success: false, resp};
         }
     }
     const signup = async (reqData, type) => {
