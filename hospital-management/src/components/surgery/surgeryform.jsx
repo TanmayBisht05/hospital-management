@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import AuthContext from '../../AuthContext';
 
 const SurgeryForm = ({ doctorID }) => {

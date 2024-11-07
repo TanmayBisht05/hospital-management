@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import './Section1.css';
 import Navbar from '../navbar/navbar';
 import banner from '../../assets/hero-banner.png';

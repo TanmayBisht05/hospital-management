@@ -8,7 +8,7 @@ import Fake from '../../utility/Fake';
 import Sidebar_admin from '../../components/sidebar_admin/Sidebar_admin';
 
 const Admin = () => {
-  const { adashboardState, signup, backend_url, logout, formattedDate } = React.useContext(AuthContext);
+  const { adashboardState, signup, backend_url, logout, formattedDate } = useContext(AuthContext);
   const navigate = useNavigate();
   const token = Cookies.get('token');
   const userType = Cookies.get('userType');

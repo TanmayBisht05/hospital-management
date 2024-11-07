@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { FaHome, FaCalendarAlt, FaSyringe, FaUserInjured } from 'react-icons/fa';
 import { MdPending, MdOutlineMeetingRoom, MdOutlineLocalPharmacy } from 'react-icons/md';
-import { MdEngineering } from 'react-icons/md';
 import { CgProfile } from 'react-icons/cg';
 import './sidebar.css';
 import AuthContext from '../../AuthContext';
