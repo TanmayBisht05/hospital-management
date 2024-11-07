@@ -4,7 +4,6 @@ import Cookies from 'js-cookie';
 import SidebarDoctor from '../../components/sidebarDoctor/sidebarDoctor.jsx';
 import './ddashboard.css';
 import AuthContext from '../../AuthContext.jsx';
-import App_cards from '../../components/app_cards/App_cards.jsx';
 import Navbar from '../../components/navbar/navbar';
 import Fake from '../../utility/Fake';
 import SurgeryForm from '../../components/surgery/surgeryform.jsx';
@@ -14,10 +13,9 @@ import DoctorHistory from '../../components/doctorHistory/DoctorHistory.jsx';
 import DoctorApprovesBills from '../../components/doctorApprovesBills/DoctorApprovesBills.jsx';
 import DoctorSalaries from '../../components/doctorSalaries/DoctorSalaries.jsx';
 import MachineHiring from '../../components/machineHiring/MachineHiring.jsx';
-import { all } from 'axios';
 
 const Ddashboard = () => {
-  const { pdashboardState, setPdashboardState, logout } = useContext(AuthContext);
+  const { pdashboardState, logout } = useContext(AuthContext);
   const [doctorData, setDoctorData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

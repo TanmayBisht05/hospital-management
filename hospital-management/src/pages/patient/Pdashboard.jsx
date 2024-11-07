@@ -4,12 +4,9 @@ import Sidebar from '../../components/sidebar/Sidebar.jsx';
 import './pdashboard.css';
 import AuthContext from '../../AuthContext.jsx';
 import App_cards from '../../components/app_cards/App_cards.jsx';
-import App_cards_2 from '../../components/app_cards_2/App_cards2.jsx';
 import Cookies from 'js-cookie';
 import Navbar from '../../components/navbar/navbar';
 import Fake from '../../utility/Fake';
-import UserInfo from './profile.jsx';
-import PatientBills from '../../components/bills/patientbills.jsx';
 import AddPharmacyRequestForm from '../../components/pharmacy/pharmacyRequestform.jsx';
 import PendingRequests from '../../components/pharmacy/pendingRequests.jsx';
 

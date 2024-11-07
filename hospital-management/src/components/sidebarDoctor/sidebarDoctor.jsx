@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { FaHome, FaCalendarAlt, FaSyringe, FaUserInjured } from 'react-icons/fa';
-import { MdPending, MdAttachMoney } from 'react-icons/md';
+import { FaHome, FaCalendarAlt, FaSyringe } from 'react-icons/fa';
+import { MdPending } from 'react-icons/md';
 import { MdEngineering } from 'react-icons/md';
 import { CgProfile } from 'react-icons/cg';
 import './sidebarDoctor.css';
