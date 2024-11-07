@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import './doctorAppointments.css';
 import AuthContext from '../../AuthContext';
@@ -18,54 +18,57 @@ const DoctorAppointments = ({ doctorID }) => {
         mode: null // 'schedule' or 'reschedule'
     });
 
-    useEffect(() => {
-        const fetchAppointments = async () => {
-            try {
-                const upcomingResponse = await axios.get(`${backend_url}/appointments/doctor/${doctorID}/upcoming`);
-                const requestedResponse = await axios.get(`${backend_url}/appointments/doctor/${doctorID}/requested`);
+    const fetchAppointments = async () => {
+        try {
+            const upcomingResponse = await axios.get(`${backend_url}/appointments/doctor/${doctorID}/upcoming`);
+            const requestedResponse = await axios.get(`${backend_url}/appointments/doctor/${doctorID}/requested`);
 
-                const allAppointments = [...upcomingResponse.data, ...requestedResponse.data];
-                const patientIDs = [...new Set(allAppointments.map(app => app.patientID))];
+            const allAppointments = [...upcomingResponse.data, ...requestedResponse.data];
+            const patientIDs = [...new Set(allAppointments.map(app => app.patientID))];
 
-                // Fetch all unique patient names
-                const patientDataPromises = patientIDs.map(id =>
-                    axios.get(`${backend_url}/patients/${id}`).then(response => ({
-                        id,
-                        name: `${response.data.firstName} ${response.data.lastName}`
-                    }))
-                );
+            // Fetch all unique patient names
+            const patientDataPromises = patientIDs.map(id =>
+                axios.get(`${backend_url}/patients/${id}`).then(response => ({
+                    id,
+                    name: `${response.data.firstName} ${response.data.lastName}`
+                }))
+            );
 
-                const patientData = await Promise.all(patientDataPromises);
-                const patientNameMap = Object.fromEntries(patientData.map(p => [p.id, p.name]));
+            const patientData = await Promise.all(patientDataPromises);
+            const patientNameMap = Object.fromEntries(patientData.map(p => [p.id, p.name]));
 
-                setPatientNames(patientNameMap);
+            setPatientNames(patientNameMap);
 
-                if (Array.isArray(upcomingResponse.data)) {
-                    const updatedAppointments = await Promise.all(upcomingResponse.data.map(async (appointment) => {
-                        const billResponse = await axios.get(`${backend_url}/bill/${appointment.billID}`);
-                        return {
-                            ...appointment,
-                            cost: billResponse.data.totalCost,
-                        };
-                    }));
-                    setUpcomingAppointments(updatedAppointments);
-                } else {
-                    setError('Unexpected response format for upcoming appointments');
-                }
-
-                if (Array.isArray(requestedResponse.data)) {
-                    setRequestedAppointments(requestedResponse.data);
-                } else {
-                    setError('Unexpected response format for requested appointments');
-                }
-            } catch (error) {
-                setError('Error fetching appointments');
-            } finally {
-                setLoading(false);
+            if (Array.isArray(upcomingResponse.data)) {
+                const updatedAppointments = await Promise.all(upcomingResponse.data.map(async (appointment) => {
+                    const billResponse = await axios.get(`${backend_url}/bill/${appointment.billID}`);
+                    return {
+                        ...appointment,
+                        cost: billResponse.data.totalCost,
+                    };
+                }));
+                setUpcomingAppointments(updatedAppointments);
+            } else {
+                setError('Unexpected response format for upcoming appointments');
             }
-        };
 
-        fetchAppointments();
+            if (Array.isArray(requestedResponse.data)) {
+                setRequestedAppointments(requestedResponse.data);
+            } else {
+                setError('Unexpected response format for requested appointments');
+            }
+        } catch (error) {
+            setError('Error fetching appointments');
+        } finally {
+            setLoading(false);
+        }
+    };
+    const should_fetch_doctor_appointments = useRef(true);
+    useEffect(() => {
+        if(should_fetch_doctor_appointments.current) {
+            fetchAppointments();
+            should_fetch_doctor_appointments.current = false;
+        }
     }, [doctorID]);
 
     const handleScheduleClick = (appointmentID, patientID, mode) => {
@@ -87,6 +90,14 @@ const DoctorAppointments = ({ doctorID }) => {
                     { headers: { 'Content-Type': 'application/json' } }
                 );
                 alert(response.data);
+                setSchedulingData({
+                    appointmentID: null,
+                    time: '',
+                    cost: '',
+                    patientID: null,
+                    mode: null // 'schedule' or 'reschedule'
+                });
+                fetchAppointments();
             } else if (mode === 'reschedule') {
                 const formattedTime = new Date(time).toISOString();
                 const response = await axios.put(
@@ -95,8 +106,15 @@ const DoctorAppointments = ({ doctorID }) => {
                     { params: { newTime: formattedTime } }
                 );
                 alert(response.data);
+                setSchedulingData({
+                    appointmentID: null,
+                    time: '',
+                    cost: '',
+                    patientID: null,
+                    mode: null // 'schedule' or 'reschedule'
+                });
+                fetchAppointments();
             }
-            window.location.reload();
         } catch (error) {
             alert('Error submitting form');
         }
@@ -111,7 +129,8 @@ const DoctorAppointments = ({ doctorID }) => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div className='appointments'>
+        <>
+        <div>
             <center><h1>Appointments for Doctor ID: {doctorID}</h1></center>
 
             <center><h2>Upcoming Appointments</h2></center>
@@ -147,11 +166,14 @@ const DoctorAppointments = ({ doctorID }) => {
                     </table>
                 </div>
             ) : (
-                <div className="appointment_cards">
-                    <center><div>No upcoming appointments found.</div></center>
+                <div className="appointments">
+                    <div className="appointment_cards">
+                        <center><div>No upcoming appointments found.</div></center>
+                    </div>
                 </div>
             )}
-
+            </div>
+            <div>
             <center><h2>Requested Appointments</h2></center>
             {requestedAppointments.length > 0 ? (
                 <div>
@@ -181,8 +203,10 @@ const DoctorAppointments = ({ doctorID }) => {
                     </table>
                 </div>
             ) : (
-                <div className="appointment_cards">
-                    <center><div>No requested appointments found.</div></center>
+                <div className="appointments">
+                    <div className="appointment_cards">
+                        <center><div>No requested appointments found.</div></center>
+                    </div>
                 </div>
             )}
 
@@ -212,6 +236,8 @@ const DoctorAppointments = ({ doctorID }) => {
                                         name="cost"
                                         value={schedulingData.cost}
                                         onChange={handleInputChange}
+                                        min={0}
+                                        placeholder='Cost'
                                         required
                                     />
                                 </div>
@@ -227,6 +253,7 @@ const DoctorAppointments = ({ doctorID }) => {
                 </div>
             )}
         </div>
+        </>
     );
 };
 

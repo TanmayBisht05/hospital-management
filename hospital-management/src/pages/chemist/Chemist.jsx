@@ -9,7 +9,7 @@ import Sidebar_chemist from '../../components/sidebar_chemist/Sidebar_chemist';
 import ChemistPharmacyPanel from '../../components/pharmacy/chemistPharmacyPanel.jsx';
 
 const Chemist = () => {
-    const { cdashboardState, backend_url, logout } = useContext(AuthContext);
+    const { cdashboardState, backend_url, logout, inventory, fetchInventory } = useContext(AuthContext);
     const navigate = useNavigate();
     const token = Cookies.get('token');
     const userType = Cookies.get('userType');
@@ -19,7 +19,6 @@ const Chemist = () => {
     const [type, setType] = useState('');
     const [companyName, setCompanyName] = useState('');
     const [amount, setAmount] = useState('');
-    const [inventory, setInventory] = useState([]);
     const [salaries, setSalaries] = useState([]);
     const [pharmacyRequests, setPharmacyRequests] = useState([]); // New state for pharmacy requests
     const should_fetch = useRef(true);
@@ -48,12 +47,6 @@ const Chemist = () => {
             should_fetch.current = false;
         }
     }, []);
-
-    const fetchInventory = async () => {
-        const response = await fetch(`${backend_url}/medicines`);
-        const data = await response.json();
-        setInventory(data);
-    };
 
     const fetchPharmacyRequests = async () => {
         const response = await fetch(`${backend_url}/pharmacy/${id}`);

@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import AuthContext from '../../AuthContext';
 
 const PharmacyRequests = () => {
-    const {handleDenyRequest, fetchPharmacyRequests, backend_url, pharmacyRequests, setPharmacyRequests} = useContext(AuthContext);
+    const {handleDenyRequest, fetchPharmacyRequests, backend_url, pharmacyRequests, setPharmacyRequests, fetchInventory} = useContext(AuthContext);
 
     useEffect(() => {
         fetchPharmacyRequests();
@@ -79,6 +79,7 @@ const PharmacyRequests = () => {
                     createBill(patientID, totalCost, "Pharmacy");
                     await fetch(`${backend_url}/pharmacy/${requestId}`, { method: 'DELETE' });
                     fetchPharmacyRequests(); // Refresh the list after denying
+                    fetchInventory();
 
 
                 } else {
