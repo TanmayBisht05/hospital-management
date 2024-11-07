@@ -465,7 +465,7 @@ const Admin = () => {
             <center><h1 className="dashboard-header">Requests</h1></center>
           <div className='appointments'>
             <h2>Medicine Requests</h2>
-            <table>
+            {requests.length > 0 ? <table>
                 <thead>
                     <tr>
                         <th>Medicine Name</th>
@@ -486,6 +486,11 @@ const Admin = () => {
                     ))}
                 </tbody>
             </table>
+            :
+            <div className="appointment_cards">
+              <p>No requests available.</p>
+            </div>
+                  }
         </div>
         </>}
         {adashboardState === 4 && ( // Dashboard state 4 for Salary Management
