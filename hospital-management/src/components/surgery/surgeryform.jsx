@@ -4,7 +4,7 @@ import axios from 'axios';
 import AuthContext from '../../AuthContext';
 
 const SurgeryForm = ({ doctorID }) => {
-  const {getMinDateTime} = useContext(AuthContext);
+  const {getMinDateTime, backend_url, fetchSurgeries} = useContext(AuthContext);
   const [formData, setFormData] = useState({
     patientID: '', // Changed from patientEmail to patientID
     type: '',
@@ -39,7 +39,7 @@ const SurgeryForm = ({ doctorID }) => {
         time: new Date(formData.time).toISOString(), // Convert to ISO format if needed
       };
 
-      const response = await fetch(`http://localhost:8080/surgeries`, {
+      const response = await fetch(`${backend_url}/surgeries`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -49,7 +49,7 @@ const SurgeryForm = ({ doctorID }) => {
         const surgeryID = await response.json(); // Assuming the response returns the surgery ID
         setSuccessMessage(`Surgery registered successfully! Surgery ID: ${surgeryID}`);
         setFormData({ patientID: '', type: '', criticalLevel: '', cost: '', time: '' }); // Reset form
-        window.location.reload();
+        fetchSurgeries(doctorID);
       } else {
         throw new Error('Failed to register surgery');
       }
@@ -68,11 +68,13 @@ const SurgeryForm = ({ doctorID }) => {
           <div className="login_div">
             <label className='login_label'>Patient ID:</label>
             <input className='login_input'
-              type="text"
+              type="number"
+              placeholder='Patient ID'
               name="patientID"
               value={formData.patientID}
               onChange={handleChange}
               required
+              min={0}
             />
           </div>
 
@@ -81,6 +83,7 @@ const SurgeryForm = ({ doctorID }) => {
             <input className='login_input'
               type="text"
               name="type"
+              placeholder='Type of surgery'
               value={formData.type}
               onChange={handleChange}
               required
@@ -92,6 +95,7 @@ const SurgeryForm = ({ doctorID }) => {
             <input className='login_input'
               type="number"
               name="criticalLevel"
+              placeholder='Critical level (0-10)'
               value={formData.criticalLevel}
               onChange={handleChange}
               required
@@ -106,6 +110,7 @@ const SurgeryForm = ({ doctorID }) => {
               type="number"
               min={0}
               name="cost"
+              placeholder='Cost'
               value={formData.cost}
               onChange={handleChange}
               required

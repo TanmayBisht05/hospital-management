@@ -44,7 +44,7 @@ const Signup = () => {
                     </div>
                     <div className="login_div">
                         <label htmlFor="dob" className="login_label">Date of Birth : </label>
-                        <input className='login_input' id='dob' type="date" placeholder="Date of Birth" max={formattedDate(new Date())} />
+                        <input className='login_input' id='dob' type="date" placeholder="Date of Birth" max={formattedDate(new Date())} required />
                     </div>
                     <div className="login_div">
                         <label htmlFor="address" className="login_label">Address : </label>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import AuthContext from '../../AuthContext';
@@ -7,30 +7,23 @@ import AuthContext from '../../AuthContext';
 
 
 const SurgeryList = ({ doctorID }) => {
-  const {getMinDateTime} = useContext(AuthContext);
-  const [surgeries, setSurgeries] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('');
+  const {getMinDateTime, fetchSurgeries, surgeries, setSurgeries, backend_url, errorMessage, setErrorMessage} = useContext(AuthContext);
   const [schedulingData, setSchedulingData] = useState({ appointmentID: '', patientID: '', time: '', cost: '' });
   const [showModal, setShowModal] = useState(false);
 
   // Fetch surgeries for the doctor
+  const should_fetch_doctor_surgeries = useRef(true);
   useEffect(() => {
-    const fetchSurgeries = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8080/surgeries/doctor/${doctorID}`);
-        setSurgeries(response.data);
-      } catch (error) {
-        setErrorMessage('Failed to load surgeries.');
-      }
-    };
-
-    fetchSurgeries();
+    if(should_fetch_doctor_surgeries.current) {
+      fetchSurgeries(doctorID);
+      should_fetch_doctor_surgeries.current = false;
+    }
   }, [doctorID]);
 
   // Delete a surgery
   const handleDelete = async (surgeryID) => {
     try {
-      await axios.delete(`http://localhost:8080/surgeries/${surgeryID}/doctor/${doctorID}`);
+      await axios.delete(`${backend_url}/surgeries/${surgeryID}/doctor/${doctorID}`);
       setSurgeries((prevSurgeries) => prevSurgeries.filter((surgery) => surgery.surgeryID !== surgeryID));
     } catch (error) {
       setErrorMessage('Failed to delete surgery.');
@@ -49,39 +42,6 @@ const SurgeryList = ({ doctorID }) => {
     setSchedulingData({ ...schedulingData, [name]: value });
   };
 
-  // // Handle schedule submit
-  // const handleScheduleSubmit = async (event) => {
-  //   event.preventDefault();
-
-  //   const { appointmentID, time, cost, patientID } = schedulingData;
-  //   const formattedTime = new Date(time).toISOString();
-  //   const costNumber = parseInt(cost, 10);
-
-  //   try {
-  //     const response = await axios.put(
-  //       `http://localhost:8080/surgeries/${appointmentID}/doctor/${doctorID}`,
-  //       {
-  //         appointmentTime: formattedTime,
-  //         patientID,
-  //         type: 'Surgery', // Modify this type as necessary
-  //       },
-  //       {
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //       }
-  //     );
-
-  //     alert(response.data); // Show success message
-  //     setShowModal(false);
-  //     // Refresh the surgeries after rescheduling
-  //     window.location.reload();
-  //   } catch (error) {
-  //     console.error('Error scheduling surgery:', error);
-  //     alert('Error scheduling surgery');
-  //   }
-  // };
-
   const handleScheduleSubmit = async (event) => {
     event.preventDefault();
 
@@ -99,7 +59,7 @@ const SurgeryList = ({ doctorID }) => {
 
     try {
         const response = await axios.put(
-            `http://localhost:8080/surgeries/${appointmentID}/doctor/${doctorID}`,
+            `${backend_url}/surgeries/${appointmentID}/doctor/${doctorID}`,
             surgeryRequest, // Send the request body as the surgeryRequest object
             {
                 headers: {
@@ -111,7 +71,7 @@ const SurgeryList = ({ doctorID }) => {
         alert('Surgery rescheduled successfully!'); // Show success message
         setShowModal(false);
         // Refresh the surgeries after rescheduling
-        window.location.reload();
+        fetchSurgeries(doctorID);
     } catch (error) {
         console.error('Error rescheduling surgery:', error);
         alert('Error rescheduling surgery');
@@ -124,8 +84,10 @@ const SurgeryList = ({ doctorID }) => {
       <h2>Surgeries for Doctor ID: {doctorID}</h2>
       {errorMessage && <p className="error-message">{errorMessage}</p>}
       {surgeries.length === 0 ? (
-        <div className="appointment_cards">
-          <p>No surgeries found.</p>
+        <div className="appointments">
+          <div className="appointment_cards">
+            <p>No surgeries found.</p>
+          </div>
         </div>
       ) : (
         <table>
@@ -146,7 +108,7 @@ const SurgeryList = ({ doctorID }) => {
                 <td>{surgery.patientID}</td>
                 <td>{surgery.type}</td>
                 <td>{surgery.criticalLevel}</td>
-                <td>{new Date(surgery.time).toLocaleString()}</td> {/* Display formatted time */}
+                <td>{new Date(surgery.time).toLocaleString()}</td>
                 <td>
                   <button onClick={() => handleDelete(surgery.surgeryID)} className='login_button button_red'>Delete</button>
                   <button onClick={() => handleScheduleClick(surgery.surgeryID, surgery.patientID)} className='login_button'>Reschedule</button>
