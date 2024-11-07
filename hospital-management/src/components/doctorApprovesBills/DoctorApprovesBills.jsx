@@ -3,30 +3,47 @@ import axios from 'axios';
 import './doctorApprovesBills.css';
 
 const DoctorApprovesBills = ({ doctorID }) => {
-    const [bills, setBills] = useState([]);
+    const [appointments, setAppointments] = useState([]);
+    const [bills, setBills] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchBills = async () => {
+        const fetchAppointmentsAndBills = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/appointments/doctor/${doctorID}/upcoming/billStatus1`);
-                console.log(response);
-                if (Array.isArray(response.data)) {
-                    setBills(response.data);
+                // Fetch appointments for the doctor
+                const appointmentsResponse = await axios.get(`http://localhost:8080/appointments/doctor/${doctorID}/upcoming/billStatus1`);
+                const appointmentsData = appointmentsResponse.data;
+                console.log(appointmentsData);
+                if (Array.isArray(appointmentsData)) {
+                    setAppointments(appointmentsData);
+
+                    // Fetch each bill's details
+                    const billsData = {};
+                    await Promise.all(
+                        appointmentsData.map(async (appointment) => {
+                            if (appointment.billID) {
+                                const billResponse = await axios.get(`http://localhost:8080/bill/${appointment.billID}`);
+                                console.log(billResponse);
+                                billsData[appointment.billID] = billResponse.data;
+                            }
+                        })
+                    );
+
+                    setBills(billsData);
                 } else {
-                    console.error('Unexpected response format for bills:', response.data);
-                    setError('Unexpected response format for bills');
+                    console.error('Unexpected response format for appointments:', appointmentsData);
+                    setError('Unexpected response format for appointments');
                 }
             } catch (error) {
-                console.error('Error fetching bills:', error);
-                setError('Error fetching bills');
+                console.error('Error fetching appointments or bills:', error);
+                setError('Error fetching data');
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchBills();
+        fetchAppointmentsAndBills();
     }, [doctorID]);
 
     const handleStatusChange = async (billID, status) => {
@@ -35,8 +52,8 @@ const DoctorApprovesBills = ({ doctorID }) => {
                 params: { status },
                 headers: { 'Content-Type': 'application/json' },
             });
-            // Refresh the bills after status change
-            setBills(bills.filter(bill => bill.billID !== billID));
+            // Refresh the appointments and bills after status change
+            setAppointments(appointments.filter(appointment => appointment.billID !== billID));
             alert(status === 2 ? "Bill accepted" : "Bill denied");
         } catch (error) {
             console.error(`Error updating bill status for bill ID ${billID}:`, error);
@@ -50,7 +67,8 @@ const DoctorApprovesBills = ({ doctorID }) => {
     return (
         <div className='appointments'>
             <center><h1>Pending Bills</h1></center>
-            {bills.length > 0 ? (
+
+            {appointments.length > 0 ? (
                 <table>
                     <thead>
                         <tr>
@@ -62,15 +80,18 @@ const DoctorApprovesBills = ({ doctorID }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {bills.map(bill => (
-                            <tr key={bill.billID}>
-                                <td>{bill.billID}</td>
-                                <td>{bill.appointmentID}</td>
-                                <td>{bill.patientID}</td>
-                                <td>{bill.cost}</td>
+                        {appointments.map(appointment => (
+                            <tr key={appointment.appointmentID}>
+                                <td>{appointment.billID}</td>
+                                <td>{appointment.appointmentID}</td>
+                                <td>{appointment.patientID}</td>
                                 <td>
-                                    <button onClick={() => handleStatusChange(bill.billID, 2)}>Accept</button>
-                                    <button onClick={() => handleStatusChange(bill.billID, 0)}>Deny</button>
+                                    {bills[appointment.billID] ? bills[appointment.billID].totalCost : 'Loading...'}
+                                </td>
+
+                                <td>
+                                    <button onClick={() => handleStatusChange(appointment.billID, 2)}>Accept</button>
+                                    <button onClick={() => handleStatusChange(appointment.billID, 0)}>Deny</button>
                                 </td>
                             </tr>
                         ))}
