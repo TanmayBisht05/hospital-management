@@ -1,7 +1,5 @@
 import React from 'react'
 import './doctorTiles.css'
-// import image from '../../assets/Bazad.jpeg'
-
 const DoctorTiles = ({params}) => {
   return (
     <div>
