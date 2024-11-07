@@ -65,7 +65,7 @@ const DoctorApprovesBills = ({ doctorID }) => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div>
+        <div className='appointments'>
             <center><h1>Pending Bills</h1></center>
 
             {appointments.length > 0 ? (
@@ -98,7 +98,9 @@ const DoctorApprovesBills = ({ doctorID }) => {
                     </tbody>
                 </table>
             ) : (
-                <center><p>No pending bills found.</p></center>
+                <div className="appointment_cards">
+                    <center><p>No pending bills found.</p></center>
+                </div>
             )}
         </div>
     );

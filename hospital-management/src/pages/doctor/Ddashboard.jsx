@@ -63,7 +63,7 @@ const Ddashboard = () => {
       case 0:
 
         return (
-
+            <div className="appointments">
             <div className="doctor-profile">
               <h1 className="dashboard-header">Doctor Profile</h1>
               {doctorData && (
@@ -111,6 +111,7 @@ const Ddashboard = () => {
               </>
             )}
           </div>
+            </div>
 );
 
         
@@ -125,6 +126,7 @@ const Ddashboard = () => {
       case 2:
         return (
           <div className='appointments'>
+            <center><h1>Surgery</h1></center>
             <SurgeryForm doctorID={doctorId} />
             <SurgeryList doctorID={doctorId} />
           </div>
@@ -140,14 +142,15 @@ const Ddashboard = () => {
       
         case 4:
           return (
-            <div>
+            <div className='appointments'>
+              <center><h1>Salary</h1></center>
               <DoctorSalaries doctorID={doctorId} />
             </div>
           );
 
         case 5:
           return (
-            <div>
+            <div className='appointments'>
               <DoctorHistory doctorID={doctorId} />
             </div>
           );

@@ -3,34 +3,19 @@ import axios from 'axios';
 import AuthContext from '../../AuthContext';
 
 const PendingRequests = ({ patientID }) => {
-  const [requests, setRequests] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const {requestsPharmacy, fetch_requests_pharmacy, handleDenyRequest} = useContext(AuthContext);
   const [error, setError] = useState(null);
-  const { handleDenyRequest, backend_url } = useContext(AuthContext);
-  const fetch_requests = () => {
-    axios.get(`${backend_url}/pharmacy/${patientID}`)
-      .then(response => {
-        setRequests(response.data);
-        setLoading(false);
-      })
-      .catch(error => {
-        setError('Failed to fetch requests.');
-        setLoading(false);
-      });
-  }
   useEffect(() => {
     if (patientID) {
-      fetch_requests();
+      fetch_requests_pharmacy(patientID);
     }
   }, [patientID]);
-
-  if (loading) return <p>Loading requests...</p>;
-  if (error) return <p>{error}</p>;
+  if (error) return <p>{error}</p>
 
   return (
-    <div>
+    <div className='appointments'>
       <h2>Pharmacy Requests for Patient ID: {patientID}</h2>
-      {requests.length > 0 ? (
+      {requestsPharmacy.length > 0 ? (
         <table>
           <thead>
             <tr>
@@ -41,18 +26,20 @@ const PendingRequests = ({ patientID }) => {
             </tr>
           </thead>
           <tbody>
-            {requests.map(request => (
+            {requestsPharmacy.map(request => (
               <tr key={request.requestID}>
                 <td>{request.requestID}</td>
                 <td>{request.medicineName}</td>
                 <td>{request.amount}</td>
-                <td><button className='login_button button_red' onClick={async () => { await handleDenyRequest(request.requestID); fetch_requests();}}>Cancel</button></td>
+                <td><button className='login_button button_red' onClick={async () => { await handleDenyRequest(request.requestID); fetch_requests_pharmacy(patientID);}}>Cancel</button></td>
               </tr>
             ))}
           </tbody>
         </table>
       ) : (
-        <center><p>No pending requests found for this patient.</p></center>
+        <div className="appointment_cards">
+          <center><p>No pending requests found for this patient.</p></center>
+        </div>
       )}
     </div>
   );

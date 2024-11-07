@@ -23,14 +23,14 @@ const Footer = () => {
           <p style={styles.paragraph}>Email: info@scholarsphere.com</p>
           <p style={styles.paragraph}>Phone: +1 123 456 7890</p>
         </div>
-        <div style={styles.subscribe}>
+        {/* <div style={styles.subscribe}>
           <h4 style={styles.heading}>Subscribe</h4>
           <p style={styles.paragraph}>Stay updated with the latest news and offers from ScholarSphere.</p>
           <form style={styles.subscribeForm}>
             <input type="email" placeholder="Enter your email" style={styles.input} />
             <button type="button" style={styles.button}>Subscribe</button>
           </form>
-        </div>
+        </div> */}
       </div>
       <div style={styles.copyright}>
         <p>&copy; HOSPITAL </p>

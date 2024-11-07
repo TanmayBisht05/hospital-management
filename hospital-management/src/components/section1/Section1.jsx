@@ -28,15 +28,8 @@ const Section1 = () => {
       <div className="section1_container">
         <div className="section1">
           <div className={`section1_left ${animate ? 'section1_left_animation' : ''}`}>
-            <center><p className='section1_welcome'>Welcome to Heal</p></center>
-            <h1 className='section1_heading'>Find Nearest Doctor.</h1>
-            <div className="section1_search_doctor">
-              <p className='section1_search_desc'>Search doctors, clinics, and hospitals</p>
-              <div className="section1_search">
-                <input type="text" placeholder="Locations" />
-                <button className='section1_search_button'>Find Now</button>
-              </div>
-            </div>
+            <center><h1 className='section1_welcome'>Welcome to Heal</h1></center>
+            <center><p className='section1_slogan'>One stop for all your medical needs!</p></center>
           </div>
           <div className={`section1_right ${animate ? 'section1_right_animation' : ''}`}>
             <img src={banner} alt="banner" />
