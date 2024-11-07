@@ -95,7 +95,7 @@ export const AuthProvider = ({ children }) => {
         }
         else {
             const resp  = await response.text();
-            return {success: false, resp};
+            return {success: false, message: resp};
         }
     }
     const signup = async (reqData, type) => {
