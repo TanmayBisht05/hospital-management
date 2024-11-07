@@ -439,7 +439,8 @@ const pdashboard = () => {
           </>}
           {pdashboardState === 1 && (
             <div>
-              <center><h1 className="dashboard-header">Upcoming Appointments</h1></center>
+              <center><h1 className="dashboard-header">Appointments</h1></center>
+              <center><h2>Upcoming Appointments</h2></center>
               <div className="appointments">
                 <div className="appointment_cards">
                 {upcomingAppointments.length > 0 ? (
@@ -451,7 +452,7 @@ const pdashboard = () => {
                   )}
                 </div>
               </div>
-              <center><h1 className="dashboard-header">Previous Appointments</h1></center>
+              <center><h2>Previous Appointments</h2></center>
               <div className="appointments">
                 <div className="appointment_cards">
                 {previousAppointments.length > 0 ? (
@@ -463,7 +464,7 @@ const pdashboard = () => {
                 )}
                 </div>
               </div>
-              <center><h1 className="dashboard-header">Requested Appointments</h1></center>
+              <center><h2>Requested Appointments</h2></center>
               <div className="appointments">
                 <div className="appointment_cards">
                 {requestedAppointments.length > 0 ? (
@@ -509,7 +510,7 @@ const pdashboard = () => {
           )}
           {pdashboardState === 3 && (
             <div className='appointments'>
-              <center><h1>Surgeries</h1></center>
+              <center><h1 className="dashboard-header">Surgeries</h1></center>
               <div className="appointment_cards">
               {surgeries.length > 0 ? (
                   <>{surgeries.map((surgery) => (

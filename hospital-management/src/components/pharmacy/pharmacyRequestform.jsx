@@ -57,6 +57,7 @@ const AddPharmacyRequestForm = ({patientID}) => {
           name="medicineName"
           value={formData.medicineName}
           onChange={handleChange}
+          placeholder='Medicine Name'
           required
         />
       </div>
@@ -67,6 +68,8 @@ const AddPharmacyRequestForm = ({patientID}) => {
           name="amount"
           value={formData.amount}
           onChange={handleChange}
+          min={1}
+          placeholder='Amount'
           required
         />
       </div>

@@ -87,9 +87,9 @@ const MachineHiring = ({ doctorID }) => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div className='appointments'>
+        <div>
             {/* Form to add new machine hire */}
-            <h1>Hire Machinery</h1>
+            <center><h1>Hire Machinery</h1></center>
             <div className="login_div">
                 {formError && <p className="error">{formError}</p>}
                 <form className='login_form' onSubmit={handleSubmit}>
@@ -119,6 +119,7 @@ const MachineHiring = ({ doctorID }) => {
                             value={formData.startDate}
                             onChange={handleInputChange}
                             min={formattedDate(new Date())}
+                            required
                         />
                     </div>
                     <div className="login_div">
@@ -131,6 +132,7 @@ const MachineHiring = ({ doctorID }) => {
                             onChange={handleInputChange}
                             disabled={!formData.startDate}
                             min={formData.startDate}
+                            required
                         />
                     </div>
                     <button className='login_button' type="submit">Add Hire</button>
@@ -170,8 +172,10 @@ const MachineHiring = ({ doctorID }) => {
                     </table>
                 </div>
             ) : (
-                <div className="appointment_cards">
-                    <p>No machine hire records found for this doctor.</p>
+                <div className="appointments">
+                    <div className="appointment_cards">
+                        <p>No machine hire records found for this doctor.</p>
+                    </div>
                 </div>
             )}
         </div>

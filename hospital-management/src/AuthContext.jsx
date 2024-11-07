@@ -14,6 +14,24 @@ export const AuthProvider = ({ children }) => {
     const [userEmail, setUserEmail] = useState('');
     const [pharmacyRequests, setPharmacyRequests] = useState([]);
     const [requestsPharmacy, setRequestsPharmacy] = useState([]);
+    const [inventory, setInventory] = useState([]);
+    const [surgeries, setSurgeries] = useState([]);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const fetchSurgeries = async (doctorID) => {
+        try {
+          const response = await fetch(`${backend_url}/surgeries/doctor/${doctorID}`);
+          setSurgeries(await response.json());
+        } catch (error) {
+          setErrorMessage('Failed to load surgeries.');
+        }
+      };
+
+    const fetchInventory = async () => {
+        const response = await fetch(`${backend_url}/medicines`);
+        const data = await response.json();
+        setInventory(data);
+    };
 
     const fetchPharmacyRequests = async () => {
         const response = await fetch(`${backend_url}/pharmacy`);
@@ -161,6 +179,13 @@ export const AuthProvider = ({ children }) => {
         requestsPharmacy,
         setRequestsPharmacy,
         fetch_requests_pharmacy,
+        inventory,
+        fetchInventory,
+        surgeries,
+        setSurgeries,
+        fetchSurgeries,
+        errorMessage,
+        setErrorMessage,
     };
     return (
         <AuthContext.Provider value={contextData}>

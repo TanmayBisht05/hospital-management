@@ -223,6 +223,7 @@ const Admin = () => {
             document.getElementById('ddepartment').value = '';
             document.getElementById('dspecialization').value = '';
             document.getElementById('dpassword').value = '';
+            fetchDoctors();
         } else {
             alert('Invalid credentials');
         }
@@ -247,6 +248,7 @@ const Admin = () => {
             document.getElementById('cphone').value = '';
             document.getElementById('cemail').value = '';
             document.getElementById('cpassword').value = '';
+            fetchChemists();
         } else {
             alert('Invalid credentials');
         }
@@ -322,7 +324,7 @@ const Admin = () => {
                     </div>
                     <div className="login_div">
                         <label htmlFor="ddob" className="login_label">Date of Birth : </label>
-                        <input className='login_input' id='ddob' type="date" placeholder="Date of Birth" min={formattedDate(new Date())} />
+                        <input className='login_input' id='ddob' type="date" placeholder="Date of Birth" max={formattedDate(new Date())} required />
                     </div>
                     <div className="login_div">
                         <label htmlFor="deducation" className="login_label">Education : </label>
@@ -337,7 +339,7 @@ const Admin = () => {
                     </div>
                     <div className="login_div">
                         <label htmlFor="dphone" className="login_label">Phone : </label>
-                        <input type="text" className="login_input" placeholder='Phone' id='dphone' />
+                        <input type="text" className="login_input" placeholder='Phone' id='dphone' required />
                     </div>
                 </div>
                 <div className="login_form_right">
@@ -382,7 +384,7 @@ const Admin = () => {
                     </div>
                     <div className="login_div">
                         <label htmlFor="cdob" className="login_label">Date of Birth : </label>
-                        <input className='login_input' id='cdob' type="date" placeholder="Date of Birth" min={formattedDate(new Date())} />
+                        <input className='login_input' id='cdob' type="date" placeholder="Date of Birth" max={formattedDate(new Date())} required />
                     </div>
                     <div className="login_div">
                         <label htmlFor="cgender" className="login_label">Gender : </label>
@@ -395,7 +397,7 @@ const Admin = () => {
                 <div className="login_form_right">
                     <div className="login_div">
                         <label htmlFor="cphone" className="login_label">Phone : </label>
-                        <input type="text" className="login_input" placeholder='Phone' id='cphone' />
+                        <input type="text" className="login_input" placeholder='Phone' id='cphone' required />
                     </div>
                     <div className="login_div">
                         <label htmlFor="cemail" className="login_label">Email : </label>
@@ -518,6 +520,7 @@ const Admin = () => {
                       onChange={(e) => setSalary(e.target.value)}
                       className="login_input"
                       placeholder="Salary Amount"
+                      min={0}
                       required
                     />
                   </div>
@@ -559,6 +562,7 @@ const Admin = () => {
                   placeholder="Salary Amount"
                   value={doctorSalary}
                   onChange={(e) => setDoctorSalary(e.target.value)}
+                  min={0}
                   required
                 />
                 </div>
@@ -615,6 +619,7 @@ const Admin = () => {
                   placeholder="0"
                   value={roomCost}
                   onChange={(e) => setRoomCost(e.target.value)}
+                  min={0}
                   required
                 />
                 </div>
